@@ -15,11 +15,13 @@
   'use strict';
 
   var LANGS = ['fr', 'en', 'es'];
-  var LANG_LABELS = { fr: 'FR', en: 'EN', es: 'ES' };
+  var LANG_LABELS = { fr: 'FR', en: 'EN', es: 'ES', 'en-bravo': 'EN', 'es-bravo': 'ES' };
   var MAX_POEMS = 20;             /* poems listed for one query */
   var LINES_COLLAPSED = 4;        /* lines shown per poem before "more" */
   var SNIPPET_MAX = 120;          /* chars of a line kept around the first hit */
-  var COLUMN_LANGS = ['en', 'es']; /* langs that live in the translation column */
+  /* langs that live in the translation column, so a hit in one can point the
+     column at it — the site's own translations included */
+  var COLUMN_LANGS = ['en', 'es', 'en-bravo', 'es-bravo'];
 
   /* --- Folding: one canonical form, so any spelling matches in any language --- */
 
@@ -159,14 +161,18 @@
       var poem = poems[id];
       if (!poem) return;
 
+      /* Finished translations of our own are searched like any other language;
+         an unfinished draft is deliberately left out of the index. */
+      var langs = window.BRAVO ? LANGS.concat(window.BRAVO.langsFor(id)) : LANGS;
+
       var titles = [];
       var lines = [];
-      LANGS.forEach(function (lang) {
+      langs.forEach(function (lang) {
         var title = titleFor(poem, lang);
         if (title) titles.push({ lang: lang, text: title, folded: fold(title) });
       });
       (poem.segments || []).forEach(function (seg) {
-        LANGS.forEach(function (lang) {
+        langs.forEach(function (lang) {
           var text = seg[lang];
           if (!text) return;
           lines.push({ tid: seg.id, lang: lang, text: text, folded: fold(text) });
@@ -730,6 +736,10 @@
   } else {
     init();
   }
+
+  /* The index is built once and kept. Nothing in the reader can change a poem,
+     so only edit mode ever needs to drop it. */
+  search.reset = function () { index = null; };
 
   /* exposed for console checks: window.FLOWERS_SEARCH('mort') */
   window.FLOWERS_SEARCH = search;

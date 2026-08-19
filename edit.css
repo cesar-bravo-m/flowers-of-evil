@@ -1,0 +1,271 @@
+/* Edit mode — only ever loaded from a local dev server (see the guard at the
+   top of index.html), so none of this reaches a reader.
+
+   It borrows the reader's own tokens rather than picking colours: dark mode and
+   the font-size setting therefore apply here with nothing declared for them. */
+
+.edit-view { display: none; }
+
+body.edit-mode[data-view="poem"] .edit-view { display: block; }
+body.edit-mode .comparison-wrap,
+body.edit-mode .poem-nav { display: none; }
+
+/* the ✎ sits with the font and theme buttons and behaves like them */
+.edit-toggle-btn[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+
+/* --- The bar --- */
+
+.edit-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+  padding: 0.75rem var(--cell-pad-x);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--veil);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.edit-bar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.edit-bar-row--status { justify-content: space-between; }
+
+.edit-bar-status,
+.edit-bar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Language pair — the segmented control the static pages already use. */
+.edit-langs {
+  display: flex;
+  width: max-content;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.edit-lang {
+  padding: 0.3rem 0.8rem;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--gold);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.edit-lang + .edit-lang { border-left: 1px solid var(--border); }
+.edit-lang:hover { background: rgba(107, 45, 45, 0.08); color: var(--accent); }
+.edit-lang[aria-pressed="true"] { background: rgba(107, 45, 45, 0.1); color: var(--accent); }
+
+.edit-field {
+  display: flex;
+  flex: 1;
+  min-width: 14rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.edit-field-label {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-muted);
+}
+
+/* There is no text input anywhere else in the site, so this is the one place
+   the shape is defined. */
+.edit-input-text,
+.edit-line {
+  width: 100%;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--paper);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.edit-input-text:focus,
+.edit-line:focus {
+  outline: none;
+  border-color: var(--accent-light);
+  box-shadow: 0 0 0 2px rgba(107, 45, 45, 0.12);
+}
+
+.edit-input-text::placeholder,
+.edit-line::placeholder { color: var(--gold-muted); opacity: 0.7; }
+
+/* in the dark the page ground and the box ground are the same colour, so the
+   box needs the same lift the search panel gets */
+[data-theme="dark"] .edit-input-text,
+[data-theme="dark"] .edit-line { background: var(--paper-warm); }
+
+.edit-toggle {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--gold);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.edit-toggle:hover { background: rgba(107, 45, 45, 0.08); color: var(--accent); }
+.edit-toggle[aria-pressed="true"] { background: rgba(107, 45, 45, 0.1); color: var(--accent); }
+
+.edit-btn {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.edit-btn:hover:not(:disabled) { background: var(--accent); color: var(--paper); }
+.edit-btn:disabled { opacity: 0.4; cursor: default; }
+
+.edit-btn--quiet { border-color: var(--border); color: var(--gold); }
+.edit-btn--quiet:hover:not(:disabled) { background: rgba(107, 45, 45, 0.08); color: var(--accent); }
+
+.edit-progress,
+.edit-note,
+.edit-file {
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  color: var(--gold-muted);
+}
+
+.edit-progress { color: var(--gold); }
+.edit-note--pending { color: var(--gold); font-style: italic; }
+.edit-note--ok { color: var(--accent-light); }
+.edit-note--error { color: var(--accent); font-weight: 600; }
+.edit-file { opacity: 0.6; }
+
+/* --- The poem --- */
+
+.edit-grid { padding: 0 var(--cell-pad-x) 4rem; }
+
+.edit-stanza { display: block; }
+
+.edit-gap { height: 1.75rem; }
+
+.edit-part {
+  margin: 1.5rem 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  text-align: center;
+  color: var(--gold);
+}
+
+.edit-row {
+  display: grid;
+  grid-template-columns: var(--num-col) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 var(--num-gap);
+  align-items: start;
+  padding: 0.3rem 0;
+}
+
+.edit-num {
+  padding-top: 0.4rem;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  text-align: right;
+  color: var(--gold-muted);
+  opacity: 0.7;
+}
+
+.edit-source { padding: 0.4rem 0.75rem 0.4rem 0; }
+
+.edit-fr {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.edit-ref {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--gold);
+  opacity: 0.85;
+}
+
+.edit-ref-tag {
+  margin-right: 0.4rem;
+  padding: 0 0.3rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--gold-muted);
+}
+
+body.edit-no-ref .edit-ref { display: none; }
+
+.edit-line {
+  overflow: hidden;
+  min-height: 2.4rem;
+  resize: none;
+}
+
+/* --- Responsive --- */
+
+@media (max-width: 1150px) {
+  .edit-row {
+    grid-template-columns: var(--num-col) minmax(0, 1fr);
+    gap: 0.35rem var(--num-gap);
+  }
+  .edit-line { grid-column: 2; }
+  .edit-source { padding-right: 0; }
+}
+
+@media (max-width: 900px) {
+  .edit-bar { top: var(--topbar-h); }
+}
+
+@media (max-width: 480px) {
+  .edit-bar { padding: 0.6rem 0.75rem; }
+  .edit-bar-row--status { flex-direction: column; align-items: stretch; }
+  .edit-bar-actions { justify-content: flex-end; }
+  .edit-grid { padding-bottom: calc(4rem + env(safe-area-inset-bottom)); }
+}
+
+@media (pointer: coarse) {
+  .edit-lang,
+  .edit-toggle,
+  .edit-btn { padding-top: 0.55rem; padding-bottom: 0.55rem; }
+}

@@ -10,6 +10,11 @@ Static website for viewing Charles Baudelaire's *Les Fleurs du mal* with side-by
 
 Open `index.html` in a browser. No server required (all file:// compatible). The URL hash is the route: a poem id (e.g. `#une-charogne`), `#home` or `#about`.
 
+The one exception is *Edit mode*, which needs somewhere to write to:
+`node tools/dev-server.mjs`, then `http://localhost:8181/`. That serves the same
+static files, and nothing about the site changes — it just makes the authoring
+tool available. See *Edit mode* below.
+
 ## Architecture
 
 **Poem data files** — Each poem is a standalone `.js` file in a numbered section directory (e.g. `1. Spleen et Ideal/une-charogne.js`). Each file self-registers into `window.POEMS[id]` with `title`, `titles` (per-language), `segments` (line-by-line translations), and `blocks` (stanza/blank pattern). These are loaded via `<script>` tags in `index.html` before `translation-data.js`.
@@ -20,7 +25,20 @@ Open `index.html` in a browser. No server required (all file:// compatible). The
 
 **`search.js`** — Unified backend-free search over every loaded poem. Builds its index lazily from `window.POEMS` on first open: each title and line is "folded" once (lowercased, accents stripped, `œ`/`æ`/`ß` expanded, curly quotes and dashes normalised), so a query matches regardless of language or accents (`ame` → `âme`, `corazon` → `corazón`, `coeur` → `cœur`). A poem qualifies when every query term appears somewhere in it; title hits outrank line hits. Opens as a palette on Ctrl/Cmd+K, `/`, or either search trigger (`.sidebar-search` in the sidebar, `.topbar-search` on narrow screens), and reaches back into the page through `window.FLOWERS` (see below). Section labels in results are read from the sidebar markup rather than duplicating `POEM_SECTIONS`.
 
-**`window.FLOWERS`** — The only public surface of `translation.js`, exposed for `search.js`: `switchPoem(id)`, `setTranslationLang(lang)` (drives the translation column as the dropdown would), `getTranslationLang()`, `focusLine(tid)` (scrolls a line into view in both columns and flashes it via `.translation-search-flash`), and `closeSidebar()` (dismisses the narrow-screen drawer so the palette is not covering an open drawer).
+**`window.FLOWERS`** — The only public surface of `translation.js`, exposed for `search.js` and `edit.js`: `switchPoem(id)`, `setTranslationLang(lang)` (drives the translation column as the dropdown would), `getTranslationLang()`, `focusLine(tid)` (scrolls a line into view in both columns and flashes it via `.translation-search-flash`), and `closeSidebar()` (dismisses the narrow-screen drawer so the palette is not covering an open drawer). Edit mode additionally uses `getPoemId()`, `getPoem()`, `availableTranslationLangs()`, `rebuild()` (tear the grid down and build it again from whatever `window.POEMS` now says) and `setPoemTitle()`. Every caller feature-detects, so a missing method degrades rather than throws.
+
+**`bravo.js`** — Folds the site's own translations into the ordinary data
+model. A poem file may end with a machine-managed block (`window.POEMS[id].bravo`)
+holding a `status`, a `title` and a `lines` array index-aligned with `segments`;
+this file copies those lines onto the segments as `en-bravo` / `es-bravo`, so
+everything downstream treats them as just another language. It also decides who
+sees what: `window.BRAVO.langsFor(id)` names only the translations marked
+complete — which is what the dropdown and the search index are built from —
+while `all(id)` includes drafts, which only edit mode asks for. Loaded between
+`translation-data.js` and `translation.js`. See *Edit mode* below.
+
+**`edit.js` / `edit.css` / `tools/dev-server.mjs`** — Edit mode. Never fetched by
+a published copy of the site; see *Edit mode* below.
 
 **`site-lang.js`** — Resolves the language the two written pages are shown in
 (`en` / `es`) and sets `data-lang` on `<body>`. Loaded as the first thing inside
@@ -131,7 +149,9 @@ Everything persisted is a preference, on the reader's own device, under one of:
 `flowers-lang`, `flowers-theme`, `flowers-font-size`, `flowers-sidebar-hidden`,
 `flowers-sidebar-collapsed`, `flowers-privacy-ack`. Anything new that must
 survive a reload belongs in `localStorage` beside them — and in the About
-page's list, which names them for the reader.
+page's list, which names them for the reader. (A seventh key,
+`flowers-edit-mode`, is written only by edit mode, which no reader can reach; it
+is therefore not in the About list, since a reader will never have one.)
 
 Home also carries a live extract: `<figure class="demo">` in `#view-home`, filled
 by `buildDemo()` from the poem named in `data-demo-poem` (`data-demo-from` /
@@ -160,8 +180,9 @@ Key constraints:
 - `blocks` alternates `{type:'stanza', lines:N}` and `{type:'blank'}` entries
 - `lines` declares that stanza's real length, so a poem can mix stanza sizes
   (sonnets are `4,4,3,3`). Omit `lines` and the renderer falls back to
-  `data-lines-per-stanza` on `.comparison` (default 4) — the 17 oldest poem
-  files rely on that fallback.
+  `data-lines-per-stanza` on `.comparison` (default 4), which assumes every
+  stanza is the same length. Nothing relies on that fallback any more: all 872
+  stanza blocks in the corpus carry their own `lines`.
 - Poems written in numbered parts (Le Voyage, Le Cygne, ...) use
   `{type:'part', label:'II'}` blocks, rendered as a centered numeral row.
 
@@ -170,17 +191,26 @@ the 1861 edition on fr.wikisource.org (`Les Fleurs du mal (1861)/<Title>`).
 
 ## Translations and copyright
 
-Only public-domain translations are carried: **Cyril Scott** (1909, Project
-Gutenberg #36098) for English and **Eduardo Marquina** (1905, es.wikisource) for
-Spanish. Scott rendered 50 of these poems and Marquina's attributed pages cover
-114, so most poems ship French-only.
+Two translations are carried per language, kept apart by their language code.
+
+The **third-party** ones must be public domain: **Cyril Scott** (1909, Project
+Gutenberg #36098) under `en`, and **Eduardo Marquina** (1905, es.wikisource)
+under `es`. Scott rendered 50 of these poems and Marquina's attributed pages
+cover 114, so most poems ship French-only.
+
+The **site's own** are original work by the author of this site, written through
+edit mode and stored under `en-bravo` / `es-bravo`. The public-domain rule below
+does not apply to them — they are not somebody else's text — but the line-count
+rule does, and the server enforces it. They are labelled *English (Bravo)* and
+*Español (Bravo)* in the dropdown, next to *English (Scott)* and
+*Español (Marquina)*.
 
 A poem simply omits the `en` / `es` key on every segment when no free translation
 exists; `poemHasLang()` in `translation.js` spots that and the column renders the
 `.translation-missing` note instead of verse. A language is all-or-nothing per
 poem — half a column would mis-pair lines against the French.
 
-Two rules when adding a translation:
+Two rules when adding somebody else's translation:
 
 - **Verify the translator is public domain.** Wikisource pages without a
   `traductor=` field or a signed credit line are treated as unverified and get the
@@ -189,6 +219,60 @@ Two rules when adding a translation:
 - **Verify the line counts match the French exactly.** The grid pairs line *i* to
   line *i*; a translation that condenses or expands lines would silently misalign
   the whole poem.
+
+## Edit mode
+
+Writing a translation of your own, line against line. It exists only on
+`localhost`: the guard at the top of `<body>` in `index.html` injects `edit.js`
+and `edit.css` only when the page is served over http from `localhost` /
+`127.0.0.1` / `[::1]`, so a published copy never carries the authoring code, and
+neither does `index.html` opened straight off disk (where the hostname is the
+empty string). `edit.js` then waits for `GET /api/edit/status` to answer before
+it shows anything at all.
+
+**Running it.** `node tools/dev-server.mjs` — zero dependencies, port 8181,
+bound to the loopback address, and it refuses any request that did not address
+it as localhost. Then open `http://localhost:8181/`. The ✎ button joins the font
+and theme buttons at the foot of the sidebar.
+
+**What it writes.** The whole translation goes into the poem's own `.js` file, in
+a delimited block appended after the curated data:
+
+    /* --- Translations by Bravo ---
+       ... do not hand-edit below this line ... */
+    window.POEMS["le-chat-1"].bravo = {
+      "en-bravo": { status: "draft", title: "The Cat", lines: [ ... ] }
+    };
+
+`lines` is index-aligned with `segments` and must be exactly as long; an
+untranslated line is `""`. A save truncates the file at the marker and rewrites
+only what follows, so the curated part is never reparsed or reformatted — the
+French, the `wordGroups` and the two public-domain translations stay
+byte-for-byte, stray `U+FEFF` characters and escaped quotes included.
+
+**Draft and complete.** Typing stops and a second and a half later the whole
+translation is written as a `draft`. A draft is invisible to a reader: it is
+folded onto the segments like any other translation, but `BRAVO.langsFor()`
+names only `complete` ones, and that is what the dropdown and the search index
+read. *Mark complete & commit* flips the status and commits the poem file; the
+server refuses `complete` while any line or the title is still blank, which is
+what "fully translated" means here.
+
+**The editor.** The reader's aligned grid cannot hold a text box per line, so
+edit mode lays the poem out flat instead — line number, the French, the existing
+Scott/Marquina line for reference, and the box. Stanza breaks and part numerals
+are kept so the shape stays visible. `Enter` moves to the next line (a line of
+verse is one line), `Ctrl/Cmd+S` saves now. The line count is fixed by the
+French and cannot be changed here, which is what keeps the columns paired.
+
+**Endpoints**, all under `/api/edit`: `status`, `poem?id=`, `save`, `commit`.
+The server is the authority on line count — it runs the poem file in `node:vm`
+the way the browser does and checks the submitted length against the real
+`segments`.
+
+**Out of scope:** `wordGroups`. A Bravo translation has none, so word-level
+hover is inert for it; line-level hover still pairs the columns. One editing tab
+at a time — two tabs on one poem would race on the same file.
 
 ## Word-by-word highlighting
 

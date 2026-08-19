@@ -301,8 +301,43 @@
     return div.innerHTML;
   }
 
-  var COLUMN_TITLES = { fr: 'Français', en: 'English', es: 'Español (Marquina)' };
+  /* Every translation is named for its translator, since there are now two of
+     each language: the public-domain ones the poem files carry, and the site's
+     own. This one table feeds the column heading, the dropdown trigger, the
+     dropdown options and the no-translation-yet note. */
+  var COLUMN_TITLES = {
+    fr: 'Français',
+    en: 'English (Scott)',
+    es: 'Español (Marquina)',
+    'en-bravo': 'English (Bravo)',
+    'es-bravo': 'Español (Bravo)'
+  };
   var currentTranslationLang = 'en';
+
+  /* Which translations the dropdown offers for the poem now open: the two
+     public-domain ones the markup names, plus whichever of the site's own are
+     finished. Edit mode asks for the unfinished ones too, so that a draft can
+     be previewed in the reader without ever being offered to a reader. */
+  function availableTranslationLangs() {
+    var comparison = document.querySelector('.comparison');
+    var attr = comparison && comparison.getAttribute('data-translation-langs');
+    var langs = (attr || 'en,es').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+    if (window.BRAVO && window.CURRENT_POEM_ID) {
+      var editing = document.body.classList.contains('edit-mode');
+      var own = editing ? window.BRAVO.all(window.CURRENT_POEM_ID)
+        : window.BRAVO.langsFor(window.CURRENT_POEM_ID);
+      own.forEach(function (lang) {
+        if (langs.indexOf(lang) === -1) langs.push(lang);
+      });
+    }
+    return langs;
+  }
+
+  /* Every code a translation cell may ever have carried, so a language swap can
+     clear the class the previous one left behind. */
+  function allTranslationLangs() {
+    return ['en', 'es'].concat(window.BRAVO ? window.BRAVO.LANGS : []);
+  }
 
   function applyHash() {
     if (!window.POEMS || !window.POEM_IDS || !window.POEM_IDS.length) return;
@@ -703,8 +738,7 @@
     var lps = comparison.getAttribute('data-lines-per-stanza');
     if (lps) LINES_PER_STANZA = parseInt(lps, 10);
 
-    var translationLangsAttr = comparison.getAttribute('data-translation-langs');
-    var translationLangs = translationLangsAttr ? translationLangsAttr.split(',').map(function (s) { return s.trim(); }) : ['en', 'es'];
+    var translationLangs = availableTranslationLangs();
     var lang = currentTranslationLang;
     if (translationLangs.indexOf(lang) === -1) lang = translationLangs[0];
     currentTranslationLang = lang;
@@ -715,11 +749,6 @@
       var bl = renderPoem(langs[l]);
       if (!bl.length) return;
       blocksByLang[langs[l]] = bl;
-    }
-    for (var t = 0; t < translationLangs.length; t++) {
-      if (!blocksByLang[translationLangs[t]]) {
-        blocksByLang[translationLangs[t]] = renderPoem(translationLangs[t]);
-      }
     }
 
     var numRows = blocksByLang[langs[0]].length + 2; /* header + stanzas + sources */
@@ -805,6 +834,8 @@
     currentTranslationLang = newLang;
     var comparison = document.querySelector('.comparison');
     if (!comparison) return;
+    /* the cell wears its language as a class; clear whichever one it had */
+    var staleClasses = allTranslationLangs().map(function (l) { return 'cell-' + l; });
     var cells = comparison.querySelectorAll('.cell-translation:not(.cell-source)');
     var blocks = renderPoem(newLang);
     if (!blocks.length || blocks.length !== cells.length - 1) return;
@@ -817,7 +848,7 @@
     }
     var srcCell = comparison.querySelector('.cell-source.cell-translation');
     if (srcCell) {
-      srcCell.classList.remove('cell-en', 'cell-es');
+      srcCell.classList.remove.apply(srcCell.classList, staleClasses);
       srcCell.classList.add('cell-' + newLang);
       srcCell.setAttribute('data-lang', newLang);
       srcCell.innerHTML = '';
@@ -826,7 +857,7 @@
 
     for (var i = 0; i < cells.length; i++) {
       var cell = cells[i];
-      cell.classList.remove('cell-en', 'cell-es');
+      cell.classList.remove.apply(cell.classList, staleClasses);
       cell.classList.add('cell-' + newLang);
       cell.setAttribute('data-lang', newLang);
       if (i === 0) continue;
@@ -846,6 +877,22 @@
     }
 
     if (syncDemoLang) syncDemoLang(newLang);
+  }
+
+  /* Bound once rather than per rebuild. `buildComparison()` runs on every poem
+     switch, and a fresh dismiss listener each time would pile up — each closed
+     over a header that had since been thrown away. So this one looks the open
+     dropdown up at click time instead of capturing it. */
+  var dropdownDismissBound = false;
+
+  function closeTranslationDropdown() {
+    var header = document.querySelector('.column-title--translation.dropdown-open');
+    if (!header) return;
+    header.classList.remove('dropdown-open');
+    var trigger = header.querySelector('.translation-dropdown-trigger');
+    var panel = header.querySelector('.translation-dropdown-panel');
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    if (panel) panel.setAttribute('aria-hidden', 'true');
   }
 
   function initTranslationDropdown(translationLangs) {
@@ -883,9 +930,7 @@
       header.classList.add('dropdown-open');
     }
     function closeDropdown() {
-      panel.setAttribute('aria-hidden', 'true');
-      trigger.setAttribute('aria-expanded', 'false');
-      header.classList.remove('dropdown-open');
+      closeTranslationDropdown();
     }
 
     trigger.addEventListener('click', function (e) {
@@ -895,9 +940,10 @@
       else openDropdown();
     });
 
-    document.addEventListener('click', function () {
-      if (header.classList.contains('dropdown-open')) closeDropdown();
-    });
+    if (!dropdownDismissBound) {
+      dropdownDismissBound = true;
+      document.addEventListener('click', closeTranslationDropdown);
+    }
     panel.addEventListener('click', function (e) {
       e.stopPropagation();
     });
@@ -1053,6 +1099,9 @@
     delegateHover(el);
     delegateWiktionaryClick(el);
     syncDemoLang = function (next) {
+      /* the extract has one button per plain language, so a Bravo translation
+         shows under the language it is a translation into */
+      if (window.BRAVO) next = window.BRAVO.base(next);
       if (next !== lang && langs.indexOf(next) !== -1) applyDemoLang(next);
     };
     syncDemoUiLang = applyDemoUiLang;
@@ -1485,9 +1534,7 @@
     if (!lang || lang === currentTranslationLang) return;
     var comparison = document.querySelector('.comparison');
     if (!comparison) return;
-    var allowed = (comparison.getAttribute('data-translation-langs') || 'en,es')
-      .split(',').map(function (s) { return s.trim(); });
-    if (allowed.indexOf(lang) === -1) return;
+    if (availableTranslationLangs().indexOf(lang) === -1) return;
 
     switchTranslationLang(lang);
     var panel = document.querySelector('.translation-dropdown-panel');
@@ -1520,11 +1567,26 @@
     }, 2600);
   }
 
+  /* Tear the grid down and build it again from whatever `window.POEMS` now
+     says. Edit mode needs this after a save; nothing else does, since the
+     reader's own transitions all go through `switchPoem`. */
+  function rebuildComparison() {
+    var comparison = document.querySelector('.comparison');
+    if (!comparison) return;
+    comparison.innerHTML = '';
+    buildComparison();
+  }
+
   window.FLOWERS = {
     switchPoem: switchPoem,
     closeSidebar: closeDrawer,
     setTranslationLang: setTranslationLang,
     getTranslationLang: function () { return currentTranslationLang; },
+    getPoemId: function () { return window.CURRENT_POEM_ID; },
+    getPoem: function () { return (window.POEMS || {})[window.CURRENT_POEM_ID] || null; },
+    availableTranslationLangs: availableTranslationLangs,
+    rebuild: rebuildComparison,
+    setPoemTitle: setPoemTitle,
     focusLine: focusLine
   };
 

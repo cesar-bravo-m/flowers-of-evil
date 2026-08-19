@@ -25,6 +25,26 @@
       document.body.setAttribute('data-view', !h || h === 'home' ? 'home' : (h === 'about' ? 'about' : 'poem'));
     })();
   </script>
+  <script>
+    /* Edit mode is an authoring tool, not part of the site. It is fetched only
+       when this page is being served from a local dev server
+       (`node tools/dev-server.mjs`), so a published copy never carries it and
+       neither does index.html opened straight off disk — where the hostname is
+       the empty string. edit.js then waits for the server to answer before it
+       shows anything. */
+    (function () {
+      var host = window.location.hostname;
+      if (window.location.protocol.indexOf('http') !== 0) return;
+      if (['localhost', '127.0.0.1', '[::1]', '::1'].indexOf(host) === -1) return;
+      var css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'edit.css';
+      document.head.appendChild(css);
+      var js = document.createElement('script');
+      js.src = 'edit.js';
+      document.head.appendChild(js);
+    })();
+  </script>
 
   <!-- Narrow screens: fixed bar that opens the poem drawer and the search palette -->
   <div class="topbar">
@@ -498,6 +518,7 @@
   <script src="7. Pieces Condamnees/femmes-damnees-delphine-et-hippolyte.js"></script>
   <script src="7. Pieces Condamnees/les-metamorphoses-du-vampire.js"></script>
   <script src="translation-data.js"></script>
+  <script src="bravo.js"></script>
   <script src="translation.js"></script>
   <script src="search.js"></script>
 </body>
