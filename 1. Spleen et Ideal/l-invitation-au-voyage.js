@@ -1,0 +1,237 @@
+window.POEMS = window.POEMS || {};
+
+window.POEMS["l-invitation-au-voyage"] = {
+  title: "L’Invitation au voyage",
+  titles: { fr: "L’Invitation au voyage", en: "Invitation to a Journey", es: "La invitación al viaje" },
+  sources: {
+    fr: "Les Fleurs du mal (1861) — French Wikisource",
+    frUrl: "https://fr.wikisource.org/wiki/Les_Fleurs_du_mal_(1861)",
+    en: "Translated by Cyril Scott, “The Flowers of Evil” (Elkin Mathews, London, 1909)",
+    enUrl: "https://www.gutenberg.org/ebooks/36098",
+    es: "Traducido por Eduardo Marquina, «Las flores del mal» (1905)",
+    esUrl: "https://es.wikisource.org/wiki/Las_flores_del_mal",
+  },
+  segments: [
+    { id: 0, fr: "Mon enfant, ma sœur,", en: "My sister, my dear", es: "Mi niña, mi hermana,",
+      wordGroups: [
+        { wid: "0-0", fr: "Mon enfant", en: "my dear", es: "Mi niña" },
+        { wid: "0-1", fr: "ma sœur", en: "My sister", es: "mi hermana" },
+      ] },
+    { id: 1, fr: "Songe à la douceur", en: "Consider how fair,", es: "¡Piensa en la dulzura",
+      wordGroups: [
+        { wid: "1-0", fr: "Songe", en: "Consider", es: "Piensa" },
+        { wid: "1-1", fr: "douceur", en: "fair", es: "dulzura" },
+      ] },
+    { id: 2, fr: "D’aller là-bas vivre ensemble !", en: "Together to live it would be!", es: "De vivir allá juntos!",
+      wordGroups: [
+        { wid: "2-0", fr: "vivre", en: "to live", es: "vivir" },
+        { wid: "2-1", fr: "ensemble", en: "Together", es: "juntos" },
+      ] },
+    { id: 3, fr: "Aimer à loisir,", en: "Down yonder to fly", es: "Amar libremente," },
+    { id: 4, fr: "Aimer et mourir", en: "To love, till we die,", es: "¡Amar y morir",
+      wordGroups: [
+        { wid: "4-0", fr: "Aimer", en: "To love", es: "Amar" },
+        { wid: "4-1", fr: "mourir", en: "die", es: "morir" },
+      ] },
+    { id: 5, fr: "Au pays qui te ressemble !", en: "In the land which resembles thee.", es: "En el país que a ti se parece!",
+      wordGroups: [
+        { wid: "5-0", fr: "Au pays", en: "In the land", es: "En el país" },
+        { wid: "5-1", fr: "qui te ressemble", en: "which resembles thee", es: "que a ti se parece" },
+      ] },
+    { id: 6, fr: "Les soleils mouillés", en: "Those suns that rise", es: "Los soles llorosos",
+      wordGroups: [
+        { wid: "6-0", fr: "Les soleils", en: "Those suns", es: "Los soles" },
+      ] },
+    { id: 7, fr: "De ces ciels brouillés", en: "'Neath erratic skies,", es: "De esos cielos encapotados",
+      wordGroups: [
+        { wid: "7-0", fr: "ciels", en: "skies", es: "cielos" },
+        { wid: "7-1", fr: "brouillés", en: "erratic", es: "encapotados" },
+      ] },
+    { id: 8, fr: "Pour mon esprit ont les charmes", en: "--No charm could be like unto theirs--", es: "Para mi espíritu tienen la seducción",
+      wordGroups: [
+        { wid: "8-0", fr: "charmes", en: "charm", es: "seducción" },
+      ] },
+    { id: 9, fr: "Si mystérieux", en: "So strange and divine,", es: "Tan misteriosa",
+      wordGroups: [
+        { wid: "9-0", fr: "Si", en: "So", es: "Tan" },
+        { wid: "9-1", fr: "mystérieux", en: "strange", es: "misteriosa" },
+      ] },
+    { id: 10, fr: "De tes traîtres yeux,", en: "Like those eyes of thine", es: "De tus traicioneros ojos,",
+      wordGroups: [
+        { wid: "10-0", fr: "tes", en: "of thine", es: "tus" },
+        { wid: "10-1", fr: "yeux", en: "eyes", es: "ojos" },
+      ] },
+    { id: 11, fr: "Brillant à travers leurs larmes.", en: "Which glow in the midst of their tears.", es: "Brillando a través de sus lágrimas.",
+      wordGroups: [
+        { wid: "11-0", fr: "Brillant", en: "Which glow", es: "Brillando" },
+        { wid: "11-1", fr: "à travers", en: "in the midst of", es: "a través" },
+        { wid: "11-2", fr: "leurs larmes", en: "their tears", es: "sus lágrimas" },
+      ] },
+    { id: 12, fr: "Là, tout n’est qu’ordre et beauté,", en: "There, all is order and loveliness,", es: "Allá, todo es orden y belleza,",
+      wordGroups: [
+        { wid: "12-0", fr: "Là", en: "There", es: "Allá" },
+        { wid: "12-1", fr: "tout", en: "all", es: "todo" },
+        { wid: "12-2", fr: "ordre", en: "order", es: "orden" },
+        { wid: "12-3", fr: "beauté", en: "loveliness", es: "belleza" },
+      ] },
+    { id: 13, fr: "Luxe, calme et volupté.", en: "Luxury, calm and voluptuousness.", es: "Lujo, calma y voluptuosidad.",
+      wordGroups: [
+        { wid: "13-0", fr: "Luxe", en: "Luxury", es: "Lujo" },
+        { wid: "13-1", fr: "calme", en: "calm", es: "calma" },
+        { wid: "13-2", fr: "volupté", en: "voluptuousness", es: "voluptuosidad" },
+      ] },
+    { id: 14, fr: "Des meubles luisants,", en: "The tables and chairs,", es: "Muebles relucientes,",
+      wordGroups: [
+        { wid: "14-0", fr: "Des meubles", en: "The tables and chairs", es: "Muebles" },
+      ] },
+    { id: 15, fr: "Polis par les ans,", en: "Polished bright by the years,", es: "Pulidos por los años,",
+      wordGroups: [
+        { wid: "15-0", fr: "Polis", en: "Polished", es: "Pulidos" },
+        { wid: "15-1", fr: "les ans", en: "the years", es: "los años" },
+      ] },
+    { id: 16, fr: "Décoreraient notre chambre ;", en: "Would decorate sweetly our rooms,", es: "Decorarían nuestra alcoba;",
+      wordGroups: [
+        { wid: "16-0", fr: "Décoreraient", en: "Would decorate", es: "Decorarían" },
+        { wid: "16-1", fr: "notre", en: "our", es: "nuestra" },
+        { wid: "16-2", fr: "chambre", en: "rooms", es: "alcoba" },
+      ] },
+    { id: 17, fr: "Les plus rares fleurs", en: "And the rarest of flowers", es: "Las más raras flores",
+      wordGroups: [
+        { wid: "17-0", fr: "Les plus rares", en: "the rarest", es: "Las más raras" },
+        { wid: "17-1", fr: "fleurs", en: "flowers", es: "flores" },
+      ] },
+    { id: 18, fr: "Mêlant leurs odeurs", en: "Would twine round our bowers", es: "Mezclando sus olores" },
+    { id: 19, fr: "Aux vagues senteurs de l’ambre,", en: "And mingle their amber perfumes:", es: "Al vago aroma del ámbar",
+      wordGroups: [
+        { wid: "19-0", fr: "senteurs", en: "perfumes", es: "aroma" },
+        { wid: "19-1", fr: "l’ambre", en: "amber", es: "ámbar" },
+      ] },
+    { id: 20, fr: "Les riches plafonds,", en: "The ceilings arrayed,", es: "Los ricos artesonados,",
+      wordGroups: [
+        { wid: "20-0", fr: "plafonds", en: "ceilings", es: "artesonados" },
+      ] },
+    { id: 21, fr: "Les miroirs profonds,", en: "And the mirrors inlaid,", es: "Los espejos profundos,",
+      wordGroups: [
+        { wid: "21-0", fr: "Les miroirs", en: "the mirrors", es: "Los espejos" },
+      ] },
+    { id: 22, fr: "La splendeur orientale,", en: "This Eastern splendour among,", es: "El esplendor oriental,",
+      wordGroups: [
+        { wid: "22-0", fr: "La splendeur", en: "splendour", es: "El esplendor" },
+        { wid: "22-1", fr: "orientale", en: "Eastern", es: "oriental" },
+      ] },
+    { id: 23, fr: "Tout y parlerait", en: "Would furtively steal", es: "Todo allí hablaría" },
+    { id: 24, fr: "À l’âme en secret", en: "O'er our souls, and appeal", es: "Al alma en secreto",
+      wordGroups: [
+        { wid: "24-0", fr: "À l’âme", en: "O'er our souls", es: "Al alma" },
+      ] },
+    { id: 25, fr: "Sa douce langue natale.", en: "With its tranquillous native tongue.", es: "Su dulce lengua natal.",
+      wordGroups: [
+        { wid: "25-0", fr: "douce", en: "tranquillous", es: "dulce" },
+        { wid: "25-1", fr: "langue", en: "tongue", es: "lengua" },
+        { wid: "25-2", fr: "natale", en: "native", es: "natal" },
+      ] },
+    { id: 26, fr: "Là, tout n’est qu’ordre et beauté,", en: "There, all is order and loveliness,", es: "Allá, todo es orden y belleza,",
+      wordGroups: [
+        { wid: "26-0", fr: "Là", en: "There", es: "Allá" },
+        { wid: "26-1", fr: "tout", en: "all", es: "todo" },
+        { wid: "26-2", fr: "ordre", en: "order", es: "orden" },
+        { wid: "26-3", fr: "beauté", en: "loveliness", es: "belleza" },
+      ] },
+    { id: 27, fr: "Luxe, calme et volupté.", en: "Luxury, calm and voluptuousness.", es: "Lujo, calma y voluptuosidad.",
+      wordGroups: [
+        { wid: "27-0", fr: "Luxe", en: "Luxury", es: "Lujo" },
+        { wid: "27-1", fr: "calme", en: "calm", es: "calma" },
+        { wid: "27-2", fr: "volupté", en: "voluptuousness", es: "voluptuosidad" },
+      ] },
+    { id: 28, fr: "Vois sur ces canaux", en: "In the harbours, peep,", es: "Mira en esos canales",
+      wordGroups: [
+        { wid: "28-0", fr: "Vois", en: "peep", es: "Mira" },
+        { wid: "28-1", fr: "canaux", en: "the harbours", es: "canales" },
+      ] },
+    { id: 29, fr: "Dormir ces vaisseaux", en: "At the vessels asleep", es: "Dormir los barcos",
+      wordGroups: [
+        { wid: "29-0", fr: "Dormir", en: "asleep", es: "Dormir" },
+        { wid: "29-1", fr: "ces vaisseaux", en: "the vessels", es: "los barcos" },
+      ] },
+    { id: 30, fr: "Dont l’humeur est vagabonde ;", en: "(Their humour is always to roam),", es: "Cuyo humor es vagabundo;",
+      wordGroups: [
+        { wid: "30-0", fr: "l’humeur", en: "Their humour", es: "humor" },
+        { wid: "30-1", fr: "est", en: "is", es: "es" },
+        { wid: "30-2", fr: "vagabonde", en: "to roam", es: "vagabundo" },
+      ] },
+    { id: 31, fr: "C’est pour assouvir", en: "Yet it is but to grant", es: "Es para saciar",
+      wordGroups: [
+        { wid: "31-0", fr: "C’est", en: "it is", es: "Es" },
+        { wid: "31-1", fr: "assouvir", en: "to grant", es: "saciar" },
+      ] },
+    { id: 32, fr: "Ton moindre désir", en: "Thy smallest want", es: "Tu menor deseo",
+      wordGroups: [
+        { wid: "32-0", fr: "Ton", en: "Thy", es: "Tu" },
+        { wid: "32-1", fr: "moindre", en: "smallest", es: "menor" },
+        { wid: "32-2", fr: "désir", en: "want", es: "deseo" },
+      ] },
+    { id: 33, fr: "Qu’ils viennent du bout du monde.", en: "From the ends of the earth that they come,", es: "Que vienen desde el cabo del mundo.",
+      wordGroups: [
+        { wid: "33-0", fr: "Qu’ils", en: "that they", es: "Que" },
+        { wid: "33-1", fr: "viennent", en: "come", es: "vienen" },
+        { wid: "33-2", fr: "du bout", en: "From the ends", es: "el cabo" },
+        { wid: "33-3", fr: "du monde", en: "of the earth", es: "del mundo" },
+      ] },
+    { id: 34, fr: "— Les soleils couchants", en: "The sunsets beam", es: "—Los soles en el ocaso",
+      wordGroups: [
+        { wid: "34-0", fr: "soleils couchants", en: "The sunsets", es: "soles en el ocaso" },
+      ] },
+    { id: 35, fr: "Revêtent les champs,", en: "Upon meadow and stream,", es: "Recubren los campos,",
+      wordGroups: [
+        { wid: "35-0", fr: "les champs", en: "meadow", es: "los campos" },
+      ] },
+    { id: 36, fr: "Les canaux, la ville entière,", en: "And upon the city entire", es: "Los canales, la ciudad entera,",
+      wordGroups: [
+        { wid: "36-0", fr: "la ville", en: "the city", es: "la ciudad" },
+        { wid: "36-1", fr: "entière", en: "entire", es: "entera" },
+      ] },
+    { id: 37, fr: "D’hyacinthe et d’or ;", en: "'Neath a violet crest,", es: "De jacinto y de oro;",
+      wordGroups: [
+        { wid: "37-0", fr: "D’hyacinthe", en: "a violet", es: "De jacinto" },
+      ] },
+    { id: 38, fr: "Le monde s’endort", en: "The world sinks to rest,", es: "El mundo se adormece",
+      wordGroups: [
+        { wid: "38-0", fr: "Le monde", en: "The world", es: "El mundo" },
+        { wid: "38-1", fr: "s’endort", en: "sinks to rest", es: "se adormece" },
+      ] },
+    { id: 39, fr: "Dans une chaude lumière.", en: "Illumed by a golden fire.", es: "En una cálida luz",
+      wordGroups: [
+        { wid: "39-0", fr: "lumière", en: "a golden fire", es: "luz" },
+      ] },
+    { id: 40, fr: "Là, tout n’est qu’ordre et beauté,", en: "There, all is order and loveliness,", es: "Allá, todo es orden y belleza,",
+      wordGroups: [
+        { wid: "40-0", fr: "Là", en: "There", es: "Allá" },
+        { wid: "40-1", fr: "tout", en: "all", es: "todo" },
+        { wid: "40-2", fr: "ordre", en: "order", es: "orden" },
+        { wid: "40-3", fr: "beauté", en: "loveliness", es: "belleza" },
+      ] },
+    { id: 41, fr: "Luxe, calme et volupté.", en: "Luxury, calm and voluptuousness.", es: "Lujo, calma y voluptuosidad.",
+      wordGroups: [
+        { wid: "41-0", fr: "Luxe", en: "Luxury", es: "Lujo" },
+        { wid: "41-1", fr: "calme", en: "calm", es: "calma" },
+        { wid: "41-2", fr: "volupté", en: "voluptuousness", es: "voluptuosidad" },
+      ] },
+  ],
+  blocks: [
+    { type: 'stanza', lines: 8 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 2 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 12 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 2 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 6 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 6 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 2 },
+  ],
+};

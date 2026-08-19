@@ -1,0 +1,2402 @@
+/* --- Fin-de-siècle × modern --- */
+:root {
+  --ink: #1a1512;
+  --paper: #f5f0e8;
+  --paper-warm: #ebe4d9;
+  --accent: #6b2d2d;
+  --accent-light: #8b4040;
+  --gold: #8b7355;
+  --gold-muted: #a09078;
+  --border: #c4b8a8;
+  --shadow: rgba(26, 21, 18, 0.12);
+  --font-display: "Cormorant Garamond", "Georgia", serif;
+  --font-body: "Libre Baskerville", "Georgia", serif;
+
+  /* Layout tokens. The responsive section at the foot of this file retunes
+     these rather than restating the rules that consume them. */
+  --sidebar-w: 12rem;          /* the fixed rail on wide screens */
+  --drawer-w: min(19rem, 82vw);/* the same sidebar, sliding over the page */
+  --topbar-h: 3rem;            /* narrow-screen bar; hidden beside the rail */
+  --content-max: 100%;         /* width the page column is allowed to reach */
+  --gutter: clamp(0.75rem, 3vw, 2rem);      /* page column side padding */
+  --cell-pad-x: clamp(0.75rem, 2.4vw, 2rem);/* verse inset inside the card */
+  --font-base: 18px;           /* root size at 100%; A-/A+ scale it */
+  --font-scale: 1;             /* 1 .. 2, set by the [data-font-size] steps */
+  --num-col: 2.5em;            /* line-number margin in the French column */
+  --num-gap: 0.5rem;
+  --veil: rgba(245, 240, 232, 0.92); /* translucent bar over the paper */
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --ink: #e8e2da;
+  --paper: #1e1a17;
+  --paper-warm: #252019;
+  --accent: #c97a7a;
+  --accent-light: #b86a6a;
+  --gold: #a08060;
+  --gold-muted: #8a7560;
+  --border: #3d3630;
+  --shadow: rgba(0, 0, 0, 0.35);
+  --veil: rgba(30, 26, 23, 0.92);
+}
+
+/* Font size. A- / A+ step --font-scale from 1 (the default, and the floor) to 2,
+   and every size in the page is relative to that base, so the whole layout grows
+   with it. --font-base is retuned per width in the responsive section. */
+html[data-font-size="120"] { --font-scale: 1.2; }
+html[data-font-size="140"] { --font-scale: 1.4; }
+html[data-font-size="160"] { --font-scale: 1.6; }
+html[data-font-size="180"] { --font-scale: 1.8; }
+html[data-font-size="200"] { --font-scale: 2; }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: calc(var(--font-base) * var(--font-scale));
+  scroll-behavior: smooth;
+  /* stop iOS inflating type in landscape */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  /* a long word must never widen the page on a narrow screen */
+  overflow-wrap: break-word;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink);
+  background: var(--paper);
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(139, 45, 45, 0.06), transparent),
+    linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 100%);
+}
+
+/* --- Narrow-screen top bar: opens the poem drawer and the search palette.
+       Hidden whenever the sidebar rail is on screen (see responsive section). --- */
+.topbar {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  align-items: center;
+  gap: 0.35rem;
+  height: calc(var(--topbar-h) + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--veil);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.topbar-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--gold);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.topbar-btn:hover {
+  background: rgba(107, 45, 45, 0.08);
+  color: var(--accent);
+}
+
+.topbar-btn .search-glyph {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+/* Faded in once the page header has scrolled away, so the poem is never nameless */
+.topbar-title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.topbar.is-scrolled .topbar-title {
+  opacity: 1;
+}
+
+/* Dims the page behind the open drawer; inert on wide screens */
+.sidebar-scrim {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(26, 21, 18, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.24s ease;
+}
+
+[data-theme="dark"] .sidebar-scrim {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* --- Sidebar: full height, fixed, not scrollable --- */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  padding: 0.75rem 0 1rem 0;
+  border-right: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.35);
+  transition: width 0.2s ease, padding 0.2s ease, opacity 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] .sidebar {
+  background: rgba(30, 26, 23, 0.6);
+}
+
+[data-theme="dark"] .comparison {
+  background: rgba(37, 32, 28, 0.6);
+}
+
+[data-theme="dark"] .sidebar-show {
+  background: var(--paper);
+}
+
+.sidebar nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.sidebar nav::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar nav::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.sidebar nav::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-muted);
+}
+
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: none;
+  margin: 0 0 1rem;
+  padding: 0 1rem;
+}
+
+.sidebar-title {
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-title:hover,
+.sidebar-title.active {
+  color: var(--accent);
+}
+
+/* Sits below the controls, at the very foot of the rail */
+.sidebar-foot {
+  flex: none;
+  padding: 0.6rem 1rem 0;
+  text-align: center;
+}
+
+.sidebar-foot-link {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.sidebar-foot-link:hover,
+.sidebar-foot-link.active {
+  color: var(--accent);
+}
+
+/* Only the drawer needs dismissing; the rail uses the « control instead */
+.sidebar-close {
+  display: none;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--gold);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.sidebar-close:hover {
+  background: rgba(107, 45, 45, 0.08);
+  color: var(--accent);
+  border-color: var(--accent-light);
+}
+
+/* Faux input that opens the search palette; the real field lives in the palette */
+.sidebar-search {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: none;
+  margin: 0 1rem 1rem;
+  padding: 0.4rem 0.45rem;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.35);
+  color: var(--gold-muted);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  line-height: 1;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+[data-theme="dark"] .sidebar-search {
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.sidebar-search:hover {
+  background: rgba(107, 45, 45, 0.08);
+  border-color: var(--accent-light);
+  color: var(--accent);
+}
+
+.sidebar-search-label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-search-key {
+  flex: none;
+  padding: 0.15rem 0.3rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  opacity: 0.8;
+}
+
+.search-glyph {
+  flex: none;
+  width: 0.95em;
+  height: 0.95em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.sidebar-section {
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-section-title {
+  margin: 0 0 0.35rem;
+}
+
+.sidebar-section-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-muted);
+  padding: 0.2rem 1rem;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  border-radius: 3px;
+}
+
+.sidebar-section-toggle:hover {
+  color: var(--gold, var(--gold-muted));
+  background: rgba(128, 110, 90, 0.08);
+}
+
+.sidebar-section-toggle:focus-visible {
+  outline: 1px solid var(--gold-muted);
+  outline-offset: -1px;
+}
+
+.sidebar-section-caret {
+  flex: none;
+  width: 0.5em;
+  height: 0.5em;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transform-origin: 55% 55%;
+  transition: transform 0.18s ease;
+}
+
+.sidebar-section[data-collapsed="true"] .sidebar-section-caret {
+  transform: rotate(-45deg);
+}
+
+.sidebar-section[data-collapsed="true"] .poem-list {
+  display: none;
+}
+
+.sidebar-section-count {
+  margin-left: auto;
+  font-size: 0.9em;
+  opacity: 0.55;
+  letter-spacing: 0;
+}
+
+.sidebar-controls .sidebar-toggle {
+  font-size: 1rem;
+}
+
+.sidebar-show {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--gold);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.sidebar-show:hover {
+  background: rgba(107, 45, 45, 0.08);
+  color: var(--accent);
+  border-color: var(--accent-light);
+}
+
+body.sidebar-hidden .sidebar {
+  width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
+  opacity: 0;
+  border-right-width: 0;
+  pointer-events: none;
+}
+
+body.sidebar-hidden .sidebar-show {
+  display: block;
+}
+
+.sidebar-show {
+  display: none;
+}
+
+.sidebar .poem-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar .poem-list li {
+  margin: 0;
+}
+
+.sidebar .poem-list a {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--ink);
+  text-decoration: none;
+  border-radius: 2px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sidebar .poem-list a:hover {
+  background: rgba(107, 45, 45, 0.08);
+  color: var(--accent);
+}
+
+.sidebar .poem-list a.active {
+  background: rgba(107, 45, 45, 0.12);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.sidebar-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1rem 1rem 0;
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+}
+
+.sidebar-control {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.sidebar-control[disabled] {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.sidebar-control:not([disabled]):hover {
+  background: rgba(107, 45, 45, 0.08);
+  color: var(--accent);
+  border-color: var(--accent-light);
+}
+
+.theme-toggle {
+  font-size: 1rem;
+}
+
+.page {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+  overflow-y: auto;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+body.sidebar-hidden .page {
+  margin-left: 0;
+}
+
+/* --- Header --- */
+.header {
+  text-align: center;
+  padding: 2.5rem 1.5rem 1.5rem;
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  margin: 0 0 0.25rem;
+}
+
+/* --- Poem nav (prev/next at bottom of page) --- */
+.poem-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 1.5rem);
+  max-width: var(--content-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem var(--gutter);
+}
+
+.poem-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.poem-nav-btn:hover:not(:disabled) {
+  background: rgba(107, 45, 45, 0.08);
+  color: var(--accent);
+  border-color: var(--accent-light);
+}
+
+.poem-nav-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.poem-nav-btn:disabled .poem-nav-title {
+  display: none;
+}
+
+.poem-nav-label {
+  font-style: normal;
+  color: var(--gold);
+}
+
+.poem-nav-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* The third seat in the nav, between the two neighbours: a poem at random.
+   Its label is one word rather than a title, so it never grows the way prev
+   and next do, and it keeps its own width while they share what is left. */
+.poem-nav-random {
+  flex: 0 0 auto;
+}
+
+.poem-nav-glyph {
+  font-size: 1.1em;
+  line-height: 1;
+  color: var(--gold-muted);
+}
+
+.poem-nav-random:hover .poem-nav-glyph {
+  color: inherit;
+}
+
+.subtitle {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--gold);
+  margin: 0;
+}
+
+.subtitle cite {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.header-ornament {
+  width: 4rem;
+  height: 2px;
+  margin: 1.25rem auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold-muted), transparent);
+}
+
+/* --- Comparison wrap --- */
+.comparison-wrap {
+  max-width: var(--content-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--gutter) 2rem;
+}
+
+/* --- Side-by-side comparison: French + one translation (dropdown in header) --- */
+.comparison {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: none;
+  grid-auto-rows: auto;
+  gap: 0;
+  padding: 2rem 1.5rem;
+  align-items: start;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  box-shadow: 0 2px 12px var(--shadow);
+  width: 100%;
+}
+
+/* Continuous vertical divider between the two columns */
+.comparison::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  margin-left: -0.5px;
+  background: var(--border);
+  pointer-events: none;
+}
+
+.comparison .cell {
+  padding: 0.25rem var(--cell-pad-x);
+  min-height: 0;
+  vertical-align: top;
+}
+
+.column-title {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Translation column header: poem title (left) + language + chevron (right) */
+.column-title--translation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.column-title--translation .column-title-text {
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  text-transform: none;
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+}
+
+.translation-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  padding: 0.25rem 0.5rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--gold-muted);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.translation-dropdown-trigger:hover {
+  color: var(--accent);
+  border-color: var(--gold-muted);
+}
+
+.column-title--translation .chevron {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.column-title--translation.dropdown-open .chevron {
+  transform: rotate(180deg);
+}
+
+.translation-dropdown-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: auto;
+  margin-top: 0.25rem;
+  min-width: 8rem;
+  padding: 0.25rem 0;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  box-shadow: 0 4px 12px var(--shadow);
+  z-index: 10;
+  display: none;
+}
+
+.column-title--translation.dropdown-open .translation-dropdown-panel {
+  display: block;
+}
+
+.translation-dropdown-panel[aria-hidden="true"] {
+  display: none !important;
+}
+
+.translation-dropdown-panel[aria-hidden="false"] {
+  display: block;
+}
+
+.translation-dropdown-option {
+  display: block;
+  width: 100%;
+  padding: 0.4rem 0.75rem;
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  background: none;
+  border: none;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.translation-dropdown-option:hover {
+  background: rgba(107, 45, 45, 0.08);
+}
+
+.translation-dropdown-option[aria-selected="true"] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.poem,
+.comparison .stanza {
+  font-size: 0.95rem;
+}
+
+.comparison .stanza {
+  margin: 0;
+  min-height: 4.5em;
+}
+
+/* Blank space between stanzas (from TRANSLATION_BLOCKS) */
+.comparison .stanza-blank {
+  margin: 0;
+  min-height: 0.45em;
+}
+
+/* Roman-numeral marker for poems written in numbered parts (Le Voyage, etc.) */
+.comparison .stanza-part {
+  margin: 0.6em 0 0.2em;
+  font-family: var(--font-display, inherit);
+  font-size: 0.85em;
+  letter-spacing: 0.18em;
+  text-align: center;
+  opacity: 0.65;
+}
+
+.poem br,
+.stanza br {
+  display: block;
+  content: "";
+  margin-top: 0.15em;
+}
+
+/* French: line numbers in margin, vertically centered with verse */
+.cell-fr .stanza--numbered {
+  display: grid;
+  grid-template-columns: var(--num-col) 1fr;
+  gap: 0 var(--num-gap);
+  align-items: center;
+}
+
+.cell-fr .stanza--numbered .line {
+  display: contents;
+}
+
+.cell-fr .stanza--numbered .line-number {
+  grid-column: 1;
+  text-align: right;
+  font-size: 0.65rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--gold-muted);
+  opacity: 0.85;
+  user-select: none;
+  line-height: 1.7;
+}
+
+.cell-fr .stanza--numbered .translation-segment {
+  grid-column: 2;
+}
+
+/* Line number (Spanish has no line numbers; rule for consistency) */
+.line-number {
+  font-size: 0.65rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--gold-muted);
+  opacity: 0.85;
+  user-select: none;
+}
+
+/* Translation alignment: hover and selection highlight */
+.translation-segment {
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.translation-highlight {
+  background-color: rgba(107, 45, 45, 0.12);
+  color: var(--accent);
+}
+
+.translation-highlight-selection {
+  background-color: rgba(139, 115, 85, 0.2);
+  color: var(--ink);
+}
+
+/* Line a search result jumped to; removed again after a couple of seconds */
+.translation-search-flash {
+  background-color: rgba(139, 115, 85, 0.34);
+  color: var(--ink);
+  box-shadow: 0 1px 0 var(--gold-muted);
+}
+
+[data-theme="dark"] .translation-search-flash {
+  background-color: rgba(201, 122, 122, 0.3);
+}
+
+/* Word-group level highlight (overlays on top of line highlight) */
+.word-group {
+  border-radius: 2px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.word-group-highlight {
+  background-color: rgba(107, 45, 45, 0.30);
+  color: var(--accent);
+  box-shadow: 0 2px 0 var(--accent-light);
+}
+
+[data-theme="dark"] .word-group-highlight {
+  background-color: rgba(201, 122, 122, 0.30);
+}
+
+/* --- Search palette --- */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 7vh 1rem 2rem;
+  background: rgba(26, 21, 18, 0.42);
+  animation: wikt-fade-in 0.15s ease;
+}
+
+/* [hidden] alone loses to the display above */
+.search-overlay[hidden] {
+  display: none;
+}
+
+[data-theme="dark"] .search-overlay {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.search-panel {
+  display: flex;
+  flex-direction: column;
+  width: min(46rem, 100%);
+  max-height: 80vh;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--paper);
+  box-shadow: 0 12px 40px var(--shadow);
+}
+
+/* lift the panel off the darkened page */
+[data-theme="dark"] .search-panel {
+  background: var(--paper-warm);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--gold-muted);
+}
+
+.search-field .search-glyph {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.search-input:focus {
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--gold-muted);
+  opacity: 0.8;
+}
+
+.search-clear {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--gold);
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.search-clear:hover {
+  background: rgba(107, 45, 45, 0.08);
+  color: var(--accent);
+}
+
+.search-results {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  padding: 0.35rem 0;
+}
+
+.search-results::-webkit-scrollbar {
+  width: 8px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.search-group {
+  padding: 0.25rem 0 0.4rem;
+}
+
+.search-group + .search-group {
+  border-top: 1px solid rgba(128, 110, 90, 0.18);
+}
+
+.search-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.3rem 1rem;
+  border: 0;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-item.is-active {
+  background: rgba(107, 45, 45, 0.1);
+}
+
+.search-item--poem {
+  flex-wrap: wrap;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+.search-poem-title {
+  font-weight: 600;
+}
+
+.search-poem-alt {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--gold);
+}
+
+.search-poem-meta {
+  margin-left: auto;
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--gold-muted);
+}
+
+.search-line-num {
+  flex: none;
+  width: 1.6rem;
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--gold-muted);
+}
+
+.search-line-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-line-langs {
+  flex: none;
+  display: inline-flex;
+  gap: 0.2rem;
+  margin-left: auto;
+}
+
+.search-lang {
+  padding: 0.05rem 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--gold-muted);
+}
+
+.search-item--more {
+  padding-left: 3.15rem;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--gold-muted);
+}
+
+.search-mark {
+  padding: 0 0.05em;
+  border-radius: 2px;
+  background: rgba(139, 115, 85, 0.3);
+  color: inherit;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .search-mark {
+  background: rgba(201, 122, 122, 0.32);
+  color: var(--ink);
+}
+
+.search-empty {
+  margin: 0;
+  padding: 1.75rem 1.5rem;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--gold-muted);
+}
+
+.search-foot {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--gold-muted);
+}
+
+.search-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.search-foot kbd {
+  padding: 0.1rem 0.3rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  line-height: 1.2;
+}
+
+.search-count {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* --- Wiktionary lookup panel --- */
+.wiktionary-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(26, 21, 18, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: wikt-fade-in 0.15s ease;
+}
+
+@keyframes wikt-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.wiktionary-panel {
+  position: relative;
+  width: min(42rem, 90vw);
+  max-height: 80vh;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 8px 32px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.wiktionary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.wiktionary-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wiktionary-lang {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-muted);
+  flex-shrink: 0;
+}
+
+.wiktionary-close {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--gold);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.wiktionary-close:hover {
+  background: rgba(107, 45, 45, 0.08);
+  color: var(--accent);
+}
+
+.wiktionary-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.wiktionary-body h1,
+.wiktionary-body h2,
+.wiktionary-body h3,
+.wiktionary-body h4 {
+  font-family: var(--font-display);
+  color: var(--accent);
+  margin: 1.25rem 0 0.5rem;
+}
+
+.wiktionary-body h1 { font-size: 1.3rem; }
+.wiktionary-body h2 { font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+.wiktionary-body h3 { font-size: 0.95rem; }
+.wiktionary-body h4 { font-size: 0.85rem; }
+
+.wiktionary-body ul,
+.wiktionary-body ol {
+  padding-left: 1.5rem;
+  margin: 0.35rem 0;
+}
+
+.wiktionary-body li {
+  margin: 0.2rem 0;
+}
+
+.wiktionary-body a {
+  color: var(--accent-light);
+  text-decoration: underline;
+  text-decoration-color: rgba(107, 45, 45, 0.3);
+}
+
+.wiktionary-body a:hover {
+  color: var(--accent);
+}
+
+.wiktionary-body img {
+  max-width: 100%;
+  height: auto;
+}
+
+.wiktionary-body table {
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.wiktionary-body th,
+.wiktionary-body td {
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.5rem;
+}
+
+.wiktionary-body .mw-editsection,
+.wiktionary-body .mw-empty-elt,
+.wiktionary-body .sister-wikipedia,
+.wiktionary-body .noprint,
+.wiktionary-body .mw-authority-control {
+  display: none;
+}
+
+.wiktionary-loading,
+.wiktionary-error {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--gold-muted);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+}
+
+.wiktionary-error {
+  color: var(--accent);
+}
+
+.wiktionary-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--gold-muted);
+  text-decoration: underline;
+}
+
+/* --- Static views: home and about -----------------------------------------
+   Prose pages living in the same document as the reader. `data-view` on <body>
+   picks one of the three routes, so switching costs no load. */
+.static-view {
+  display: none;
+  width: 100%;
+  max-width: 42rem;
+  margin: 0 auto;
+  /* prose keeps a margin even on the phone, where --gutter drops to 0 so the
+     comparison card can run full-bleed */
+  padding: 3rem max(var(--gutter), 1.25rem) 1rem;
+}
+
+body[data-view="home"] #view-home,
+body[data-view="about"] #view-about {
+  display: block;
+}
+
+/* The poem chrome steps aside while a static view is up */
+body:not([data-view="poem"]) .header,
+body:not([data-view="poem"]) .comparison-wrap,
+body:not([data-view="poem"]) .poem-nav {
+  display: none;
+}
+
+.static-head {
+  text-align: center;
+  margin-bottom: 2.25rem;
+}
+
+.static-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  margin: 0 0 0.4rem;
+}
+
+.static-lede {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--gold);
+  margin: 0;
+}
+
+.static-body {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: var(--ink);
+}
+
+.static-body p {
+  margin: 0 0 1.2rem;
+}
+
+.static-body cite {
+  font-style: italic;
+}
+
+.static-points {
+  list-style: none;
+  margin: 0 0 1.6rem;
+  padding: 0;
+}
+
+.static-points li {
+  position: relative;
+  padding-left: 1.4rem;
+  margin-bottom: 0.7rem;
+}
+
+/* A small gold rule instead of a bullet, to match the ornaments */
+.static-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.9em;
+  width: 0.7rem;
+  height: 1px;
+  background: var(--gold-muted);
+}
+
+.static-points b {
+  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: 1.08em;
+  color: var(--accent);
+}
+
+.static-points kbd {
+  font-family: inherit;
+  font-size: 0.85em;
+  padding: 0.05em 0.35em;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--gold);
+}
+
+/* Byline above the buttons: who made this. */
+.static-credit {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--ink);
+  text-align: center;
+  margin: 2rem 0 0.9rem;
+}
+
+.static-credit b {
+  font-weight: 400;
+  color: var(--accent);
+}
+
+/* Holds one button on home, two on about, centred either way. */
+.static-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+  text-align: center;
+  margin: 2rem 0 1.75rem;
+}
+
+/* The byline already carries the top margin when it precedes the buttons. */
+.static-credit + .static-cta {
+  margin-top: 0;
+}
+
+.static-btn {
+  display: inline-block;
+  padding: 0.65rem 1.5rem;
+  border: 1px solid var(--accent-light);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.static-btn:hover {
+  background: var(--accent);
+  color: var(--paper);
+  border-color: var(--accent);
+}
+
+/* Second button beside the primary one: the same shape, held back to the
+   ornament gold so `Start reading` stays the obvious first move. */
+.static-btn--quiet {
+  border-color: var(--border);
+  color: var(--gold);
+}
+
+.static-btn--quiet:hover {
+  background: rgba(107, 45, 45, 0.08);
+  color: var(--accent);
+  border-color: var(--accent-light);
+}
+
+.static-note {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--gold);
+  text-align: center;
+}
+
+/* Links in the written pages. The browser's blue reads as a foreign object on
+   this paper, so prose links take the accent the ornaments and small caps use,
+   underlined faintly and fully on hover. `.static-link` names the same
+   treatment explicitly; a link in the copy needs no class to get it. */
+.static-body a:not(.static-btn),
+.static-link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(107, 45, 45, 0.35);
+  text-underline-offset: 0.18em;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.static-body a:not(.static-btn):hover,
+.static-link:hover {
+  color: var(--accent-light);
+  text-decoration-color: currentColor;
+}
+
+[data-theme="dark"] .static-body a:not(.static-btn),
+[data-theme="dark"] .static-link {
+  text-decoration-color: rgba(201, 122, 122, 0.4);
+}
+
+/* --- Glossary ------------------------------------------------------------
+   A term in the copy that wants a sentence of explanation behind it. The term
+   itself is the trigger and the note beside it is a native popover, so the
+   browser gives us the toggle, Escape and click-away; only the placing is ours
+   (`initGlossary()` in translation.js). A browser without popover support
+   leaves the note at `display: none` — the copy still reads whole without it. */
+.glossary-term {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--gold-muted);
+  text-underline-offset: 0.22em;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.glossary-term:hover,
+.glossary-term[aria-expanded="true"] {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+.glossary-note {
+  display: none;
+}
+
+.glossary-note:popover-open {
+  display: block;
+  position: fixed;
+  /* placed by initGlossary(); the inset shorthand only clears the UA centring */
+  inset: auto;
+  margin: 0;
+  width: min(26rem, calc(100vw - 1.5rem));
+  padding: 0.9rem 1.1rem 1rem;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 8px 32px var(--shadow);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  text-align: left;
+  animation: wikt-fade-in 0.15s ease;
+}
+
+.glossary-note b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.25em;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  color: var(--accent);
+  margin-bottom: 0.15rem;
+}
+
+.glossary-note cite {
+  font-style: italic;
+}
+
+/* A second heading level, for the privacy statement at the foot of About. */
+.static-section {
+  margin-top: 2.75rem;
+}
+
+.static-subtitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  margin: 0 0 0.9rem;
+}
+
+/* --- Site language ---------------------------------------------------------
+   Home and About are written twice over, in English and in Spanish, and
+   `data-lang` on <body> -- set by site-lang.js before the first paint -- says
+   which of the two the page shows. Only the hiding is declared, so whatever is
+   shown keeps the display it would have had anyway: a span stays inline, a
+   block of paragraphs stays a block. */
+body[data-lang="en"] .lang-es,
+body[data-lang="es"] .lang-en {
+  display: none;
+}
+
+/* The switch between them, above the title on either page: deliberately the
+   same segmented pill as the extract's translation switch, one size up. The
+   gesture is the same one, aimed at the page rather than at a column. */
+.static-langs {
+  display: flex;
+  width: max-content;
+  margin: 0 auto 1.6rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.static-lang {
+  padding: 0.28rem 0.8rem;
+  background: transparent;
+  border: 0;
+  color: var(--gold-muted);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.static-lang + .static-lang {
+  border-left: 1px solid var(--border);
+}
+
+.static-lang:hover {
+  color: var(--accent);
+}
+
+.static-lang[aria-pressed="true"] {
+  background: rgba(107, 45, 45, 0.1);
+  color: var(--accent);
+}
+
+[data-theme="dark"] .static-lang[aria-pressed="true"] {
+  background: rgba(201, 122, 122, 0.16);
+}
+
+/* --- Privacy notice --------------------------------------------------------
+   A bar along the foot of the page on a first visit, dismissed for good once
+   read. It states the position -- no cookies, nothing collected -- rather than
+   asking consent for something that never happens, and links to the full
+   statement on About. */
+.privacy-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 130;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem 1.1rem;
+  padding: 0.7rem max(var(--gutter), 1rem) calc(0.7rem + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  background: var(--veil);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 -0.5rem 1.5rem var(--shadow);
+}
+
+.privacy-bar[hidden] {
+  display: none;
+}
+
+.privacy-text {
+  max-width: 46rem;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--gold);
+}
+
+.privacy-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex: none;
+}
+
+.privacy-link {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--gold-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.privacy-link:hover {
+  color: var(--accent);
+}
+
+.privacy-ok {
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--accent-light);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.privacy-ok:hover {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+/* Room under the page so the bar covers nothing while it is up. Its own
+   height is measured into --privacy-bar-h, since the text wraps to three
+   lines on a phone and a fixed guess would leave the footer underneath. */
+body.privacy-bar-open .page {
+  padding-bottom: calc(var(--privacy-bar-h, 4.5rem) + 1rem);
+}
+
+/* --- Home page extract -----------------------------------------------------
+   A miniature of the reader living in the home page prose: four lines, the
+   same line and word highlighting, and a language switch of its own. The prose
+   measure has no room for two verse columns -- an alexandrine needs more than
+   half of it -- so the extract always takes the shape the comparison card
+   falls back to below 1151px: each French line followed by its translation,
+   tinted and ruled so the pair reads as one unit. */
+.demo {
+  margin: 1.75rem 0 2rem;
+}
+
+.demo-card {
+  padding: 1.15rem 0.6rem;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  box-shadow: 0 2px 12px var(--shadow);
+}
+
+[data-theme="dark"] .demo-card {
+  background: rgba(37, 32, 28, 0.6);
+}
+
+.demo-cell {
+  display: block;
+  /* a verse too long for the card turns under itself rather than starting
+     level with the line below */
+  padding: 0.15rem 0.85rem 0.15rem 1.7rem;
+  text-indent: -0.85rem;
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.demo-cell-translation {
+  margin: 0.05rem 0 0.85rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.3rem;
+  border-left: 2px solid var(--border);
+  background: rgba(139, 115, 85, 0.08);
+}
+
+[data-theme="dark"] .demo-cell-translation {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.demo-pair:last-child .demo-cell-translation {
+  margin-bottom: 0;
+}
+
+.demo-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.demo-head .demo-cell {
+  padding-left: 0.85rem;
+  text-indent: 0;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-light);
+}
+
+.demo-head-cell--translation {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.demo-head-title {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* the language switch, as the reader's dropdown would read if it had room to
+   show both choices at once */
+.demo-langs {
+  display: inline-flex;
+  flex: none;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.demo-lang {
+  padding: 0.15rem 0.55rem;
+  background: transparent;
+  border: 0;
+  color: var(--gold-muted);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.demo-lang + .demo-lang {
+  border-left: 1px solid var(--border);
+}
+
+.demo-lang:hover {
+  color: var(--accent);
+}
+
+.demo-lang[aria-pressed="true"] {
+  background: rgba(107, 45, 45, 0.1);
+  color: var(--accent);
+}
+
+.demo-caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1rem;
+  justify-content: space-between;
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--gold);
+}
+
+.demo-open {
+  flex: none;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--gold-muted);
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.demo-open:hover {
+  color: var(--accent);
+}
+
+/* --- Footer --- */
+.footer {
+  text-align: center;
+  padding: 1.5rem 1rem 2rem;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--gold);
+}
+
+.footer p {
+  margin: 0;
+}
+
+.footer cite {
+  font-style: italic;
+}
+
+.footer-ornament {
+  width: 3rem;
+  height: 1px;
+  margin: 0 auto 1rem;
+  background: linear-gradient(90deg, transparent, var(--gold-muted), transparent);
+}
+
+/* Attribution, shown at the foot of each column */
+.comparison .cell-source {
+  padding-top: 0.4em;
+}
+
+.column-source {
+  display: block;
+  border-top: 1px solid var(--rule, rgba(128, 110, 90, 0.28));
+  padding-top: 0.7em;
+  margin-top: 0.4em;
+  font-size: 0.74em;
+  line-height: 1.55;
+  opacity: 0.66;
+}
+
+.column-source-label {
+  display: block;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.86em;
+  opacity: 0.75;
+  margin-bottom: 0.25em;
+}
+
+.column-source a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.column-source a:hover {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Missing translation
+   Poems with no copyright-free translation keep their row structure so the
+   French column still aligns; the note rides on the first stanza and the
+   remaining translation cells stay empty.
+   ========================================================================== */
+
+.stanza--missing:empty {
+  min-height: 0;
+}
+
+.translation-missing {
+  border: 1px solid var(--rule, rgba(128, 110, 90, 0.28));
+  border-left: 3px solid var(--gold-muted);
+  border-radius: 2px;
+  padding: 1em 1.1em;
+  background: var(--paper-warm);
+  max-width: 34em;
+}
+
+.translation-missing-title {
+  font-family: var(--font-display);
+  font-size: 1.05em;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  margin: 0 0 0.4em;
+}
+
+.translation-missing-note {
+  font-size: 0.82em;
+  line-height: 1.65;
+  opacity: 0.72;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Responsive layout
+
+   Four regimes, expressed mostly by retuning the layout tokens at the top of
+   this file rather than restating the rules that consume them:
+
+     >= 1151px  columns  French and the translation side by side
+     <= 1150px  stacked  the two columns interleave into one, book-width
+     <= 900px   drawer   sidebar slides in over the page, top bar drives it
+     <= 480px   compact  smaller base type, full-bleed comparison card
+
+   The column split sits where a verse column stops shredding the line: below
+   it the old layout gave each column ~180px, four words to a line.
+   ========================================================================== */
+
+@media (min-width: 640px) {
+  :root { --content-max: min(94%, 36rem); }
+}
+
+@media (min-width: 1151px) {
+  :root { --content-max: 1400px; }
+}
+
+/* Two columns are at their tightest just after they appear, so the padding
+   starts narrow there and only opens up once there is width to spare. */
+@media (min-width: 1151px) {
+  :root {
+    --gutter: clamp(1rem, 2.5vw - 1rem, 2rem);
+    --cell-pad-x: clamp(1rem, 2.5vw - 1rem, 2rem);
+  }
+}
+
+/* --- <= 900px: the sidebar becomes an overlay drawer --- */
+@media (max-width: 900px) {
+  .topbar {
+    display: flex;
+  }
+
+  .page {
+    margin-left: 0;
+    /* the top bar already occupies part of the viewport */
+    min-height: 0;
+  }
+
+  /* Off-canvas until body.sidebar-open, and out of the tab order while there:
+     visibility flips only after the slide has finished. */
+  .sidebar {
+    width: var(--drawer-w);
+    z-index: 120;
+    padding: calc(0.75rem + env(safe-area-inset-top)) 0 calc(1rem + env(safe-area-inset-bottom));
+    background: var(--paper);
+    box-shadow: 0 0 3rem var(--shadow);
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition: transform 0.24s ease, visibility 0s linear 0.24s;
+  }
+
+  [data-theme="dark"] .sidebar {
+    background: var(--paper-warm);
+  }
+
+  body.sidebar-open .sidebar {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.24s ease, visibility 0s;
+  }
+
+  /* The collapse preference belongs to the rail, so it must never shrink the
+     drawer -- reaching this width with the class still set would otherwise
+     leave a drawer nothing could open. */
+  body.sidebar-hidden .sidebar {
+    width: var(--drawer-w);
+    opacity: 1;
+    border-right-width: 1px;
+    pointer-events: auto;
+  }
+
+  .sidebar-scrim {
+    display: block;
+  }
+
+  body.sidebar-open .sidebar-scrim {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* whatever is overlaying the page owns the scroll while it is up */
+  body.sidebar-open,
+  body.modal-open {
+    overflow: hidden;
+  }
+
+  .sidebar-close {
+    display: inline-flex;
+  }
+
+  /* the top bar carries the menu button, so the rail's own affordances go */
+  .sidebar-show,
+  body.sidebar-hidden .sidebar-show,
+  .sidebar-controls .sidebar-toggle {
+    display: none;
+  }
+
+  .header {
+    padding: 2rem 1.25rem 1.25rem;
+  }
+}
+
+/* --- <= 1150px: one column, each French stanza followed by its translation --- */
+@media (max-width: 1150px) {
+  :root {
+    --num-col: 1.75em;
+    --num-gap: 0.35rem;
+  }
+
+  /* block layout leaves the grid-row/grid-column the renderer sets inert, so
+     the cells fall back to document order: fr, translation, fr, translation… */
+  .comparison {
+    display: block;
+    padding: 1.25rem 0;
+  }
+
+  .comparison::after {
+    display: none;
+  }
+
+  .comparison .cell {
+    display: block;
+    width: 100%;
+    padding: 0.3rem var(--cell-pad-x);
+  }
+
+  /* no neighbour to line up with any more, so a stanza takes its own height */
+  .comparison .stanza {
+    min-height: 0;
+  }
+
+  /* spacer rows and the second copy of a part numeral are column artefacts */
+  .comparison .cell-blank,
+  .comparison .cell-part.cell-translation {
+    display: none;
+  }
+
+  /* "Français" labelled a column that no longer exists; the dropdown names the
+     translation and the tint tells the two apart */
+  .comparison .cell.row-first:not(.cell-translation) {
+    display: none;
+  }
+
+  .comparison .cell-translation:not(.row-first):not(.cell-source) {
+    margin: 0.1rem 0 1.15rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.55rem;
+    border-left: 2px solid var(--border);
+    background: rgba(139, 115, 85, 0.08);
+  }
+
+  [data-theme="dark"] .comparison .cell-translation:not(.row-first):not(.cell-source) {
+    background: rgba(255, 255, 255, 0.045);
+  }
+
+  /* hold the translation on the same left edge as the numbered French verse */
+  .comparison .cell-translation:not(.row-first):not(.cell-source) .stanza {
+    padding-left: calc(var(--num-col) + var(--num-gap));
+  }
+
+  .comparison .cell-part {
+    margin-top: 0.75rem;
+  }
+
+  .comparison .cell-source {
+    padding-top: 1.25rem;
+  }
+
+  .column-title {
+    margin-bottom: 0.9rem;
+  }
+
+  .column-title--translation .column-title-text {
+    font-size: 1rem;
+  }
+
+  .poem-nav-btn {
+    flex: 0 1 auto;
+  }
+}
+
+/* --- <= 480px: phone --- */
+@media (max-width: 480px) {
+  /* the card runs edge to edge; side gutters would only crowd the verse */
+  :root {
+    --font-base: 16px;
+    --gutter: 0px;
+  }
+
+  .comparison {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-radius: 0;
+  }
+
+  .header {
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .title {
+    font-size: clamp(1.65rem, 8.5vw, 2.15rem);
+  }
+
+  .subtitle {
+    font-size: 0.92rem;
+  }
+
+  .header-ornament {
+    margin-top: 1rem;
+  }
+
+  .poem-nav {
+    padding: 1.5rem 0.75rem 1.75rem;
+  }
+
+  /* room for two full-width buttons only; the labels carry the meaning */
+  .poem-nav-btn {
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  /* the random button shrinks to its glyph so those two keep their halves */
+  .poem-nav-random {
+    flex: 0 0 auto;
+  }
+
+  .poem-nav-random .poem-nav-label {
+    display: none;
+  }
+
+  /* the switch names the translation; its title is what the head can spare */
+  .demo-head-title {
+    display: none;
+  }
+
+  .demo-cell {
+    padding-right: 0.4rem;
+    padding-left: 1.25rem;
+  }
+
+  .poem-nav-title {
+    display: none;
+  }
+
+  .footer {
+    padding: 1.25rem 1rem calc(2rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* --- Overlays on small screens: sheets rather than floating panels --- */
+@media (max-width: 700px) {
+  .search-overlay {
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .search-panel {
+    width: 100%;
+    max-height: none;
+    height: 100vh;
+    height: 100dvh;
+    border-width: 0;
+    border-radius: 0;
+  }
+
+  .search-field {
+    padding-top: calc(0.75rem + env(safe-area-inset-top));
+  }
+
+  .search-item--poem {
+    flex-wrap: wrap;
+  }
+
+  .search-poem-meta {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .search-line-langs {
+    margin-left: 0.4rem;
+  }
+
+  /* the keyboard legend does not survive the narrower foot */
+  .search-foot .search-hint {
+    display: none;
+  }
+
+  .search-count {
+    margin-left: 0;
+  }
+
+  .search-foot {
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+  }
+
+  .wiktionary-overlay {
+    align-items: flex-end;
+  }
+
+  .wiktionary-panel {
+    width: 100%;
+    max-height: 88vh;
+    max-height: 88dvh;
+    border-radius: 4px 4px 0 0;
+    border-bottom-width: 0;
+  }
+
+  .wiktionary-body {
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  }
+
+  /* fetched tables are laid out for a desktop page */
+  .wiktionary-body table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
+/* --- Touch: hit areas the finger can actually land on --- */
+@media (pointer: coarse) {
+  .sidebar .poem-list a { padding: 0.6rem 1rem; }
+  .sidebar-section-toggle { padding: 0.5rem 1rem; }
+  .sidebar-search { padding: 0.6rem 0.5rem; }
+  .sidebar-search-key { display: none; }
+  .sidebar-control { padding: 0.75rem 0.25rem; }
+  .search-item { padding: 0.5rem 1rem; }
+  .search-item--poem { padding: 0.6rem 1rem; }
+  .translation-dropdown-trigger { padding: 0.4rem 0.6rem; }
+  .translation-dropdown-option { padding: 0.6rem 0.9rem; }
+  .poem-nav-btn { padding: 0.7rem 0.9rem; }
+  .wiktionary-close { width: 2.4rem; height: 2.4rem; }
+}
+
+/* --- Short viewports (landscape phones): the header must not eat the screen --- */
+@media (max-height: 480px) and (max-width: 900px) {
+  .header {
+    padding: 0.9rem 1rem 0.75rem;
+  }
+
+  .title {
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
+  }
+
+  .header-ornament {
+    margin-top: 0.6rem;
+  }
+
+  .comparison {
+    padding-top: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

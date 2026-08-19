@@ -1,0 +1,41 @@
+window.POEMS = window.POEMS || {};
+
+window.POEMS["paysage"] = {
+  title: "Paysage",
+  titles: { fr: "Paysage" },
+  sources: {
+    fr: "Les Fleurs du mal (1861) — French Wikisource",
+    frUrl: "https://fr.wikisource.org/wiki/Les_Fleurs_du_mal_%281861%29/Paysage",
+  },
+  segments: [
+    { id: 0, fr: "Je veux, pour composer chastement mes églogues," },
+    { id: 1, fr: "Coucher auprès du ciel, comme les astrologues," },
+    { id: 2, fr: "Et, voisin des clochers, écouter en rêvant" },
+    { id: 3, fr: "Leurs hymnes solennels emportés par le vent." },
+    { id: 4, fr: "Les deux mains au menton, du haut de ma mansarde," },
+    { id: 5, fr: "Je verrai l’atelier qui chante et qui bavarde ;" },
+    { id: 6, fr: "Les tuyaux, les clochers, ces mâts de la cité," },
+    { id: 7, fr: "Et les grands ciels qui font rêver d’éternité." },
+    { id: 8, fr: "Il est doux, à travers les brumes, de voir naître" },
+    { id: 9, fr: "L’étoile dans l’azur, la lampe à la fenêtre," },
+    { id: 10, fr: "Les fleuves de charbon monter au firmament" },
+    { id: 11, fr: "Et la lune verser son pâle enchantement." },
+    { id: 12, fr: "Je verrai les printemps, les étés, les automnes ;" },
+    { id: 13, fr: "Et quand viendra l’hiver aux neiges monotones," },
+    { id: 14, fr: "Je fermerai partout portières et volets" },
+    { id: 15, fr: "Pour bâtir dans la nuit mes féeriques palais." },
+    { id: 16, fr: "Alors je rêverai des horizons bleuâtres," },
+    { id: 17, fr: "Des jardins, des jets d’eau pleurant dans les albâtres," },
+    { id: 18, fr: "Des baisers, des oiseaux chantant soir et matin," },
+    { id: 19, fr: "Et tout ce que l’Idylle a de plus enfantin." },
+    { id: 20, fr: "L’Émeute, tempêtant vainement à ma vitre," },
+    { id: 21, fr: "Ne fera pas lever mon front de mon pupitre ;" },
+    { id: 22, fr: "Car je serai plongé dans cette volupté" },
+    { id: 23, fr: "D’évoquer le Printemps avec ma volonté," },
+    { id: 24, fr: "De tirer un soleil de mon cœur, et de faire" },
+    { id: 25, fr: "De mes pensers brûlants une tiède atmosphère." },
+  ],
+  blocks: [
+    { type: 'stanza', lines: 26 },
+  ],
+};

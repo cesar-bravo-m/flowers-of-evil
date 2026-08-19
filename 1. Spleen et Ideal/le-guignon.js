@@ -1,0 +1,113 @@
+window.POEMS = window.POEMS || {};
+
+window.POEMS["le-guignon"] = {
+  title: "Le Guignon",
+  titles: { fr: "Le Guignon", en: "Ill-Luck", es: "El de la mala suerte" },
+  sources: {
+    fr: "Les Fleurs du mal (1861) — French Wikisource",
+    frUrl: "https://fr.wikisource.org/wiki/Les_Fleurs_du_mal_(1861)",
+    en: "Translated by Cyril Scott, “The Flowers of Evil” (Elkin Mathews, London, 1909)",
+    enUrl: "https://www.gutenberg.org/ebooks/36098",
+    es: "Traducido por Eduardo Marquina, «Las flores del mal» (1905)",
+    esUrl: "https://es.wikisource.org/wiki/Las_flores_del_mal",
+  },
+  segments: [
+    { id: 0, fr: "Pour soulever un poids si lourd,", en: "This heavy burden to uplift,", es: "¡Para levantar un peso tan abrumador,",
+      wordGroups: [
+        { wid: "0-0", fr: "soulever", en: "to uplift", es: "levantar" },
+        { wid: "0-1", fr: "un poids", en: "burden", es: "un peso" },
+        { wid: "0-2", fr: "si lourd", en: "heavy", es: "tan abrumador" },
+      ] },
+    { id: 1, fr: "Sisyphe, il faudrait ton courage !", en: "O Sysiphus, thy pluck is required!", es: "Sísifo, sería menester tu coraje!",
+      wordGroups: [
+        { wid: "1-0", fr: "Sisyphe", en: "Sysiphus", es: "Sísifo" },
+        { wid: "1-1", fr: "il faudrait", en: "is required", es: "sería menester" },
+        { wid: "1-2", fr: "ton courage", en: "thy pluck", es: "tu coraje" },
+      ] },
+    { id: 2, fr: "Bien qu’on ait du cœur à l’ouvrage,", en: "And even though the heart aspired,", es: "Por más que se ponga amor en la obra,",
+      wordGroups: [
+        { wid: "2-0", fr: "Bien qu’on", en: "even though", es: "Por más que" },
+        { wid: "2-1", fr: "cœur", en: "the heart", es: "amor" },
+        { wid: "2-2", fr: "à l’ouvrage", en: "aspired", es: "en la obra" },
+      ] },
+    { id: 3, fr: "L’Art est long et le Temps est court.", en: "Art is long and Time is swift.", es: "El Arte es largo y el Tiempo es corto.",
+      wordGroups: [
+        { wid: "3-0", fr: "L’Art", en: "Art", es: "El Arte" },
+        { wid: "3-1", fr: "est long", en: "is long", es: "es largo" },
+        { wid: "3-2", fr: "le Temps", en: "Time", es: "el Tiempo" },
+        { wid: "3-3", fr: "est court", en: "is swift", es: "es corto" },
+      ] },
+    { id: 4, fr: "Loin des sépultures célèbres,", en: "Afar from sepulchres renowned,", es: "Lejos de las sepulturas célebres,",
+      wordGroups: [
+        { wid: "4-0", fr: "Loin", en: "Afar", es: "Lejos" },
+        { wid: "4-1", fr: "des sépultures", en: "from sepulchres", es: "de las sepulturas" },
+        { wid: "4-2", fr: "célèbres", en: "renowned", es: "célebres" },
+      ] },
+    { id: 5, fr: "Vers un cimetière isolé,", en: "To a graveyard, quite apart,", es: "Hacia un cementerio aislado,",
+      wordGroups: [
+        { wid: "5-0", fr: "Vers", en: "To", es: "Hacia" },
+        { wid: "5-1", fr: "un cimetière", en: "a graveyard", es: "un cementerio" },
+        { wid: "5-2", fr: "isolé", en: "quite apart", es: "aislado" },
+      ] },
+    { id: 6, fr: "Mon cœur, comme un tambour voilé,", en: "Like a broken drum, my heart,", es: "Mi corazón, cual un tambor enlutado,",
+      wordGroups: [
+        { wid: "6-0", fr: "Mon cœur", en: "my heart", es: "Mi corazón" },
+        { wid: "6-1", fr: "comme", en: "Like", es: "cual" },
+        { wid: "6-2", fr: "un tambour", en: "drum", es: "un tambor" },
+        { wid: "6-3", fr: "voilé", en: "broken", es: "enlutado" },
+      ] },
+    { id: 7, fr: "Va battant des marches funèbres.", en: "Beats the funeral marches' sound.", es: "Va, tocando marchas fúnebres.",
+      wordGroups: [
+        { wid: "7-0", fr: "battant", en: "Beats", es: "tocando" },
+        { wid: "7-1", fr: "marches", en: "marches", es: "marchas" },
+        { wid: "7-2", fr: "funèbres", en: "funeral", es: "fúnebres" },
+      ] },
+    { id: 8, fr: "— Maint joyau dort enseveli", en: "Many a buried jewel sleeps", es: "—Más de una joya duerme amortajada",
+      wordGroups: [
+        { wid: "8-0", fr: "Maint", en: "Many a", es: "Más de una" },
+        { wid: "8-1", fr: "joyau", en: "jewel", es: "joya" },
+        { wid: "8-2", fr: "dort", en: "sleeps", es: "duerme" },
+        { wid: "8-3", fr: "enseveli", en: "buried", es: "amortajada" },
+      ] },
+    { id: 9, fr: "Dans les ténèbres et l’oubli,", en: "In the long-forgotten deeps,", es: "En las tinieblas y el olvido,",
+      wordGroups: [
+        { wid: "9-0", fr: "Dans", en: "In", es: "En" },
+        { wid: "9-1", fr: "les ténèbres", en: "deeps", es: "las tinieblas" },
+        { wid: "9-2", fr: "l’oubli", en: "long-forgotten", es: "el olvido" },
+      ] },
+    { id: 10, fr: "Bien loin des pioches et des sondes ;", en: "Far from mattock and from sound;", es: "Muy lejos de azadones y de sondas;",
+      wordGroups: [
+        { wid: "10-0", fr: "Bien loin", en: "Far", es: "Muy lejos" },
+        { wid: "10-1", fr: "des pioches", en: "from mattock", es: "de azadones" },
+        { wid: "10-2", fr: "des sondes", en: "from sound", es: "de sondas" },
+      ] },
+    { id: 11, fr: "Mainte fleur épanche à regret", en: "Many a flower wafts aloft", es: "Más de una flor despliega con pesar",
+      wordGroups: [
+        { wid: "11-0", fr: "Mainte", en: "Many a", es: "Más de una" },
+        { wid: "11-1", fr: "fleur", en: "flower", es: "flor" },
+        { wid: "11-2", fr: "épanche", en: "wafts", es: "despliega" },
+      ] },
+    { id: 12, fr: "Son parfum doux comme un secret", en: "Its perfumes, like a secret soft,", es: "Su perfume dulce como un secreto",
+      wordGroups: [
+        { wid: "12-0", fr: "Son parfum", en: "Its perfumes", es: "Su perfume" },
+        { wid: "12-1", fr: "doux", en: "soft", es: "dulce" },
+        { wid: "12-2", fr: "comme", en: "like", es: "como" },
+        { wid: "12-3", fr: "un secret", en: "a secret", es: "un secreto" },
+      ] },
+    { id: 13, fr: "Dans les solitudes profondes.", en: "Within the solitudes, profound.", es: "En las soledades profundas.",
+      wordGroups: [
+        { wid: "13-0", fr: "Dans", en: "Within", es: "En" },
+        { wid: "13-1", fr: "les solitudes", en: "the solitudes", es: "las soledades" },
+        { wid: "13-2", fr: "profondes", en: "profound", es: "profundas" },
+      ] },
+  ],
+  blocks: [
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 3 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 3 },
+  ],
+};

@@ -1,0 +1,180 @@
+window.POEMS = window.POEMS || {};
+
+window.POEMS["le-reniement-de-saint-pierre"] = {
+  title: "Le Reniement de saint Pierre",
+  titles: { fr: "Le Reniement de saint Pierre", es: "El reniego de San Pedro" },
+  sources: {
+    fr: "Les Fleurs du mal (1861) — French Wikisource",
+    frUrl: "https://fr.wikisource.org/wiki/Les_Fleurs_du_mal_%281861%29/Le_Reniement_de_saint_Pierre",
+    es: "Traducido por Eduardo Marquina, «Las flores del mal» (1905)",
+    esUrl: "https://es.wikisource.org/wiki/El_reniego_de_San_Pedro",
+  },
+  segments: [
+    { id: 0, fr: "Qu’est-ce que Dieu fait donc de ce flot d’anathèmes", es: "¿Qué es lo que Dios hace, entonces, de esta oleada de anatemas",
+      wordGroups: [
+        { wid: "0-0", fr: "Dieu", es: "Dios" },
+        { wid: "0-1", fr: "fait", es: "hace" },
+        { wid: "0-2", fr: "flot", es: "oleada" },
+      ] },
+    { id: 1, fr: "Qui monte tous les jours vers ses chers Séraphins ?", es: "Que sube todos los días hacia sus caros Serafines?",
+      wordGroups: [
+        { wid: "1-0", fr: "monte", es: "sube" },
+        { wid: "1-1", fr: "jours", es: "días" },
+      ] },
+    { id: 2, fr: "Comme un tyran gorgé de viande et de vins,", es: "¿Cómo un tirano ahíto de manjares y de vinos,",
+      wordGroups: [
+        { wid: "2-0", fr: "tyran", es: "tirano" },
+        { wid: "2-1", fr: "vins", es: "vinos" },
+      ] },
+    { id: 3, fr: "Il s’endort au doux bruit de nos affreux blasphèmes.", es: "Se adormece al suave rumor de nuestras horrendas blasfemias?",
+      wordGroups: [
+        { wid: "3-0", fr: "s’endort", es: "adormece" },
+        { wid: "3-1", fr: "doux", es: "suave" },
+        { wid: "3-2", fr: "blasphèmes", es: "blasfemias" },
+      ] },
+    { id: 4, fr: "Les sanglots des martyrs et des suppliciés", es: "Los sollozos de los mártires y de los ajusticiados,",
+      wordGroups: [
+        { wid: "4-0", fr: "sanglots", es: "sollozos" },
+        { wid: "4-1", fr: "martyrs", es: "mártires" },
+      ] },
+    { id: 5, fr: "Sont une symphonie enivrante sans doute,", es: "Son, sin duda, una embriagadora sinfonía," },
+    { id: 6, fr: "Puisque, malgré le sang que leur volupté coûte,", es: "Puesto que, malgrado la sangre que su voluptuosidad cuesta,",
+      wordGroups: [
+        { wid: "6-0", fr: "malgré", es: "malgrado" },
+        { wid: "6-1", fr: "sang", es: "sangre" },
+        { wid: "6-2", fr: "volupté", es: "voluptuosidad" },
+      ] },
+    { id: 7, fr: "Les cieux ne s’en sont point encore rassasiés !", es: "¡Los cielos todavía no están saciados del todo!",
+      wordGroups: [
+        { wid: "7-0", fr: "cieux", es: "cielos" },
+        { wid: "7-1", fr: "encore", es: "todavía" },
+      ] },
+    { id: 8, fr: "— Ah ! Jésus, souviens-toi du Jardin des Olives !", es: "—¡Ah, Jesús! ¡Recuérdate del Huerto de los Olivos!",
+      wordGroups: [
+        { wid: "8-0", fr: "Jésus", es: "Jesús" },
+        { wid: "8-1", fr: "Olives", es: "Olivos" },
+      ] },
+    { id: 9, fr: "Dans ta simplicité tu priais à genoux", es: "En tu candidez prosternado, rogabas" },
+    { id: 10, fr: "Celui qui dans son ciel riait au bruit des clous", es: "A Aquel que en su cielo reía del ruido de los clavos",
+      wordGroups: [
+        { wid: "10-0", fr: "ciel", es: "cielo" },
+        { wid: "10-1", fr: "bruit", es: "ruido" },
+        { wid: "10-2", fr: "clous", es: "clavos" },
+      ] },
+    { id: 11, fr: "Que d’ignobles bourreaux plantaient dans tes chairs vives,", es: "Que innobles verdugos hundían en tus carnes vivas,",
+      wordGroups: [
+        { wid: "11-0", fr: "bourreaux", es: "verdugos" },
+        { wid: "11-1", fr: "chairs", es: "carnes" },
+        { wid: "11-2", fr: "vives", es: "vivas" },
+      ] },
+    { id: 12, fr: "Lorsque tu vis cracher sur ta divinité", es: "Cuando viste escupir sobre tu divinidad",
+      wordGroups: [
+        { wid: "12-0", fr: "divinité", es: "divinidad" },
+      ] },
+    { id: 13, fr: "La crapule du corps de garde et des cuisines,", es: "La crápula del cuerpo de guardia y de la servidumbre,",
+      wordGroups: [
+        { wid: "13-0", fr: "crapule", es: "crápula" },
+        { wid: "13-1", fr: "corps", es: "cuerpo" },
+      ] },
+    { id: 14, fr: "Et lorsque tu sentis s’enfoncer les épines", es: "Y cuando sentiste incrustarse las espinas,",
+      wordGroups: [
+        { wid: "14-0", fr: "sentis", es: "sentiste" },
+      ] },
+    { id: 15, fr: "Dans ton crâne où vivait l’immense Humanité ;", es: "En tu cráneo donde vivía la inmensa Humanidad;",
+      wordGroups: [
+        { wid: "15-0", fr: "crâne", es: "cráneo" },
+        { wid: "15-1", fr: "vivait", es: "vivía" },
+        { wid: "15-2", fr: "Humanité", es: "Humanidad" },
+      ] },
+    { id: 16, fr: "Quand de ton corps brisé la pesanteur horrible", es: "Cuando de tu cuerpo roto la pesadez horrible",
+      wordGroups: [
+        { wid: "16-0", fr: "corps", es: "cuerpo" },
+        { wid: "16-1", fr: "horrible", es: "horrible" },
+      ] },
+    { id: 17, fr: "Allongeait tes deux bras distendus, que ton sang", es: "Alargaba tus dos brazos distendidos, que tu sangre",
+      wordGroups: [
+        { wid: "17-0", fr: "Allongeait", es: "Alargaba" },
+        { wid: "17-1", fr: "deux", es: "dos" },
+        { wid: "17-2", fr: "bras", es: "brazos" },
+        { wid: "17-3", fr: "sang", es: "sangre" },
+      ] },
+    { id: 18, fr: "Et ta sueur coulaient de ton front pâlissant,", es: "Y tu sudor manaba de tu frente palidecida,",
+      wordGroups: [
+        { wid: "18-0", fr: "sueur", es: "sudor" },
+        { wid: "18-1", fr: "front", es: "frente" },
+      ] },
+    { id: 19, fr: "Quand tu fus devant tous posé comme une cible,", es: "Cuando tú fuiste ante todos colgado como un blanco.",
+      wordGroups: [
+        { wid: "19-0", fr: "devant", es: "ante" },
+      ] },
+    { id: 20, fr: "Rêvais-tu de ces jours si brillants et si beaux", es: "¿Recordabas, acaso, aquellos días tan brillantes, y tan hermosos",
+      wordGroups: [
+        { wid: "20-0", fr: "jours", es: "días" },
+        { wid: "20-1", fr: "brillants", es: "brillantes" },
+        { wid: "20-2", fr: "beaux", es: "hermosos" },
+      ] },
+    { id: 21, fr: "Où tu vins pour remplir l’éternelle promesse,", es: "En que llegaste para cumplir la eterna promesa,",
+      wordGroups: [
+        { wid: "21-0", fr: "promesse", es: "promesa" },
+      ] },
+    { id: 22, fr: "Où tu foulais, monté sur une douce ânesse,", es: "Cuando atravesaste, montado sobre una mansa mula" },
+    { id: 23, fr: "Des chemins tout jonchés de fleurs et de rameaux,", es: "Caminos colmados de flores y de follaje,",
+      wordGroups: [
+        { wid: "23-0", fr: "chemins", es: "Caminos" },
+        { wid: "23-1", fr: "fleurs", es: "flores" },
+      ] },
+    { id: 24, fr: "Où, le cœur tout gonflé d’espoir et de vaillance,", es: "En que el corazón henchido de esperanzas y de valentía,",
+      wordGroups: [
+        { wid: "24-0", fr: "cœur", es: "corazón" },
+      ] },
+    { id: 25, fr: "Tu fouettais tous ces vils marchands à tour de bras,", es: "Azotaste sin rodeos a todos aquellos mercaderes viles?",
+      wordGroups: [
+        { wid: "25-0", fr: "vils", es: "viles" },
+      ] },
+    { id: 26, fr: "Où tu fus maître enfin ? Le remords n’a-t-il pas", es: "¿Cuando fuiste tú, finalmente, el amo? El remordimiento,",
+      wordGroups: [
+        { wid: "26-0", fr: "maître", es: "amo" },
+        { wid: "26-1", fr: "remords", es: "remordimiento" },
+      ] },
+    { id: 27, fr: "Pénétré dans ton flanc plus avant que la lance ?", es: "¿No ha penetrado en tu flanco mucho antes que la lanza?",
+      wordGroups: [
+        { wid: "27-0", fr: "Pénétré", es: "penetrado" },
+        { wid: "27-1", fr: "flanc", es: "flanco" },
+        { wid: "27-2", fr: "avant", es: "antes" },
+      ] },
+    { id: 28, fr: "— Certes, je sortirai, quant à moi, satisfait", es: "—Por cierto, en cuanto a mi, saldré satisfecho" },
+    { id: 29, fr: "D’un monde où l’action n’est pas la sœur du rêve ;", es: "De un mundo donde la acción no es la hermana del ensueño;",
+      wordGroups: [
+        { wid: "29-0", fr: "monde", es: "mundo" },
+        { wid: "29-1", fr: "l’action", es: "acción" },
+        { wid: "29-2", fr: "sœur", es: "hermana" },
+        { wid: "29-3", fr: "rêve", es: "ensueño" },
+      ] },
+    { id: 30, fr: "Puissé-je user du glaive et périr par le glaive !", es: "¡Pueda yo empuñar la espada y perecer por la espada!",
+      wordGroups: [
+        { wid: "30-0", fr: "glaive", es: "espada" },
+        { wid: "30-1", fr: "glaive", es: "espada" },
+      ] },
+    { id: 31, fr: "Saint Pierre a renié Jésus… il a bien fait !", es: "San Pedro ha renegado de Jesús... ¡Hizo bien!",
+      wordGroups: [
+        { wid: "31-0", fr: "Jésus", es: "Jesús" },
+      ] },
+  ],
+  blocks: [
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+  ],
+};

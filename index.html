@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f5f0e8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1e1a17" media="(prefers-color-scheme: dark)">
+  <title>Les Fleurs du mal — Charles Baudelaire</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital@0;1&display=swap" rel="stylesheet">
+</head>
+<body data-view="poem">
+  <!-- Resolves and applies the page language (English / Spanish) before the
+       written pages below are parsed. -->
+  <script src="site-lang.js"></script>
+  <script>
+    /* Pick the route before the page paints, so a link straight to #home or
+       #about never flashes the poem view first. An unknown hash is assumed to
+       be a poem id here; translation.js re-checks once the poems have loaded. */
+    (function () {
+      var h = window.location.hash.slice(1);
+      document.body.setAttribute('data-view', !h || h === 'home' ? 'home' : (h === 'about' ? 'about' : 'poem'));
+    })();
+  </script>
+
+  <!-- Narrow screens: fixed bar that opens the poem drawer and the search palette -->
+  <div class="topbar">
+    <button type="button" class="topbar-btn topbar-menu" aria-label="Show poem list" title="Show poem list" aria-expanded="false" aria-controls="sidebar">☰</button>
+    <span class="topbar-title">Au lecteur</span>
+    <button type="button" class="topbar-btn topbar-search" aria-label="Search poems" title="Search titles and lines in any language">
+      <svg class="search-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <circle cx="6.75" cy="6.75" r="4.25"></circle>
+        <line x1="9.9" y1="9.9" x2="14" y2="14"></line>
+      </svg>
+    </button>
+  </div>
+
+  <button type="button" class="sidebar-show" aria-label="Show poem list" title="Show poem list">☰</button>
+  <div class="sidebar-scrim" aria-hidden="true"></div>
+  <aside class="sidebar" id="sidebar" aria-label="Choose poem">
+    <div class="sidebar-head">
+      <a class="sidebar-title" href="#home" title="Home">Les Fleurs du mal</a>
+      <button type="button" class="sidebar-close" aria-label="Close poem list" title="Close poem list">×</button>
+    </div>
+    <button type="button" class="sidebar-search" aria-label="Search poems" title="Search titles and lines in any language">
+      <svg class="search-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <circle cx="6.75" cy="6.75" r="4.25"></circle>
+        <line x1="9.9" y1="9.9" x2="14" y2="14"></line>
+      </svg>
+      <span class="sidebar-search-label">
+        <span class="lang-en" lang="en">Search</span>
+        <span class="lang-es" lang="es">Buscar</span>
+      </span>
+      <kbd class="sidebar-search-key" aria-hidden="true">Ctrl K</kbd>
+    </button>
+    <nav>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-au-lecteur" data-section-toggle="au-lecteur">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Au Lecteur</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-au-lecteur" data-section="au-lecteur"></ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-spleen-et-ideal" data-section-toggle="spleen-et-ideal">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Spleen et Idéal</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-spleen-et-ideal" data-section="spleen-et-ideal">
+          <!-- Filled by translation.js -->
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-tableaux-parisiens" data-section-toggle="tableaux-parisiens">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Tableaux Parisiens</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-tableaux-parisiens" data-section="tableaux-parisiens"></ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-le-vin" data-section-toggle="le-vin">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Le Vin</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-le-vin" data-section="le-vin"></ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-fleurs-du-mal" data-section-toggle="fleurs-du-mal">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Fleurs du Mal</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-fleurs-du-mal" data-section="fleurs-du-mal"></ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-revolte" data-section-toggle="revolte">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Révolte</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-revolte" data-section="revolte"></ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-la-mort" data-section-toggle="la-mort">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">La Mort</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-la-mort" data-section="la-mort"></ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-pieces-condamnees" data-section-toggle="pieces-condamnees">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Pieces Condamnées</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-pieces-condamnees" data-section="pieces-condamnees"></ul>
+      </div>
+    </nav>
+    <div class="sidebar-foot">
+      <a class="sidebar-foot-link" href="#about">
+        <span class="lang-en" lang="en">About</span>
+        <span class="lang-es" lang="es">Acerca de</span>
+      </a>
+    </div>
+    <div class="sidebar-controls">
+      <button type="button" class="sidebar-control sidebar-toggle" aria-label="Hide sidebar" title="Hide sidebar">«</button>
+      <button type="button" class="sidebar-control font-down" aria-label="Decrease font size" title="Decrease font size">A−</button>
+      <button type="button" class="sidebar-control font-up" aria-label="Increase font size" title="Increase font size">A+</button>
+      <button type="button" class="sidebar-control theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+    </div>
+  </aside>
+
+  <div class="page">
+    <header class="header">
+      <h1 class="title">Au lecteur</h1>
+      <p class="subtitle">Charles Baudelaire — <cite>Les Fleurs du mal</cite></p>
+      <div class="header-ornament"></div>
+    </header>
+
+    <div class="comparison-wrap">
+      <main class="comparison" data-lines-per-stanza="4" data-langs="fr,en" data-translation-langs="en,es" aria-label="Comparison French / translation">
+      <!-- Rows built by translation.js for aligned stanzas -->
+      </main>
+    </div>
+
+    <nav class="poem-nav" aria-label="Previous, random and next poem">
+      <button type="button" class="poem-nav-btn poem-nav-prev" aria-label="Previous poem" disabled><span class="poem-nav-label">Previous</span> <cite class="poem-nav-title"></cite></button>
+      <button type="button" class="poem-nav-btn poem-nav-random random-poem" aria-label="Open a poem at random" title="Open a poem at random"><span class="poem-nav-glyph" aria-hidden="true">&#8258;</span> <span class="poem-nav-label">Random</span></button>
+      <button type="button" class="poem-nav-btn poem-nav-next" aria-label="Next poem" disabled><cite class="poem-nav-title"></cite> <span class="poem-nav-label">Next</span></button>
+    </nav>
+
+    <!-- Home and About. Only one of the three views (poem / home / about) is
+         shown at a time; `data-view` on <body> says which. -->
+    <article class="static-view" id="view-home" aria-labelledby="home-heading">
+      <div class="static-langs" role="group" aria-label="Page language — idioma de la página">
+        <button type="button" class="static-lang" data-lang="en" lang="en">English</button>
+        <button type="button" class="static-lang" data-lang="es" lang="es">Español</button>
+      </div>
+      <header class="static-head">
+        <h1 class="static-title" id="home-heading">Les Fleurs du mal</h1>
+        <p class="static-lede">
+          <span class="lang-en" lang="en">Charles Baudelaire, 1861</span>
+          <span class="lang-es" lang="es">Charles Baudelaire, 1861</span>
+        </p>
+        <div class="header-ornament"></div>
+      </header>
+      <div class="static-body">
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;margin-bottom:5px;">
+          <img src="/assets/beaudelaire.png" width="300px" />
+          <!-- <span class="static-note">English by Cyril Scott (1909) and Spanish by Eduardo Marquina (1905)</span> -->
+        </div>
+        <div class="lang-en" lang="en">
+          <p>This website is dedicated to Charles Baudelaire's <cite>Les Fleurs du mal</cite>. You will find here
+            all 126 poems of the 1861 edition plus six
+            <span class="glossary"><button type="button" class="glossary-term"
+              popovertarget="glossary-condamnees-en"><i lang="fr">pièces condamnées</i></button><span
+              class="glossary-note" id="glossary-condamnees-en" popover><b lang="fr">Pièces condamnées</b>The six
+              poems a Paris court ordered cut from the 1857 edition for <i lang="fr">outrage à la morale
+              publique</i>. Baudelaire never put them back: the 1861 edition appeared without them, and they
+              were reprinted in Brussels in <cite>Les Épaves</cite> (1866). The judgment against them stood
+              until 1949.</span></span>, with English and Spanish
+            translations.</p>
+          <p>Hovering over a word highlights the word it became in the translation. Try it out here!</p>
+        </div>
+        <div class="lang-es" lang="es">
+          <p>Este sitio está dedicado a <cite>Les Fleurs du mal</cite> de Charles Baudelaire. Aquí están
+            los 126 poemas de la edición de 1861 más las 6
+            <span class="glossary"><button type="button" class="glossary-term"
+              popovertarget="glossary-condamnees-es"><i lang="fr">pièces condamnées</i></button><span
+              class="glossary-note" id="glossary-condamnees-es" popover><b lang="fr">Pièces condamnées</b>Los seis
+              poemas que un tribunal de París mandó suprimir de la edición de 1857 por ultraje a la moral
+              pública. La edición de 1861 se publicó sin ellos, y se reimprimieron en
+              Bruselas en <cite>Les Épaves</cite> (1866). La decisión de la corte no se anuló hasta 1949.</span></span>, con
+            traducciones al inglés y al español.</p>
+          <p>Pasa el cursor sobre una palabra para ilumar su traducción. Pruébalo aquí:</p>
+        </div>
+        <figure class="demo" data-demo-poem="correspondances" data-demo-from="0" data-demo-lines="4">
+          <!-- The opening quatrain of Correspondances, built by translation.js
+               from the poem's own file: the same lines, the same highlighting
+               and the same language switch the reader gives them. -->
+        </figure>
+        <div class="lang-en" lang="en">
+          <p>The translations used on this site are Cyril Scott's <a href="https://www.gutenberg.org/ebooks/36098">1909 English translation</a>,
+            Eduardo Marquina's <a href="https://es.wikisource.org/wiki/Las_flores_del_mal">1905 Spanish translation</a>, and César Bravo's
+            (yours truly) 2026 English and Spanish translations.</p>
+          <p>Questions?
+            <a class="static-link" href="https://www.instagram.com/cesar_bravo.x/" target="_blank" rel="noopener noreferrer">send me a DM</a>.</p>
+        </div>
+        <div class="lang-es" lang="es">
+          <p>Las traducciones usadas son la <a href="https://www.gutenberg.org/ebooks/36098">traducción inglesa de 1909</a> de Cyril Scott,
+            la <a href="https://es.wikisource.org/wiki/Las_flores_del_mal">traducción española de 1905</a> de Eduardo Marquina, y las traducciones al inglés y español de César Bravo (2026).</p>
+          <p>
+            <a class="static-link" href="https://www.instagram.com/cesar_bravo.x/" target="_blank" rel="noopener noreferrer">Mandáme un DM por Instagram</a> si tienes cualquier duda o comentario.</p>
+        </div>
+        <p class="static-cta">
+          <button type="button" class="static-btn start-reading">
+            <span class="lang-en" lang="en">Start reading</span>
+            <span class="lang-es" lang="es">Empezar a leer</span>
+          </button>
+          <button type="button" class="static-btn static-btn--quiet random-poem">
+            <span class="lang-en" lang="en">A poem at random</span>
+            <span class="lang-es" lang="es">Un poema al azar</span>
+          </button>
+        </p>
+        <!-- <p class="static-note">
+          <span class="lang-en" lang="en">English by Cyril Scott (1909) and Spanish by Eduardo Marquina (1905),
+            both public domain, alongside a Spanish translation of my own in progress.
+            <a class="static-link" href="#about">More about this site</a>.</span>
+          <span class="lang-es" lang="es">El inglés es de Cyril Scott (1909) y el español de Eduardo Marquina (1905),
+            ambos de dominio público, junto a una traducción española mía en curso.
+            <a class="static-link" href="#about">Más sobre este sitio</a>.</span>
+        </p> -->
+      </div>
+    </article>
+
+    <article class="static-view" id="view-about" aria-labelledby="about-heading">
+      <div class="static-langs" role="group" aria-label="Page language — idioma de la página">
+        <button type="button" class="static-lang" data-lang="en" lang="en">English</button>
+        <button type="button" class="static-lang" data-lang="es" lang="es">Español</button>
+      </div>
+      <header class="static-head">
+        <h1 class="static-title" id="about-heading">
+          <span class="lang-en" lang="en">About</span>
+          <span class="lang-es" lang="es">Acerca del sitio</span>
+        </h1>
+        <div class="header-ornament"></div>
+      </header>
+      <div class="static-body">
+        <div class="lang-en" lang="en">
+          <p>
+            This site is a not-for-profit personal project. I am translating <cite>Flowers of Evil</cite>
+            into Spanish, and I wanted somewhere to keep that work and show it to the world.
+          </p>
+        </div>
+        <div class="lang-es" lang="es">
+          <p>
+            Este sitio es un proyecto personal sin fin de lucro. Estoy traduciendo <cite>Las Flores del Mal</cite>
+            al español, y quería un lugar donde guardar y mostrar ese trabajo.
+          </p>
+        </div>
+        <p class="static-credit">
+          <span class="lang-en" lang="en">Please direct any inquiries to my Instagram or Linkedin:</span>
+          <span class="lang-es" lang="es">Dirige cualquier pregunta a mi Instagram o Linkedin:</span>
+        </p>
+        <p class="static-cta">
+          <a class="static-btn" href="https://www.instagram.com/cesar_bravo.x/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a class="static-btn" href="https://www.linkedin.com/in/cesar-bravo-molina/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </p>
+
+        <!-- Privacy. Nothing here is collected, but saying so plainly is the
+             point of the notice; the bar at the foot of the page links here. -->
+        <section class="static-section" id="privacy" aria-labelledby="privacy-heading">
+          <h2 class="static-subtitle" id="privacy-heading">
+            <span class="lang-en" lang="en">Privacy</span>
+            <span class="lang-es" lang="es">Privacidad</span>
+          </h2>
+          <div class="lang-en" lang="en">
+            <p>This site sets no cookies, runs no analytics, and has no accounts, no login and
+              no database. Nothing you read, search for or click here is recorded or sent to me,
+              and there is no personal data of yours for me to keep, share or sell.</p>
+            <!-- <p>A few settings are remembered on your own device, in your browser’s
+              <b>localStorage</b>: the language of these pages, light or dark, the type size,
+              which sections of the poem list you have collapsed, and whether you have dismissed
+              the notice at the foot of the page. They never leave your browser. Clearing this
+              site’s data in your browser erases every one of them, and costs you nothing else.</p>
+            <p>Two things are fetched from elsewhere: the typefaces come from <b>Google Fonts</b>
+              as the page loads, and clicking a word opens its entry from <b>Wiktionary</b>, run by
+              the Wikimedia Foundation. As with any request to any website, those two see your IP
+              address; neither is told anything else about you, and no identifier of mine travels
+              with the request.</p>
+            <p>The GDPR gives you the right to see, correct or erase the personal data a site
+              holds about you, and to object to its being processed. Here there is none to see —
+              but if you would like to ask about any of this, my Instagram is just above.</p> -->
+          </div>
+          <div class="lang-es" lang="es">
+            <p>Este sitio no usa cookies, no tiene analítica y no tiene cuentas, ni inicio de
+              sesión ni base de datos. Nada de lo que leas, busques o pulses aquí queda
+              registrado ni me llega, y no hay ningún dato personal tuyo que yo pueda guardar,
+              compartir o vender.</p>
+            <!-- <p>Algunos ajustes se recuerdan en tu propio dispositivo, en el <b>localStorage</b> de
+              tu navegador: el idioma de estas páginas, el modo claro u oscuro, el tamaño de
+              letra, qué secciones de la lista de poemas has plegado y si ya cerraste el aviso
+              del pie de página. No salen nunca de tu navegador. Si borras los datos de este
+              sitio en tu navegador desaparecen todos, y no pierdes nada más.</p>
+            <p>Dos cosas se piden fuera: las tipografías vienen de <b>Google Fonts</b> al cargar
+              la página, y al pulsar una palabra se abre su entrada de <b>Wiktionary</b>, de la
+              Fundación Wikimedia. Como en cualquier petición a cualquier web, esos dos ven tu
+              dirección IP; no se les cuenta nada más sobre ti, y ninguna petición lleva un
+              identificador mío.</p> -->
+            <!-- <p>El RGPD te da derecho a ver, corregir o borrar los datos personales que un sitio
+              tenga sobre ti, y a oponerte a su tratamiento. Aquí no hay ninguno que ver — pero
+              si quieres preguntar sobre cualquiera de estos puntos, mi Instagram está justo
+              arriba.</p> -->
+          </div>
+        </section>
+
+        <p class="static-note">
+          <span class="lang-en" lang="en"><a class="static-link" href="#home">Back to the beginning</a></span>
+          <span class="lang-es" lang="es"><a class="static-link" href="#home">Volver al principio</a></span>
+        </p>
+      </div>
+    </article>
+
+    <footer class="footer">
+      <div class="footer-ornament"></div>
+      <p><cite>Les Fleurs du mal</cite> — 1861</p>
+    </footer>
+  </div>
+
+  <!-- Shown once, until dismissed. There is nothing to consent to -- no
+       cookies, no tracking -- so it states that rather than asking. -->
+  <div class="privacy-bar" role="region" aria-label="Privacy notice — aviso de privacidad" hidden>
+    <p class="privacy-text">
+      <span class="lang-en" lang="en">No cookies, no tracking, no accounts. A few reading preferences are kept
+        in this browser and nowhere else.</span>
+      <span class="lang-es" lang="es">Sin cookies, sin rastreo, sin cuentas. Algunas preferencias de lectura se
+        guardan en este navegador y en ningún otro sitio.</span>
+    </p>
+    <span class="privacy-actions">
+      <a class="privacy-link" href="#about">
+        <span class="lang-en" lang="en">Details</span>
+        <span class="lang-es" lang="es">Detalles</span>
+      </a>
+      <button type="button" class="privacy-ok">
+        <span class="lang-en" lang="en">Got it</span>
+        <span class="lang-es" lang="es">Entendido</span>
+      </button>
+    </span>
+  </div>
+
+  <script src="0. Au Lecteur/au-lecteur.js"></script>
+  <script src="1. Spleen et Ideal/benediction.js"></script>
+  <script src="1. Spleen et Ideal/l-albatros.js"></script>
+  <script src="1. Spleen et Ideal/elevation.js"></script>
+  <script src="1. Spleen et Ideal/correspondances.js"></script>
+  <script src="1. Spleen et Ideal/j-aime-le-souvenir.js"></script>
+  <script src="1. Spleen et Ideal/les-phares.js"></script>
+  <script src="1. Spleen et Ideal/la-muse-malade.js"></script>
+  <script src="1. Spleen et Ideal/la-muse-venale.js"></script>
+  <script src="1. Spleen et Ideal/le-mauvais-moine.js"></script>
+  <script src="1. Spleen et Ideal/l-ennemi.js"></script>
+  <script src="1. Spleen et Ideal/le-guignon.js"></script>
+  <script src="1. Spleen et Ideal/la-vie-anterieure.js"></script>
+  <script src="1. Spleen et Ideal/bohemiens-en-voyage.js"></script>
+  <script src="1. Spleen et Ideal/l-homme-et-la-mer.js"></script>
+  <script src="1. Spleen et Ideal/don-juan-aux-enfers.js"></script>
+  <script src="1. Spleen et Ideal/chatiment-de-l-orgueil.js"></script>
+  <script src="1. Spleen et Ideal/la-beaute.js"></script>
+  <script src="1. Spleen et Ideal/l-ideal.js"></script>
+  <script src="1. Spleen et Ideal/la-geante.js"></script>
+  <script src="1. Spleen et Ideal/le-masque.js"></script>
+  <script src="1. Spleen et Ideal/hymne-a-la-beaute.js"></script>
+  <script src="1. Spleen et Ideal/parfum-exotique.js"></script>
+  <script src="1. Spleen et Ideal/la-chevelure.js"></script>
+  <script src="1. Spleen et Ideal/je-t-adore.js"></script>
+  <script src="1. Spleen et Ideal/tu-mettrais-l-univers.js"></script>
+  <script src="1. Spleen et Ideal/sed-non-satiata.js"></script>
+  <script src="1. Spleen et Ideal/vetements-ondoyants.js"></script>
+  <script src="1. Spleen et Ideal/le-serpent-qui-danse.js"></script>
+  <script src="1. Spleen et Ideal/une-charogne.js"></script>
+  <script src="1. Spleen et Ideal/de-profundis-clamavi.js"></script>
+  <script src="1. Spleen et Ideal/le-vampire.js"></script>
+  <script src="1. Spleen et Ideal/une-nuit-que-j-etais.js"></script>
+  <script src="1. Spleen et Ideal/remords-posthume.js"></script>
+  <script src="1. Spleen et Ideal/le-chat-1.js"></script>
+  <script src="1. Spleen et Ideal/duellum.js"></script>
+  <script src="1. Spleen et Ideal/le-balcon.js"></script>
+  <script src="1. Spleen et Ideal/le-possede.js"></script>
+  <script src="1. Spleen et Ideal/un-fantome.js"></script>
+  <script src="1. Spleen et Ideal/je-te-donne-ces-vers.js"></script>
+  <script src="1. Spleen et Ideal/semper-eadem.js"></script>
+  <script src="1. Spleen et Ideal/tout-entiere.js"></script>
+  <script src="1. Spleen et Ideal/que-diras-tu-ce-soir.js"></script>
+  <script src="1. Spleen et Ideal/le-flambeau-vivant.js"></script>
+  <script src="1. Spleen et Ideal/reversibilite.js"></script>
+  <script src="1. Spleen et Ideal/confession.js"></script>
+  <script src="1. Spleen et Ideal/l-aube-spirituelle.js"></script>
+  <script src="1. Spleen et Ideal/harmonie-du-soir.js"></script>
+  <script src="1. Spleen et Ideal/le-flacon.js"></script>
+  <script src="1. Spleen et Ideal/le-poison.js"></script>
+  <script src="1. Spleen et Ideal/ciel-brouille.js"></script>
+  <script src="1. Spleen et Ideal/le-chat-2.js"></script>
+  <script src="1. Spleen et Ideal/le-beau-navire.js"></script>
+  <script src="1. Spleen et Ideal/l-invitation-au-voyage.js"></script>
+  <script src="1. Spleen et Ideal/l-irreparable.js"></script>
+  <script src="1. Spleen et Ideal/causerie.js"></script>
+  <script src="1. Spleen et Ideal/chant-d-automne.js"></script>
+  <script src="1. Spleen et Ideal/a-une-madone.js"></script>
+  <script src="1. Spleen et Ideal/chanson-d-apres-midi.js"></script>
+  <script src="1. Spleen et Ideal/sisina.js"></script>
+  <script src="1. Spleen et Ideal/franciscae-meae-laudes.js"></script>
+  <script src="1. Spleen et Ideal/a-une-dame-creole.js"></script>
+  <script src="1. Spleen et Ideal/moesta-et-errabunda.js"></script>
+  <script src="1. Spleen et Ideal/le-revenant.js"></script>
+  <script src="1. Spleen et Ideal/sonnet-d-automne.js"></script>
+  <script src="1. Spleen et Ideal/tristesses-de-la-lune.js"></script>
+  <script src="1. Spleen et Ideal/les-chats.js"></script>
+  <script src="1. Spleen et Ideal/les-hiboux.js"></script>
+  <script src="1. Spleen et Ideal/la-pipe.js"></script>
+  <script src="1. Spleen et Ideal/la-musique.js"></script>
+  <script src="1. Spleen et Ideal/sepulture.js"></script>
+  <script src="1. Spleen et Ideal/une-gravure-fantastique.js"></script>
+  <script src="1. Spleen et Ideal/le-mort-joyeux.js"></script>
+  <script src="1. Spleen et Ideal/le-tonneau-de-la-haine.js"></script>
+  <script src="1. Spleen et Ideal/la-cloche-felee.js"></script>
+  <script src="1. Spleen et Ideal/spleen-1.js"></script>
+  <script src="1. Spleen et Ideal/spleen-2.js"></script>
+  <script src="1. Spleen et Ideal/spleen-3.js"></script>
+  <script src="1. Spleen et Ideal/spleen-4.js"></script>
+  <script src="1. Spleen et Ideal/obsession.js"></script>
+  <script src="1. Spleen et Ideal/le-gout-du-neant.js"></script>
+  <script src="1. Spleen et Ideal/alchimie-de-la-douleur.js"></script>
+  <script src="1. Spleen et Ideal/horreur-sympathique.js"></script>
+  <script src="1. Spleen et Ideal/l-heautontimoroumenos.js"></script>
+  <script src="1. Spleen et Ideal/l-irremediable.js"></script>
+  <script src="1. Spleen et Ideal/l-horloge.js"></script>
+  <script src="2. Tableaux Parisiens/paysage.js"></script>
+  <script src="2. Tableaux Parisiens/le-soleil.js"></script>
+  <script src="2. Tableaux Parisiens/a-une-mendiante-rousse.js"></script>
+  <script src="2. Tableaux Parisiens/le-cygne.js"></script>
+  <script src="2. Tableaux Parisiens/les-sept-vieillards.js"></script>
+  <script src="2. Tableaux Parisiens/les-petites-vieilles.js"></script>
+  <script src="2. Tableaux Parisiens/les-aveugles.js"></script>
+  <script src="2. Tableaux Parisiens/a-une-passante.js"></script>
+  <script src="2. Tableaux Parisiens/le-squelette-laboureur.js"></script>
+  <script src="2. Tableaux Parisiens/le-crepuscule-du-soir.js"></script>
+  <script src="2. Tableaux Parisiens/le-jeu.js"></script>
+  <script src="2. Tableaux Parisiens/danse-macabre.js"></script>
+  <script src="2. Tableaux Parisiens/l-amour-du-mensonge.js"></script>
+  <script src="2. Tableaux Parisiens/je-n-ai-pas-oublie.js"></script>
+  <script src="2. Tableaux Parisiens/la-servante-au-grand-coeur.js"></script>
+  <script src="2. Tableaux Parisiens/brumes-et-pluies.js"></script>
+  <script src="2. Tableaux Parisiens/reve-parisien.js"></script>
+  <script src="2. Tableaux Parisiens/le-crepuscule-du-matin.js"></script>
+  <script src="3. Le Vin/l-ame-du-vin.js"></script>
+  <script src="3. Le Vin/le-vin-des-chiffonniers.js"></script>
+  <script src="3. Le Vin/le-vin-de-l-assassin.js"></script>
+  <script src="3. Le Vin/le-vin-du-solitaire.js"></script>
+  <script src="3. Le Vin/le-vin-des-amants.js"></script>
+  <script src="4. Fleurs du Mal/la-destruction.js"></script>
+  <script src="4. Fleurs du Mal/une-martyre.js"></script>
+  <script src="4. Fleurs du Mal/femmes-damnees.js"></script>
+  <script src="4. Fleurs du Mal/les-deux-bonnes-soeurs.js"></script>
+  <script src="4. Fleurs du Mal/la-fontaine-de-sang.js"></script>
+  <script src="4. Fleurs du Mal/allegorie.js"></script>
+  <script src="4. Fleurs du Mal/la-beatrice.js"></script>
+  <script src="4. Fleurs du Mal/un-voyage-a-cythere.js"></script>
+  <script src="4. Fleurs du Mal/l-amour-et-le-crane.js"></script>
+  <script src="5. Revolte/le-reniement-de-saint-pierre.js"></script>
+  <script src="5. Revolte/abel-et-cain.js"></script>
+  <script src="5. Revolte/les-litanies-de-satan.js"></script>
+  <script src="6. La Mort/la-mort-des-amants.js"></script>
+  <script src="6. La Mort/la-mort-des-pauvres.js"></script>
+  <script src="6. La Mort/la-mort-des-artistes.js"></script>
+  <script src="6. La Mort/la-fin-de-la-journee.js"></script>
+  <script src="6. La Mort/le-reve-d-un-curieux.js"></script>
+  <script src="6. La Mort/le-voyage.js"></script>
+  <script src="7. Pieces Condamnees/les-bijoux.js"></script>
+  <script src="7. Pieces Condamnees/le-lethe.js"></script>
+  <script src="7. Pieces Condamnees/a-celle-qui-est-trop-gaie.js"></script>
+  <script src="7. Pieces Condamnees/lesbos.js"></script>
+  <script src="7. Pieces Condamnees/femmes-damnees-delphine-et-hippolyte.js"></script>
+  <script src="7. Pieces Condamnees/les-metamorphoses-du-vampire.js"></script>
+  <script src="translation-data.js"></script>
+  <script src="translation.js"></script>
+  <script src="search.js"></script>
+</body>
+</html>

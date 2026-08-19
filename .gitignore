@@ -1,0 +1,7 @@
+# Atomic writes from tools/dev-server.mjs land here before the rename.
+*.tmp
+
+node_modules/
+
+.DS_Store
+Thumbs.db

@@ -1,0 +1,43 @@
+window.POEMS = window.POEMS || {};
+
+window.POEMS["l-amour-et-le-crane"] = {
+  title: "L’Amour et le Crâne",
+  titles: { fr: "L’Amour et le Crâne" },
+  sources: {
+    fr: "Les Fleurs du mal (1861) — French Wikisource",
+    frUrl: "https://fr.wikisource.org/wiki/Les_Fleurs_du_mal_%281861%29/L%E2%80%99Amour_et_le_Cr%C3%A2ne",
+  },
+  segments: [
+    { id: 0, fr: "L’Amour est assis sur le crâne" },
+    { id: 1, fr: "﻿De l’Humanité," },
+    { id: 2, fr: "Et sur ce trône le profane," },
+    { id: 3, fr: "﻿Au rire effronté," },
+    { id: 4, fr: "Souffle gaiement des bulles rondes" },
+    { id: 5, fr: "﻿Qui montent dans l’air," },
+    { id: 6, fr: "Comme pour rejoindre les mondes" },
+    { id: 7, fr: "﻿Au fond de l’éther." },
+    { id: 8, fr: "Le globe lumineux et frêle" },
+    { id: 9, fr: "﻿Prend un grand essor," },
+    { id: 10, fr: "Crève et crache son âme grêle" },
+    { id: 11, fr: "﻿Comme un songe d’or." },
+    { id: 12, fr: "J’entends le crâne à chaque bulle" },
+    { id: 13, fr: "﻿Prier et gémir :" },
+    { id: 14, fr: "— « Ce jeu féroce et ridicule," },
+    { id: 15, fr: "﻿Quand doit-il finir ?" },
+    { id: 16, fr: "Car ce que ta bouche cruelle" },
+    { id: 17, fr: "﻿Éparpille en l’air," },
+    { id: 18, fr: "Monstre assassin, c’est ma cervelle," },
+    { id: 19, fr: "﻿Mon sang et ma chair ! »" },
+  ],
+  blocks: [
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+  ],
+};

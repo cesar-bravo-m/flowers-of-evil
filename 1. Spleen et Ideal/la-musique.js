@@ -1,0 +1,108 @@
+window.POEMS = window.POEMS || {};
+
+window.POEMS["la-musique"] = {
+  title: "La Musique",
+  titles: { fr: "La Musique", en: "Music", es: "La música" },
+  sources: {
+    fr: "Les Fleurs du mal (1861) — French Wikisource",
+    frUrl: "https://fr.wikisource.org/wiki/Les_Fleurs_du_mal_(1861)",
+    en: "Translated by Cyril Scott, “The Flowers of Evil” (Elkin Mathews, London, 1909)",
+    enUrl: "https://www.gutenberg.org/ebooks/36098",
+    es: "Traducido por Eduardo Marquina, «Las flores del mal» (1905)",
+    esUrl: "https://es.wikisource.org/wiki/Las_flores_del_mal",
+  },
+  segments: [
+    { id: 0, fr: "La musique souvent me prend comme une mer !", en: "Oft Music possesses me like the seas!", es: "¡La música frecuentemente me coge como un mar!",
+      wordGroups: [
+        { wid: "0-0", fr: "La musique", en: "Music", es: "La música" },
+        { wid: "0-1", fr: "souvent", en: "Oft", es: "frecuentemente" },
+        { wid: "0-2", fr: "me prend", en: "possesses me", es: "me coge" },
+        { wid: "0-3", fr: "comme", en: "like", es: "como" },
+        { wid: "0-4", fr: "une mer", en: "the seas", es: "un mar" },
+      ] },
+    { id: 1, fr: "Vers ma pâle étoile,", en: "To my planet pale,", es: "Hacia mi pálida estrella,",
+      wordGroups: [
+        { wid: "1-0", fr: "Vers", en: "To", es: "Hacia" },
+        { wid: "1-1", fr: "ma", en: "my", es: "mi" },
+        { wid: "1-2", fr: "pâle", en: "pale", es: "pálida" },
+        { wid: "1-3", fr: "étoile", en: "planet", es: "estrella" },
+      ] },
+    { id: 2, fr: "Sous un plafond de brume ou dans un vaste éther,", en: "'Neath a ceiling of mist, in the lofty breeze,", es: "Bajo un techado de brumas o en la vastedad etérea,",
+      wordGroups: [
+        { wid: "2-0", fr: "Sous", en: "'Neath", es: "Bajo" },
+        { wid: "2-1", fr: "un plafond", en: "a ceiling", es: "un techado" },
+        { wid: "2-2", fr: "de brume", en: "of mist", es: "de brumas" },
+        { wid: "2-3", fr: "vaste", en: "lofty", es: "vastedad" },
+        { wid: "2-4", fr: "éther", en: "breeze", es: "etérea" },
+      ] },
+    { id: 3, fr: "Je mets à la voile ;", en: "I set my sail.", es: "Yo me hago a la vela;",
+      wordGroups: [
+        { wid: "3-0", fr: "Je", en: "I", es: "Yo" },
+        { wid: "3-1", fr: "mets", en: "set", es: "me hago" },
+        { wid: "3-2", fr: "la voile", en: "my sail", es: "la vela" },
+      ] },
+    { id: 4, fr: "La poitrine en avant et les poumons gonflés", en: "With inflated lungs and expanded chest,", es: "El pecho saliente y los pulmones hinchados",
+      wordGroups: [
+        { wid: "4-0", fr: "La poitrine", en: "chest", es: "El pecho" },
+        { wid: "4-1", fr: "en avant", en: "expanded", es: "saliente" },
+        { wid: "4-2", fr: "les poumons", en: "lungs", es: "los pulmones" },
+        { wid: "4-3", fr: "gonflés", en: "inflated", es: "hinchados" },
+      ] },
+    { id: 5, fr: "Comme de la toile,", en: "Like to a sail,", es: "Como velamen,",
+      wordGroups: [
+        { wid: "5-0", fr: "Comme", en: "Like", es: "Como" },
+        { wid: "5-1", fr: "la toile", en: "a sail", es: "velamen" },
+      ] },
+    { id: 6, fr: "J’escalade le dos des flots amoncelés", en: "On the backs of the heaped-up billows I rest--", es: "Yo trepo al lomo de las olas amontonadas",
+      wordGroups: [
+        { wid: "6-0", fr: "le dos", en: "the backs", es: "al lomo" },
+        { wid: "6-1", fr: "des flots", en: "billows", es: "de las olas" },
+        { wid: "6-2", fr: "amoncelés", en: "heaped-up", es: "amontonadas" },
+      ] },
+    { id: 7, fr: "Que la nuit me voile ;", en: "Which the shadows veil--", es: "Que la noche me vela;",
+      wordGroups: [
+        { wid: "7-0", fr: "Que", en: "Which", es: "Que" },
+        { wid: "7-1", fr: "la nuit", en: "the shadows", es: "la noche" },
+        { wid: "7-2", fr: "voile", en: "veil", es: "vela" },
+      ] },
+    { id: 8, fr: "Je sens vibrer en moi toutes les passions", en: "I feel all the anguish within me arise", es: "Siento vibrar en mí todas las pasiones",
+      wordGroups: [
+        { wid: "8-0", fr: "Je sens", en: "I feel", es: "Siento" },
+        { wid: "8-1", fr: "vibrer", en: "arise", es: "vibrar" },
+        { wid: "8-2", fr: "en moi", en: "within me", es: "en mí" },
+        { wid: "8-3", fr: "toutes", en: "all", es: "todas" },
+        { wid: "8-4", fr: "les passions", en: "the anguish", es: "las pasiones" },
+      ] },
+    { id: 9, fr: "D’un vaisseau qui souffre ;", en: "Of a ship in distress;", es: "De un navío que sufre;",
+      wordGroups: [
+        { wid: "9-0", fr: "D’un", en: "Of a", es: "De un" },
+        { wid: "9-1", fr: "vaisseau", en: "ship", es: "navío" },
+        { wid: "9-2", fr: "souffre", en: "in distress", es: "sufre" },
+      ] },
+    { id: 10, fr: "Le bon vent, la tempête et ses convulsions", en: "The tempest, the rain, 'neath the lowering skies,", es: "El buen viento, la tempestad y sus convulsiones",
+      wordGroups: [
+        { wid: "10-0", fr: "la tempête", en: "The tempest", es: "la tempestad" },
+      ] },
+    { id: 11, fr: "Sur l’immense gouffre", en: "My body caress;", es: "Sobre el inmenso abismo" },
+    { id: 12, fr: "Me bercent. D’autre fois, calme plat, grand miroir", en: "At times, the calm pool or the mirror clear", es: "Me mecen. ¡Otras veces, calma chicha, gran espejo",
+      wordGroups: [
+        { wid: "12-0", fr: "D’autre fois", en: "At times", es: "Otras veces" },
+        { wid: "12-1", fr: "calme plat", en: "the calm pool", es: "calma chicha" },
+        { wid: "12-2", fr: "miroir", en: "the mirror", es: "espejo" },
+      ] },
+    { id: 13, fr: "De mon désespoir !", en: "Of my despair!", es: "De mi desesperación!",
+      wordGroups: [
+        { wid: "13-0", fr: "De mon", en: "Of my", es: "De mi" },
+        { wid: "13-1", fr: "désespoir", en: "despair", es: "desesperación" },
+      ] },
+  ],
+  blocks: [
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 3 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 3 },
+  ],
+};

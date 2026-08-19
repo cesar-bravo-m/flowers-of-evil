@@ -1,0 +1,106 @@
+window.POEMS = window.POEMS || {};
+
+window.POEMS["les-hiboux"] = {
+  title: "Les Hiboux",
+  titles: { fr: "Les Hiboux", en: "Owls", es: "Los buhos" },
+  sources: {
+    fr: "Les Fleurs du mal (1861) — French Wikisource",
+    frUrl: "https://fr.wikisource.org/wiki/Les_Fleurs_du_mal_(1861)",
+    en: "Translated by Cyril Scott, “The Flowers of Evil” (Elkin Mathews, London, 1909)",
+    enUrl: "https://www.gutenberg.org/ebooks/36098",
+    es: "Traducido por Eduardo Marquina, «Las flores del mal» (1905)",
+    esUrl: "https://es.wikisource.org/wiki/Las_flores_del_mal",
+  },
+  segments: [
+    { id: 0, fr: "Sous les ifs noirs qui les abritent,", en: "Beneath the shades of sombre yews,", es: "Bajo los techos negros que los abrigan,",
+      wordGroups: [
+        { wid: "0-0", fr: "Sous", en: "Beneath", es: "Bajo" },
+        { wid: "0-1", fr: "les ifs", en: "yews", es: "los techos" },
+        { wid: "0-2", fr: "noirs", en: "sombre", es: "negros" },
+        { wid: "0-3", fr: "abritent", en: "shades", es: "abrigan" },
+      ] },
+    { id: 1, fr: "Les hiboux se tiennent rangés,", en: "The silent owls sit ranged in rows,", es: "Los búhos se mantienen alineados,",
+      wordGroups: [
+        { wid: "1-0", fr: "Les hiboux", en: "The silent owls", es: "Los búhos" },
+        { wid: "1-1", fr: "se tiennent", en: "sit", es: "se mantienen" },
+        { wid: "1-2", fr: "rangés", en: "ranged in rows", es: "alineados" },
+      ] },
+    { id: 2, fr: "Ainsi que des dieux étrangers,", en: "Like ancient idols, strangely pose,", es: "Como dioses extraños,",
+      wordGroups: [
+        { wid: "2-0", fr: "Ainsi que", en: "Like", es: "Como" },
+        { wid: "2-1", fr: "des dieux", en: "idols", es: "dioses" },
+        { wid: "2-2", fr: "étrangers", en: "strangely", es: "extraños" },
+      ] },
+    { id: 3, fr: "Dardant leur œil rouge. Ils méditent.", en: "And darting fiery eyes, they muse.", es: "Clavando su mirada roja. Meditan.",
+      wordGroups: [
+        { wid: "3-0", fr: "Dardant", en: "darting", es: "Clavando" },
+        { wid: "3-1", fr: "leur œil", en: "eyes", es: "su mirada" },
+        { wid: "3-2", fr: "rouge", en: "fiery", es: "roja" },
+        { wid: "3-3", fr: "Ils", en: "they" },
+        { wid: "3-4", fr: "méditent", en: "muse", es: "Meditan" },
+      ] },
+    { id: 4, fr: "Sans remuer ils se tiendront", en: "Immovable, they sit and gaze,", es: "Sin moverse se mantendrán",
+      wordGroups: [
+        { wid: "4-0", fr: "Sans remuer", en: "Immovable", es: "Sin moverse" },
+        { wid: "4-1", fr: "ils", en: "they" },
+        { wid: "4-2", fr: "se tiendront", en: "sit", es: "se mantendrán" },
+      ] },
+    { id: 5, fr: "Jusqu’à l’heure mélancolique", en: "Until the melancholy hour,", es: "Hasta la hora melancólica",
+      wordGroups: [
+        { wid: "5-0", fr: "Jusqu’à", en: "Until", es: "Hasta" },
+        { wid: "5-1", fr: "l’heure", en: "hour", es: "la hora" },
+        { wid: "5-2", fr: "mélancolique", en: "melancholy", es: "melancólica" },
+      ] },
+    { id: 6, fr: "Où, poussant le soleil oblique,", en: "At which the darknesses devour", es: "En que, empujando el sol oblicuo,",
+      wordGroups: [
+        { wid: "6-0", fr: "Où", en: "At which", es: "En que" },
+      ] },
+    { id: 7, fr: "Les ténèbres s’établiront.", en: "The faded sunset's slanting rays.", es: "Las tinieblas se establezcan." },
+    { id: 8, fr: "Leur attitude au sage enseigne", en: "Their attitude, instructs the wise,", es: "Su actitud, por sabia, enseña",
+      wordGroups: [
+        { wid: "8-0", fr: "Leur attitude", en: "Their attitude", es: "Su actitud" },
+        { wid: "8-1", fr: "au sage", en: "the wise", es: "por sabia" },
+        { wid: "8-2", fr: "enseigne", en: "instructs", es: "enseña" },
+      ] },
+    { id: 9, fr: "Qu’il faut en ce monde qu’il craigne", en: "That he--within this world--who flies", es: "Que es preciso en este mundo que tema",
+      wordGroups: [
+        { wid: "9-0", fr: "Qu’il", en: "That he", es: "Que" },
+        { wid: "9-1", fr: "en ce monde", en: "within this world", es: "en este mundo" },
+        { wid: "9-2", fr: "craigne", en: "flies", es: "tema" },
+      ] },
+    { id: 10, fr: "Le tumulte et le mouvement ;", en: "From tumult and from merriment;", es: "El tumulto y el movimiento;",
+      wordGroups: [
+        { wid: "10-0", fr: "Le tumulte", en: "tumult", es: "El tumulto" },
+        { wid: "10-1", fr: "et", en: "and", es: "y" },
+        { wid: "10-2", fr: "le mouvement", en: "merriment", es: "el movimiento" },
+      ] },
+    { id: 11, fr: "L’homme ivre d’une ombre qui passe", en: "The man allured by a passing face,", es: "El hombre embriagado por la sombra que pasa",
+      wordGroups: [
+        { wid: "11-0", fr: "L’homme", en: "The man", es: "El hombre" },
+        { wid: "11-1", fr: "ivre", en: "allured", es: "embriagado" },
+        { wid: "11-2", fr: "qui passe", en: "passing", es: "que pasa" },
+      ] },
+    { id: 12, fr: "Porte toujours le châtiment", en: "For ever bears the chastisement", es: "Lleva siempre el castigo",
+      wordGroups: [
+        { wid: "12-0", fr: "Porte", en: "bears", es: "Lleva" },
+        { wid: "12-1", fr: "toujours", en: "For ever", es: "siempre" },
+        { wid: "12-2", fr: "le châtiment", en: "the chastisement", es: "el castigo" },
+      ] },
+    { id: 13, fr: "D’avoir voulu changer de place.", en: "Of having wished to change his place.", es: "De haber querido cambiar de sitio.",
+      wordGroups: [
+        { wid: "13-0", fr: "D’avoir", en: "Of having", es: "De haber" },
+        { wid: "13-1", fr: "voulu", en: "wished", es: "querido" },
+        { wid: "13-2", fr: "changer", en: "to change", es: "cambiar" },
+        { wid: "13-3", fr: "de place", en: "his place", es: "de sitio" },
+      ] },
+  ],
+  blocks: [
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 3 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 3 },
+  ],
+};

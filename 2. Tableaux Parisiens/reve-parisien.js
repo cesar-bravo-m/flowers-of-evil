@@ -1,0 +1,287 @@
+window.POEMS = window.POEMS || {};
+
+window.POEMS["reve-parisien"] = {
+  title: "Rêve parisien",
+  titles: { fr: "Rêve parisien", es: "Sueño parisiense" },
+  sources: {
+    fr: "Les Fleurs du mal (1861) — French Wikisource",
+    frUrl: "https://fr.wikisource.org/wiki/Les_Fleurs_du_mal_%281861%29/R%C3%AAve_parisien",
+    es: "Traducido por Eduardo Marquina, «Las flores del mal» (1905)",
+    esUrl: "https://es.wikisource.org/wiki/Sue%C3%B1o_parisiense",
+  },
+  segments: [
+    { id: 0, fr: "De ce terrible paysage,", es: "De aquel terrible paisaje,",
+      wordGroups: [
+        { wid: "0-0", fr: "terrible", es: "terrible" },
+        { wid: "0-1", fr: "paysage", es: "paisaje" },
+      ] },
+    { id: 1, fr: "Tel que jamais mortel n’en vit,", es: "Tal que jamás un mortal vio,",
+      wordGroups: [
+        { wid: "1-0", fr: "Tel", es: "Tal" },
+        { wid: "1-1", fr: "jamais", es: "jamás" },
+        { wid: "1-2", fr: "mortel", es: "mortal" },
+      ] },
+    { id: 2, fr: "Ce matin encore l’image,", es: "Esta mañana todavía la imagen,",
+      wordGroups: [
+        { wid: "2-0", fr: "matin", es: "mañana" },
+        { wid: "2-1", fr: "encore", es: "todavía" },
+      ] },
+    { id: 3, fr: "Vague et lointaine, me ravit.", es: "Vaga y lejana, me arrebataba." },
+    { id: 4, fr: "Le sommeil est plein de miracles !", es: "¡El sueño estaba lleno de milagros!",
+      wordGroups: [
+        { wid: "4-0", fr: "sommeil", es: "sueño" },
+        { wid: "4-1", fr: "plein", es: "lleno" },
+      ] },
+    { id: 5, fr: "Par un caprice singulier,", es: "Por un capricho singular",
+      wordGroups: [
+        { wid: "5-0", fr: "caprice", es: "capricho" },
+        { wid: "5-1", fr: "singulier", es: "singular" },
+      ] },
+    { id: 6, fr: "J’avais banni de ces spectacles", es: "Yo había desterrado del espectáculo" },
+    { id: 7, fr: "Le végétal irrégulier,", es: "El vegetal singular,",
+      wordGroups: [
+        { wid: "7-0", fr: "végétal", es: "vegetal" },
+      ] },
+    { id: 8, fr: "Et, peintre fier de mon génie,", es: "Y, pintor orgulloso de mi genio,",
+      wordGroups: [
+        { wid: "8-0", fr: "peintre", es: "pintor" },
+        { wid: "8-1", fr: "fier", es: "orgulloso" },
+        { wid: "8-2", fr: "génie", es: "genio" },
+      ] },
+    { id: 9, fr: "Je savourais dans mon tableau", es: "saboreaba en mi cuadro",
+      wordGroups: [
+        { wid: "9-0", fr: "tableau", es: "cuadro" },
+      ] },
+    { id: 10, fr: "L’enivrante monotonie", es: "La embriagante monotonía",
+      wordGroups: [
+        { wid: "10-0", fr: "monotonie", es: "monotonía" },
+      ] },
+    { id: 11, fr: "Du métal, du marbre et de l’eau.", es: "Del metal, del mármol y del agua.",
+      wordGroups: [
+        { wid: "11-0", fr: "métal", es: "metal" },
+        { wid: "11-1", fr: "marbre", es: "mármol" },
+      ] },
+    { id: 12, fr: "Babel d’escaliers et d’arcades,", es: "Babel de escaleras y de arcadas,",
+      wordGroups: [
+        { wid: "12-0", fr: "Babel", es: "Babel" },
+      ] },
+    { id: 13, fr: "C’était un palais infini,", es: "Era un palacio infinito,",
+      wordGroups: [
+        { wid: "13-0", fr: "palais", es: "palacio" },
+        { wid: "13-1", fr: "infini", es: "infinito" },
+      ] },
+    { id: 14, fr: "Plein de bassins et de cascades", es: "Lleno de fuentes y cascadas",
+      wordGroups: [
+        { wid: "14-0", fr: "Plein", es: "Lleno" },
+        { wid: "14-1", fr: "cascades", es: "cascadas" },
+      ] },
+    { id: 15, fr: "Tombant dans l’or mat ou bruni ;", es: "Volcando el oro mate o bruñido;",
+      wordGroups: [
+        { wid: "15-0", fr: "mat", es: "mate" },
+      ] },
+    { id: 16, fr: "Et des cataractes pesantes,", es: "Y cataratas pesadas,",
+      wordGroups: [
+        { wid: "16-0", fr: "cataractes", es: "cataratas" },
+      ] },
+    { id: 17, fr: "Comme des rideaux de cristal,", es: "Como cortinas de cristal,",
+      wordGroups: [
+        { wid: "17-0", fr: "rideaux", es: "cortinas" },
+        { wid: "17-1", fr: "cristal", es: "cristal" },
+      ] },
+    { id: 18, fr: "Se suspendaient, éblouissantes,", es: "Pendían, deslumbrantes," },
+    { id: 19, fr: "À des murailles de métal.", es: "De las murallas de metal.",
+      wordGroups: [
+        { wid: "19-0", fr: "murailles", es: "murallas" },
+        { wid: "19-1", fr: "métal", es: "metal" },
+      ] },
+    { id: 20, fr: "Non d’arbres, mais de colonnades", es: "No de árboles, sino de columnatas," },
+    { id: 21, fr: "Les étangs dormants s’entouraient,", es: "Los dormidos estanques nos rodeaban,",
+      wordGroups: [
+        { wid: "21-0", fr: "étangs", es: "estanques" },
+      ] },
+    { id: 22, fr: "Où de gigantesques naïades,", es: "Donde gigantescas náyades,",
+      wordGroups: [
+        { wid: "22-0", fr: "gigantesques", es: "gigantescas" },
+        { wid: "22-1", fr: "naïades", es: "náyades" },
+      ] },
+    { id: 23, fr: "Comme des femmes, se miraient.", es: "Como mujeres, se contemplaban.",
+      wordGroups: [
+        { wid: "23-0", fr: "femmes", es: "mujeres" },
+      ] },
+    { id: 24, fr: "Des nappes d’eau s’épanchaient, bleues,", es: "Napas de agua derramábanse, azules",
+      wordGroups: [
+        { wid: "24-0", fr: "bleues", es: "azules" },
+      ] },
+    { id: 25, fr: "Entre des quais roses et verts,", es: "Entre malecones rosados y verdes,",
+      wordGroups: [
+        { wid: "25-0", fr: "Entre", es: "Entre" },
+        { wid: "25-1", fr: "roses", es: "rosados" },
+        { wid: "25-2", fr: "verts", es: "verdes" },
+      ] },
+    { id: 26, fr: "Pendant des millions de lieues,", es: "A lo largo de millones de leguas,",
+      wordGroups: [
+        { wid: "26-0", fr: "millions", es: "millones" },
+        { wid: "26-1", fr: "lieues", es: "leguas" },
+      ] },
+    { id: 27, fr: "Vers les confins de l’univers ;", es: "Hacia el confín del universo;",
+      wordGroups: [
+        { wid: "27-0", fr: "confins", es: "confín" },
+        { wid: "27-1", fr: "l’univers", es: "universo" },
+      ] },
+    { id: 28, fr: "C’étaient des pierres inouïes", es: "¡Eran piedras inauditas",
+      wordGroups: [
+        { wid: "28-0", fr: "pierres", es: "piedras" },
+      ] },
+    { id: 29, fr: "Et des flots magiques ; c’étaient", es: "Y oleadas mágicas; eran" },
+    { id: 30, fr: "D’immenses glaces éblouies", es: "Inmensos espejos deslumbrantes",
+      wordGroups: [
+        { wid: "30-0", fr: "D’immenses", es: "Inmensos" },
+      ] },
+    { id: 31, fr: "Par tout ce qu’elles reflétaient !", es: "Por todo cuanto ellos reflejaban!" },
+    { id: 32, fr: "Insouciants et taciturnes,", es: "Indolentes y taciturnos,",
+      wordGroups: [
+        { wid: "32-0", fr: "taciturnes", es: "taciturnos" },
+      ] },
+    { id: 33, fr: "Des Ganges, dans le firmament,", es: "Los Ganges, en el firmamento,",
+      wordGroups: [
+        { wid: "33-0", fr: "Ganges", es: "Ganges" },
+        { wid: "33-1", fr: "firmament", es: "firmamento" },
+      ] },
+    { id: 34, fr: "Versaient le trésor de leurs urnes", es: "Volcaban el tesoro de sus urnas",
+      wordGroups: [
+        { wid: "34-0", fr: "trésor", es: "tesoro" },
+        { wid: "34-1", fr: "urnes", es: "urnas" },
+      ] },
+    { id: 35, fr: "Dans des gouffres de diamant.", es: "En abismos de diamante.",
+      wordGroups: [
+        { wid: "35-0", fr: "gouffres", es: "abismos" },
+        { wid: "35-1", fr: "diamant", es: "diamante" },
+      ] },
+    { id: 36, fr: "Architecte de mes féeries,", es: "Arquitecto de mis hechizos," },
+    { id: 37, fr: "Je faisais, à ma volonté,", es: "Yo hacía, a mi capricho," },
+    { id: 38, fr: "Sous un tunnel de pierreries", es: "Bajo un túnel de pedrerías",
+      wordGroups: [
+        { wid: "38-0", fr: "tunnel", es: "túnel" },
+      ] },
+    { id: 39, fr: "Passer un océan dompté ;", es: "Pasar un océano domado;",
+      wordGroups: [
+        { wid: "39-0", fr: "Passer", es: "Pasar" },
+        { wid: "39-1", fr: "océan", es: "océano" },
+      ] },
+    { id: 40, fr: "Et tout, même la couleur noire,", es: "Y todo, aun el color negro,",
+      wordGroups: [
+        { wid: "40-0", fr: "couleur", es: "color" },
+        { wid: "40-1", fr: "noire", es: "negro" },
+      ] },
+    { id: 41, fr: "Semblait fourbi, clair, irisé ;", es: "Parecía límpido, claro, irisado;",
+      wordGroups: [
+        { wid: "41-0", fr: "Semblait", es: "Parecía" },
+        { wid: "41-1", fr: "clair", es: "claro" },
+      ] },
+    { id: 42, fr: "Le liquide enchâssait sa gloire", es: "El líquido engastaba su gloria",
+      wordGroups: [
+        { wid: "42-0", fr: "liquide", es: "líquido" },
+        { wid: "42-1", fr: "gloire", es: "gloria" },
+      ] },
+    { id: 43, fr: "Dans le rayon cristallisé.", es: "En el destello cristalizado." },
+    { id: 44, fr: "Nul astre d’ailleurs, nuls vestiges", es: "¡Ningún astro, desde luego, nada de vestigios",
+      wordGroups: [
+        { wid: "44-0", fr: "astre", es: "astro" },
+        { wid: "44-1", fr: "vestiges", es: "vestigios" },
+      ] },
+    { id: 45, fr: "De soleil, même au bas du ciel,", es: "De sol, ni siquiera en lo bajo del cielo,",
+      wordGroups: [
+        { wid: "45-0", fr: "soleil", es: "sol" },
+        { wid: "45-1", fr: "ciel", es: "cielo" },
+      ] },
+    { id: 46, fr: "Pour illuminer ces prodiges,", es: "Para iluminar estos prodigios,",
+      wordGroups: [
+        { wid: "46-0", fr: "illuminer", es: "iluminar" },
+        { wid: "46-1", fr: "prodiges", es: "prodigios" },
+      ] },
+    { id: 47, fr: "Qui brillaient d’un feu personnel !", es: "Que brillaban con su propio fuego!",
+      wordGroups: [
+        { wid: "47-0", fr: "feu", es: "fuego" },
+      ] },
+    { id: 48, fr: "Et sur ces mouvantes merveilles", es: "Y sobre estas movientes maravillas" },
+    { id: 49, fr: "Planait (terrible nouveauté !", es: "Cerníase (¡terrible novedad!",
+      wordGroups: [
+        { wid: "49-0", fr: "terrible", es: "terrible" },
+      ] },
+    { id: 50, fr: "Tout pour l’œil, rien pour les oreilles !)", es: "¡Todo para la vista, nada para los oídos!)",
+      wordGroups: [
+        { wid: "50-0", fr: "oreilles", es: "oídos" },
+      ] },
+    { id: 51, fr: "Un silence d’éternité.", es: "Un silencio de eternidad.",
+      wordGroups: [
+        { wid: "51-0", fr: "silence", es: "silencio" },
+        { wid: "51-1", fr: "d’éternité", es: "eternidad" },
+      ] },
+    { id: 52, fr: "En rouvrant mes yeux pleins de flamme", es: "Al reabrir mis ojos llameantes",
+      wordGroups: [
+        { wid: "52-0", fr: "yeux", es: "ojos" },
+      ] },
+    { id: 53, fr: "J’ai vu l’horreur de mon taudis,", es: "He visto el horror de mi rincón," },
+    { id: 54, fr: "Et senti, rentrant dans mon âme,", es: "Y sentí, penetrando en mi alma,",
+      wordGroups: [
+        { wid: "54-0", fr: "senti", es: "sentí" },
+        { wid: "54-1", fr: "âme", es: "alma" },
+      ] },
+    { id: 55, fr: "La pointe des soucis maudits ;", es: "La punta de las preocupaciones malditas;",
+      wordGroups: [
+        { wid: "55-0", fr: "maudits", es: "malditas" },
+      ] },
+    { id: 56, fr: "La pendule aux accents funèbres", es: "El péndulo de los acentos fúnebres",
+      wordGroups: [
+        { wid: "56-0", fr: "pendule", es: "péndulo" },
+        { wid: "56-1", fr: "funèbres", es: "fúnebres" },
+      ] },
+    { id: 57, fr: "Sonnait brutalement midi,", es: "Sonaba brutalmente el mediodía,",
+      wordGroups: [
+        { wid: "57-0", fr: "brutalement", es: "brutalmente" },
+        { wid: "57-1", fr: "midi", es: "mediodía" },
+      ] },
+    { id: 58, fr: "Et le ciel versait des ténèbres", es: "Y el cielo volcaba tinieblas",
+      wordGroups: [
+        { wid: "58-0", fr: "ciel", es: "cielo" },
+        { wid: "58-1", fr: "ténèbres", es: "tinieblas" },
+      ] },
+    { id: 59, fr: "Sur le triste monde engourdi.", es: "Sobre el triste mundo adormilado.",
+      wordGroups: [
+        { wid: "59-0", fr: "triste", es: "triste" },
+        { wid: "59-1", fr: "monde", es: "mundo" },
+      ] },
+  ],
+  blocks: [
+    { type: 'part', label: "I" },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+    { type: 'part', label: "II" },
+    { type: 'stanza', lines: 4 },
+    { type: 'blank' },
+    { type: 'stanza', lines: 4 },
+  ],
+};
