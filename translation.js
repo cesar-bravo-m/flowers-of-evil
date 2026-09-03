@@ -585,10 +585,21 @@
     showStatic(view, scroll);
   }
 
+  /* Where `Start reading` goes. The book opens on `Au lecteur`, which is the
+     preface rather than a poem — a reader asking to start should land on the
+     first poem proper. */
+  var FIRST_POEM_ID = 'benediction';
+
+  function firstPoemId() {
+    var ids = window.POEM_IDS || [];
+    if (window.POEMS && window.POEMS[FIRST_POEM_ID]) return FIRST_POEM_ID;
+    return ids[0];
+  }
+
   function initRoutes() {
     var start = document.querySelector('.start-reading');
     if (start) start.addEventListener('click', function () {
-      var id = window.POEM_IDS && window.POEM_IDS[0];
+      var id = firstPoemId();
       if (id) switchPoem(id);
     });
     /* Both ways in wear the same class: the button beside `Start reading` on

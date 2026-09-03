@@ -1,0 +1,20 @@
+{
+  "name": "flowers-of-evil",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/cesar-bravo-m/flowers-of-evil#readme",
+  "bugs": {
+    "url": "https://github.com/cesar-bravo-m/flowers-of-evil/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cesar-bravo-m/flowers-of-evil.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
