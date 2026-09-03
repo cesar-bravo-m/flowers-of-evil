@@ -37,6 +37,7 @@
     title: '',
     lines: [],
     showRef: true,
+    showSyl: true,
     status: '',
     error: '',
     git: null
@@ -100,6 +101,82 @@
 
   function translatedCount() {
     return state.lines.filter(function (l) { return normalise(l); }).length;
+  }
+
+  /* --- Syllables ---------------------------------------------------------- */
+
+  /* syllables.js is injected beside this file by the guard in index.html. If it
+     is not there the gutters simply never appear, like every other optional
+     part of this page. */
+  function syl() { return window.SYLLABLES || null; }
+
+  var frCounts = [];      /* the French line counts, one per segment */
+  var mineCounts = [];    /* and the counts of what has been typed against them */
+  var poemMetre = 0;
+
+  function scanLine(text, lang) {
+    var s = syl();
+    if (!s || !text) return null;
+    try { return s.scan(text, lang); } catch (e) { return null; }
+  }
+
+  /* Classical French leaves some lines readable two ways — the diérèse in
+     "orient", "hier", "lion". The poem itself is the best witness available:
+     if a line could be eleven or twelve and the poem is in twelves, it is
+     twelve. The tooltip still says so. */
+  function settle(r) {
+    if (!r || !r.unsure || !poemMetre) return r;
+    if (poemMetre < r.min || poemMetre > r.max) return r;
+    return { count: poemMetre, min: r.min, max: r.max, parts: r.parts, unsure: true, settled: true };
+  }
+
+  function measurePoem() {
+    frCounts = [];
+    mineCounts = [];
+    poemMetre = 0;
+    var s = syl();
+    if (!s) return;
+    var lines = segments().map(function (seg) { return seg.fr || ''; });
+    poemMetre = s.meter(lines, 'fr');
+    frCounts = lines.map(function (l) { return settle(scanLine(l, 'fr')); });
+  }
+
+  /* Is what has been typed on line `index` the length the French is? */
+  function fits(index, n) {
+    var want = frCounts[index];
+    if (!want || n == null) return true;
+    if (n === want.count) return true;
+    return want.unsure && n >= want.min && n <= want.max;
+  }
+
+  function offCount() {
+    var n = 0;
+    for (var i = 0; i < mineCounts.length; i++) {
+      if (mineCounts[i] != null && !fits(i, mineCounts[i])) n++;
+    }
+    return n;
+  }
+
+  function countCell(kind) {
+    /* a visual gutter: the bar carries the same news in words */
+    var node = el('span', 'edit-syl edit-syl--' + kind);
+    node.setAttribute('aria-hidden', 'true');
+    node.setAttribute('data-kind', kind);
+    return node;
+  }
+
+  function paint(node, r, off) {
+    node.textContent = r ? String(r.count) : '';
+    node.title = r ? tooltip(r) : '';
+    node.className = 'edit-syl edit-syl--' + node.getAttribute('data-kind') +
+      (r && r.unsure ? ' is-unsure' : '') + (off ? ' is-off' : '');
+  }
+
+  function tooltip(r) {
+    var text = r.parts.join(' · ');
+    if (r.settled) text += '  (or ' + r.min + '–' + r.max + '; the poem is in ' + poemMetre + 's)';
+    else if (r.unsure) text += '  (or ' + r.max + ', with the diérèse)';
+    return text;
   }
 
   /* --- Loading and storing the poem's own block --------------------------- */
@@ -252,7 +329,17 @@
       syncBar();
     });
 
+    els.syl = el('button', 'edit-toggle', 'Syllables');
+    els.syl.type = 'button';
+    els.syl.title = 'Show the syllable count of each line';
+    els.syl.addEventListener('click', function () {
+      state.showSyl = !state.showSyl;
+      document.body.classList.toggle('edit-no-syl', !state.showSyl);
+      syncBar();
+    });
+
     els.progress = el('span', 'edit-progress');
+    els.metre = el('span', 'edit-metre');
     els.note = el('span', 'edit-note');
     els.file = el('span', 'edit-file');
 
@@ -272,10 +359,12 @@
     top.appendChild(langs);
     top.appendChild(titleField);
     top.appendChild(els.ref);
+    if (syl()) top.appendChild(els.syl);
 
     var bottom = el('div', 'edit-bar-row edit-bar-row--status');
     var left = el('div', 'edit-bar-status');
     left.appendChild(els.progress);
+    left.appendChild(els.metre);
     left.appendChild(els.note);
     left.appendChild(els.file);
     var right = el('div', 'edit-bar-actions');
@@ -299,9 +388,16 @@
     });
     if (els.title.value !== state.title) els.title.value = state.title;
     els.ref.setAttribute('aria-pressed', state.showRef ? 'true' : 'false');
+    els.syl.setAttribute('aria-pressed', state.showSyl ? 'true' : 'false');
 
     els.progress.textContent = done + ' / ' + total + ' lines'
       + (state.status === 'complete' ? ' · complete' : '');
+
+    var off = poemMetre ? offCount() : 0;
+    els.metre.textContent = poemMetre && state.showSyl
+      ? '· ' + poemMetre + ' syllables' + (off ? ' · ' + off + ' off' : '')
+      : '';
+    els.metre.className = 'edit-metre' + (off ? ' is-off' : '');
 
     var ready = total > 0 && done === total && !!normalise(state.title);
     els.commit.disabled = !ready || !(state.git && state.git.isRepo);
@@ -330,16 +426,31 @@
     var row = el('div', 'edit-row');
     row.appendChild(el('span', 'edit-num', String(index + 1)));
 
+    /* Each column is a two-cell sub-grid — the text, then its count — so a
+       number always sits beside the first line of what it counts, however the
+       verse wraps. */
     var source = el('div', 'edit-source');
     source.appendChild(el('p', 'edit-fr', seg.fr || ''));
+    var frCell = countCell('fr');
+    paint(frCell, frCounts[index], false);
+    source.appendChild(frCell);
+
     var ref = referenceFor(seg);
     if (ref) {
       var p = el('p', 'edit-ref');
       p.appendChild(el('span', 'edit-ref-tag', TRANSLATOR[ref.lang] || ref.lang));
       p.appendChild(document.createTextNode(ref.text));
       source.appendChild(p);
+      /* what a published translator made of the same line: calibration, so it
+         is never marked wrong */
+      var refCell = countCell('ref');
+      paint(refCell, scanLine(ref.text, ref.lang), false);
+      source.appendChild(refCell);
     }
     row.appendChild(source);
+
+    var cell = el('div', 'edit-write');
+    var mineCell = countCell('mine');
 
     var box = el('textarea', 'edit-line');
     box.rows = 1;
@@ -350,6 +461,7 @@
     box.addEventListener('input', function () {
       state.lines[index] = this.value;
       autoGrow(this);
+      measureLine(index, mineCell);
       syncBar();
       scheduleSave();
     });
@@ -362,8 +474,20 @@
         else flush();
       }
     });
-    row.appendChild(box);
+    cell.appendChild(box);
+    cell.appendChild(mineCell);
+    measureLine(index, mineCell);
+    row.appendChild(cell);
     return row;
+  }
+
+  /* An empty box shows nothing: a poem not yet started must not open as a page
+     of red. */
+  function measureLine(index, node) {
+    var text = normalise(state.lines[index]);
+    var r = text ? scanLine(text, BASE[state.lang]) : null;
+    mineCounts[index] = r ? r.count : null;
+    paint(node, r, !!r && !fits(index, r.count));
   }
 
   function buildGrid() {
@@ -371,6 +495,8 @@
     grid.innerHTML = '';
     var p = poem();
     if (!p) return;
+
+    measurePoem();
 
     var segs = segments();
     var blocks = (p.blocks && p.blocks.length) ? p.blocks : [{ type: 'stanza', lines: segs.length }];

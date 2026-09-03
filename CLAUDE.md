@@ -15,6 +15,12 @@ The one exception is *Edit mode*, which needs somewhere to write to:
 static files, and nothing about the site changes — it just makes the authoring
 tool available. See *Edit mode* below.
 
+On Windows, `.\dev.ps1` does that in one step: it starts the server and opens
+the browser once the server actually answers. `-Port` moves it, `-NoBrowser`
+skips the window, Ctrl+C stops it. If a server is already up on that port it
+opens the browser at that one rather than starting a second — two editing tabs
+on one poem would race on the same file.
+
 ## Architecture
 
 **Poem data files** — Each poem is a standalone `.js` file in a numbered section directory (e.g. `1. Spleen et Ideal/une-charogne.js`). Each file self-registers into `window.POEMS[id]` with `title`, `titles` (per-language), `segments` (line-by-line translations), and `blocks` (stanza/blank pattern). These are loaded via `<script>` tags in `index.html` before `translation-data.js`.
@@ -36,6 +42,19 @@ sees what: `window.BRAVO.langsFor(id)` names only the translations marked
 complete — which is what the dropdown and the search index are built from —
 while `all(id)` includes drafts, which only edit mode asks for. Loaded between
 `translation-data.js` and `translation.js`. See *Edit mode* below.
+
+**`syllables.js` / `en-syllables.js`** — Metrical syllable counting, for the
+count gutters in edit mode. Loaded only on localhost, beside `edit.js`. It
+counts the way a poet counts rather than the way a dictionary hyphenates —
+French mute e elides before a vowel and never sounds at the end of a line,
+Spanish runs a word-final vowel into the next word's initial one and then
+measures to the last stress — which is why no hyphenation library appears here.
+`scan(line, lang)` returns `{count, min, max, unsure, parts}`: it is a segmenter,
+so the count is `parts.length` and the pieces go in the tooltip, and a line
+classical usage lets you read two ways says so through `unsure` rather than
+asserting one. `meter(lines, lang)` gives the count most of a poem's lines agree
+on. `en-syllables.js` is generated and carries the ~15k English words the rules
+get wrong. See *Syllable counting* below.
 
 **`edit.js` / `edit.css` / `tools/dev-server.mjs`** — Edit mode. Never fetched by
 a published copy of the site; see *Edit mode* below.
@@ -270,9 +289,72 @@ The server is the authority on line count — it runs the poem file in `node:vm`
 the way the browser does and checks the submitted length against the real
 `segments`.
 
+**Syllable gutters.** Each row carries three counts in narrow right-hand
+gutters, mirroring the line-number gutter on the left: the French, the
+Scott/Marquina reference line, and what you have typed. Only the last one can
+go red, and only when it is non-empty and does not match the French — a poem
+not yet started must not open as a page of red, and the reference is
+calibration rather than a target. Every count has a tooltip giving the split
+(`nos · pé · chés · sont · tê · tus`), so a number you disagree with can be
+checked. Where French allows two readings the count is dotted-underlined, and
+the poem's own metre settles it when it falls in range: if a line reads as 11
+or 12 and the poem is in twelves, it is twelve. The bar names the metre and how
+many written lines miss it, and a *Syllables* toggle beside *Reference* turns
+the whole thing off. None of it reaches `payload()` — counts are presentational,
+and the save format is untouched.
+
 **Out of scope:** `wordGroups`. A Bravo translation has none, so word-level
 hover is inert for it; line-level hover still pairs the columns. One editing tab
 at a time — two tabs on one poem would race on the same file.
+
+## Syllable counting
+
+`syllables.js` was tuned against the corpus rather than written from memory, and
+that is how any change to it should be checked.
+
+**`tools/check-meter.mjs`** — Baudelaire's metre is strict, so within a poem the
+lines agree with each other, and where the counter disagrees with the poem it is
+almost always the counter that is wrong. That makes 3,543 French lines a free
+test set. The tool loads every poem the way the browser does (`node:vm`),
+infers each poem's expected metre by bucketing lines on their stanza's length
+and their position in it, and reports the agreement rate with every outlier.
+French currently scores **97.4%**, and a good part of the residue is the
+inference struggling with *L'Invitation au voyage*'s 5/5/7 rather than the
+counter being wrong.
+
+The same trick does **not** work for the two translations, which is worth
+knowing before trusting a number from it:
+
+- **Marquina's Spanish is not metrical at all** — his counts scatter from 11 to
+  18 with no mode above 17%. `--lang es` measures Marquina, not the counter.
+  Spanish rules are deterministic, so they are pinned by `tools/selftest.mjs`
+  instead.
+- **Scott's English is only loosely metrical**, so `--lang en` (about 60%)
+  understates the counter badly. Measured properly — every distinct word Scott
+  uses, against cmudict — it is **99.95%**.
+
+**`tools/build-en-syllables.mjs`** regenerates `en-syllables.js` from the CMU
+Pronouncing Dictionary: it derives each word's true count, runs our rules over
+the same words, and commits only the disagreements. The rules alone reach
+**87.4%**, so the file carries about 15k corrections (~130 KB). It shrinks
+whenever the rules improve, which makes the number it prints a score for
+`syllables.js` rather than just a byte count. Needs the network; nothing else
+here does, and nothing runs it at page load.
+
+**`tools/selftest.mjs`** — hand-verified cases for all three languages, covering
+the rules the corpus cannot pin: Spanish synalepha and the aguda/esdrújula
+adjustment, English silent e and `-tion`, French tréma, elision and the mute e.
+
+Three rules worth knowing, because they are the ones that surprise:
+
+- **A plural `-es` does not elide** before a vowel, where a bare final `-e`
+  does. This was settled empirically — it moved French from 93.0% to 96.3%.
+- **A verb's `-ent` does not elide either**, and it is silent outright after a
+  vowel (`étaient`, `puent`) but a mute e after a consonant (`parlent`).
+  Which words in `-ent` are verbs was drawn from the corpus and hand-checked,
+  not guessed; the two lists sit next to the rule.
+- **`-tion` is two syllables in French and one in English.** The counter parts
+  company with itself here on purpose.
 
 ## Word-by-word highlighting
 

@@ -33,8 +33,8 @@
   /* Stands in for the `sources` entry the curated translations carry. No URL:
      there is nothing to link to, and `buildSourceCell()` already copes. */
   var CREDIT = {
-    'en-bravo': 'Translated by Bravo',
-    'es-bravo': 'Traducido por Bravo'
+    'en-bravo': 'Translated by César Bravo (2026)',
+    'es-bravo': 'Traducido por César Bravo (2026)'
   };
 
   function poemOf(poemId) {

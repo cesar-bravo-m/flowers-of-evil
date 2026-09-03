@@ -170,10 +170,15 @@ body.edit-mode .poem-nav { display: none; }
 .edit-note--ok { color: var(--accent-light); }
 .edit-note--error { color: var(--accent); font-weight: 600; }
 .edit-file { opacity: 0.6; }
+.edit-metre { color: var(--gold); opacity: 0.8; }
+.edit-metre.is-off { color: var(--accent); opacity: 1; }
 
 /* --- The poem --- */
 
-.edit-grid { padding: 0 var(--cell-pad-x) 4rem; }
+.edit-grid {
+  --syl-col: 1.6rem;           /* the count gutter, mirroring --num-col */
+  padding: 0 var(--cell-pad-x) 4rem;
+}
 
 .edit-stanza { display: block; }
 
@@ -202,6 +207,14 @@ body.edit-mode .poem-nav { display: none; }
   text-align: right;
   color: var(--gold-muted);
   opacity: 0.7;
+}
+
+.edit-source,
+.edit-write {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--syl-col);
+  column-gap: var(--num-gap);
+  align-items: start;
 }
 
 .edit-source { padding: 0.4rem 0.75rem 0.4rem 0; }
@@ -234,7 +247,38 @@ body.edit-mode .poem-nav { display: none; }
   color: var(--gold-muted);
 }
 
-body.edit-no-ref .edit-ref { display: none; }
+body.edit-no-ref .edit-ref,
+body.edit-no-ref .edit-syl--ref { display: none; }
+
+/* --- Syllable counts --- */
+
+.edit-syl {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--gold-muted);
+  opacity: 0.75;
+  cursor: default;
+}
+
+.edit-syl--fr { padding-top: 0.34rem; }
+.edit-syl--ref { margin-top: 0.25rem; padding-top: 0.2rem; opacity: 0.55; }
+.edit-syl--mine { padding-top: 0.5rem; }
+
+/* the one number that is a verdict rather than a fact */
+.edit-syl--mine.is-off {
+  color: var(--accent);
+  font-weight: 600;
+  opacity: 1;
+}
+
+/* a line classical usage lets you read two ways; the tooltip gives both */
+.edit-syl.is-unsure { border-bottom: 1px dotted currentColor; }
+
+body.edit-no-syl .edit-syl { display: none; }
+body.edit-no-syl .edit-source,
+body.edit-no-syl .edit-write { display: block; }
 
 .edit-line {
   overflow: hidden;
@@ -249,7 +293,7 @@ body.edit-no-ref .edit-ref { display: none; }
     grid-template-columns: var(--num-col) minmax(0, 1fr);
     gap: 0.35rem var(--num-gap);
   }
-  .edit-line { grid-column: 2; }
+  .edit-write { grid-column: 2; }
   .edit-source { padding-right: 0; }
 }
 

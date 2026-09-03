@@ -71,3 +71,56 @@ window.POEMS["au-lecteur"] = {
     { type: 'stanza', lines: 4 },
   ],
 };
+
+/* --- Translations by Bravo ---------------------------------------------
+   Machine-managed by localhost edit mode (tools/dev-server.mjs). Everything
+   from this marker to the end of the file is rewritten wholesale on save.
+   Do not hand-edit below this line, and do not append anything after it. */
+window.POEMS["au-lecteur"].bravo = {
+  "es-bravo": {
+    status: "draft",
+    title: "",
+    lines: [
+      "La necedad, el error, el pecado, la avaricia,",
+      "Ocupan nuestros espíritus y trabajan nuestros cuerpos,",
+      "Y nosotros alimentamos nuestros amables remordimientos,",
+      "Como los mendigos alimentas sus alimañas.",
+      "Nuestros pecados son persistentes, nuestros arrepentimientos son cobardes;",
+      "Hacemos pagar generosamente nuestras confesiones",
+      "Y volvemos felizmente en el camino fangoso",
+      "Creyente por medio de llantos viles lavar todos nuestros pecados.",
+      "Sobre la almohada del mal yace Satán Trismegisto",
+      "Que mece largamente nuestro espíritu encantado,",
+      "Y el rico metal de nuestra voluntad",
+      "Es vaporizado por este sabio químico.",
+      "¡Es el Diablo que tienta los hijo que nos agitan",
+      "En objetos repugnantes encontramos encantos;",
+      "Cada día hacia el infierno descendemos un paso",
+      "Sin horror, a través de oscuridades apestosas.",
+      "Así que un libertino pobre que folla y come",
+      "El seno martirizado de una antigua puta,",
+      "Robemos el paso a un placer clandestino",
+      "Que nos instan fuertemente como una naranja.",
+      "Apretado, bullicioso, como un millón de helmintos,",
+      "En nuestros cerebros se ríe un pueblo de Demonios,",
+      "Y, cuando respiramos, la Muerte en nuestros pulmones",
+      "Desciende, río invisible, con denuncias sordas.",
+      "Si la violación, el veneno, la daga, el incendio,",
+      "Todavía no han bordado sus agradables diseños",
+      "El lienzo banal de nuestros lamentables destinos,",
+      "Es que nuestra alma, ¡ay!, no es lo bastante osada.",
+      "Pero entre los chacales, las panteras, los piojos,",
+      "Los monos, los escorpiones, los buitres, las serpientes,",
+      "Los monstruos chillones, aulladores, resoplantes, rastreros,",
+      "En la casa de fieras infame de nuestros vicios,",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
+  },
+};

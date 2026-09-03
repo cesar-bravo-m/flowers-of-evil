@@ -40,9 +40,15 @@
       css.rel = 'stylesheet';
       css.href = 'edit.css';
       document.head.appendChild(css);
-      var js = document.createElement('script');
-      js.src = 'edit.js';
-      document.head.appendChild(js);
+      /* The syllable counter and its English word list go in ahead of edit.js.
+         A script added this way is async by default, so `async = false` is what
+         holds them in order; edit.js feature-detects anyway. */
+      ['syllables.js', 'en-syllables.js', 'edit.js'].forEach(function (src) {
+        var js = document.createElement('script');
+        js.src = src;
+        js.async = false;
+        document.head.appendChild(js);
+      });
     })();
   </script>
 
@@ -255,7 +261,7 @@
           </button>
           <button type="button" class="static-btn static-btn--quiet random-poem">
             <span class="lang-en" lang="en">A poem at random</span>
-            <span class="lang-es" lang="es">Un poema al azar</span>
+            <span class="lang-es" lang="es">Poema al azar</span>
           </button>
         </p>
         <!-- <p class="static-note">
@@ -303,53 +309,6 @@
           <a class="static-btn" href="https://www.linkedin.com/in/cesar-bravo-molina/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </p>
 
-        <!-- Privacy. Nothing here is collected, but saying so plainly is the
-             point of the notice; the bar at the foot of the page links here. -->
-        <section class="static-section" id="privacy" aria-labelledby="privacy-heading">
-          <h2 class="static-subtitle" id="privacy-heading">
-            <span class="lang-en" lang="en">Privacy</span>
-            <span class="lang-es" lang="es">Privacidad</span>
-          </h2>
-          <div class="lang-en" lang="en">
-            <p>This site sets no cookies, runs no analytics, and has no accounts, no login and
-              no database. Nothing you read, search for or click here is recorded or sent to me,
-              and there is no personal data of yours for me to keep, share or sell.</p>
-            <!-- <p>A few settings are remembered on your own device, in your browser’s
-              <b>localStorage</b>: the language of these pages, light or dark, the type size,
-              which sections of the poem list you have collapsed, and whether you have dismissed
-              the notice at the foot of the page. They never leave your browser. Clearing this
-              site’s data in your browser erases every one of them, and costs you nothing else.</p>
-            <p>Two things are fetched from elsewhere: the typefaces come from <b>Google Fonts</b>
-              as the page loads, and clicking a word opens its entry from <b>Wiktionary</b>, run by
-              the Wikimedia Foundation. As with any request to any website, those two see your IP
-              address; neither is told anything else about you, and no identifier of mine travels
-              with the request.</p>
-            <p>The GDPR gives you the right to see, correct or erase the personal data a site
-              holds about you, and to object to its being processed. Here there is none to see —
-              but if you would like to ask about any of this, my Instagram is just above.</p> -->
-          </div>
-          <div class="lang-es" lang="es">
-            <p>Este sitio no usa cookies, no tiene analítica y no tiene cuentas, ni inicio de
-              sesión ni base de datos. Nada de lo que leas, busques o pulses aquí queda
-              registrado ni me llega, y no hay ningún dato personal tuyo que yo pueda guardar,
-              compartir o vender.</p>
-            <!-- <p>Algunos ajustes se recuerdan en tu propio dispositivo, en el <b>localStorage</b> de
-              tu navegador: el idioma de estas páginas, el modo claro u oscuro, el tamaño de
-              letra, qué secciones de la lista de poemas has plegado y si ya cerraste el aviso
-              del pie de página. No salen nunca de tu navegador. Si borras los datos de este
-              sitio en tu navegador desaparecen todos, y no pierdes nada más.</p>
-            <p>Dos cosas se piden fuera: las tipografías vienen de <b>Google Fonts</b> al cargar
-              la página, y al pulsar una palabra se abre su entrada de <b>Wiktionary</b>, de la
-              Fundación Wikimedia. Como en cualquier petición a cualquier web, esos dos ven tu
-              dirección IP; no se les cuenta nada más sobre ti, y ninguna petición lleva un
-              identificador mío.</p> -->
-            <!-- <p>El RGPD te da derecho a ver, corregir o borrar los datos personales que un sitio
-              tenga sobre ti, y a oponerte a su tratamiento. Aquí no hay ninguno que ver — pero
-              si quieres preguntar sobre cualquiera de estos puntos, mi Instagram está justo
-              arriba.</p> -->
-          </div>
-        </section>
-
         <p class="static-note">
           <span class="lang-en" lang="en"><a class="static-link" href="#home">Back to the beginning</a></span>
           <span class="lang-es" lang="es"><a class="static-link" href="#home">Volver al principio</a></span>
@@ -367,10 +326,8 @@
        cookies, no tracking -- so it states that rather than asking. -->
   <div class="privacy-bar" role="region" aria-label="Privacy notice — aviso de privacidad" hidden>
     <p class="privacy-text">
-      <span class="lang-en" lang="en">No cookies, no tracking, no accounts. A few reading preferences are kept
-        in this browser and nowhere else.</span>
-      <span class="lang-es" lang="es">Sin cookies, sin rastreo, sin cuentas. Algunas preferencias de lectura se
-        guardan en este navegador y en ningún otro sitio.</span>
+      <span class="lang-en" lang="en">This site uses no cookies</span>
+      <span class="lang-es" lang="es">Este sitio no usa cookies.</span>
     </p>
     <span class="privacy-actions">
       <a class="privacy-link" href="#about">
