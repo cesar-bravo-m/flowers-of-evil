@@ -609,7 +609,7 @@ window.POEMS["benediction"].bravo = {
       "Ellos mezclan ceniza con impuros escupitajos;",
       "Con hipocresía desechan lo que él toca,",
       "Y se acusan de haber puesto sus pies en sus pasos.",
-      "Su mujer va gritando por las plazas profanas:",
+      "Su mujer va gritando por las plazas públicas:",
       "«Puesto que halla en mí belleza suficiente para adorarme,",
       "Haré el trabajo de los ídolos antiguos,",
       "Y como ellos quiero que hacerme redorar.",
