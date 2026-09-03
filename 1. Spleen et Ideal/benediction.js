@@ -574,7 +574,7 @@ window.POEMS["benediction"].bravo = {
     title: "Bendición",
     lines: [
       "Cuando, por un decreto de potencias supremas,",
-      "El poeta aparece en esta creación hastiada,",
+      "El Poeta aparece en esta creación hastiada,",
       "Su madre, horrorizada y llena de blasfemias,",
       "Levanta sus puños contra Dios, quien de ella se apiada:",
       "-« \"¡Ah! ¡por qué no parí un nudo entero de serpientes,",
