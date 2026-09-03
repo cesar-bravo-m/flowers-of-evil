@@ -597,21 +597,24 @@ body.sidebar-hidden .page {
   font-family: var(--font-body);
   font-size: 0.95rem;
   cursor: pointer;
+  text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
-.poem-nav-btn:hover:not(:disabled) {
+.poem-nav-btn:hover:not(:disabled):not([aria-disabled="true"]) {
   background: rgba(107, 45, 45, 0.08);
   color: var(--accent);
   border-color: var(--accent-light);
 }
 
-.poem-nav-btn:disabled {
+.poem-nav-btn:disabled,
+.poem-nav-btn[aria-disabled="true"] {
   opacity: 0.45;
   cursor: default;
 }
 
-.poem-nav-btn:disabled .poem-nav-title {
+.poem-nav-btn:disabled .poem-nav-title,
+.poem-nav-btn[aria-disabled="true"] .poem-nav-title {
   display: none;
 }
 

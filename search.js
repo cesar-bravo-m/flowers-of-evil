@@ -660,7 +660,11 @@
       window.location.hash = id;
       return;
     }
-    if (id !== window.CURRENT_POEM_ID) api.switchPoem(id);
+    /* Unconditionally, not only when the poem changes: the reader may be on
+       the home or about page with this poem still marked current, and then
+       there would be nothing to bring the reader back to it. switchPoem()
+       decides for itself whether the address needs a new history entry. */
+    api.switchPoem(id);
     if (lang && api.setTranslationLang) api.setTranslationLang(lang);
     if (tid != null && tid !== '' && api.focusLine) {
       var line = parseInt(tid, 10);

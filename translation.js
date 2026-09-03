@@ -295,9 +295,14 @@
     return result;
   }
 
+  /* A handful of lines in the corpus carry a stray U+FEFF, left over from how
+     the French was gathered. It is invisible on screen but it lands in the text
+     a search engine indexes and in anything copied out of the page, so it goes
+     here — at the one point every line passes through on its way to the DOM —
+     rather than by rewriting the poem files. */
   function escapeHtml(s) {
     var div = document.createElement('div');
-    div.textContent = s;
+    div.textContent = String(s).replace(/﻿/g, '');
     return div.innerHTML;
   }
 
@@ -313,6 +318,10 @@
     'es-bravo': 'Español (Bravo)'
   };
   var currentTranslationLang = 'en';
+  /* What the reader last asked for, as distinct from what the poem in front of
+     them can actually show. Kept apart so that one Spanish-only poem does not
+     leave every poem after it in Spanish. */
+  var preferredTranslationLang = 'en';
 
   /* Which translations the dropdown offers for the poem now open: the two
      public-domain ones the markup names, plus whichever of the site's own are
@@ -339,26 +348,170 @@
     return ['en', 'es'].concat(window.BRAVO ? window.BRAVO.LANGS : []);
   }
 
-  function applyHash() {
+  /* The poem the address names, picked before the first build so that the grid
+     is rendered once rather than built and then switched. */
+  function applyInitialRoute() {
     if (!window.POEMS || !window.POEM_IDS || !window.POEM_IDS.length) return;
-    var hash = window.location.hash.slice(1);
-    if (hash && window.POEMS[hash]) {
-      window.CURRENT_POEM_ID = hash;
-      window.TRANSLATION_SEGMENTS = window.POEMS[hash].segments;
-      window.TRANSLATION_BLOCKS = window.POEMS[hash].blocks;
+    var route = currentRoute();
+    var id = route.view === 'poem' ? route.id : null;
+    if (id && window.POEMS[id]) {
+      window.CURRENT_POEM_ID = id;
+      window.TRANSLATION_SEGMENTS = window.POEMS[id].segments;
+      window.TRANSLATION_BLOCKS = window.POEMS[id].blocks;
     }
+  }
+
+  /* --- Addresses ----------------------------------------------------------
+     Every poem has a real URL of its own — /poems/<id>/ — written out by
+     tools/build-pages.mjs as a page that already carries the verse in its
+     HTML. That is what a search engine indexes, what a shared link opens and
+     what Back returns to; the hash form this site used to use
+     (#une-charogne) still works, and applyRoute() quietly replaces it with
+     the real address so there is only ever one URL per poem.
+
+     `data-base` on <html> says how far the current page sits below the site
+     root — "" at the root, "../../" on a poem page — so one set of helpers
+     builds correct links from either. Opened straight off disk there are no
+     directory indexes, so the file name goes back on the end. */
+
+  var BASE = document.documentElement.getAttribute('data-base') || '';
+  var IS_FILE = window.location.protocol === 'file:';
+  /* Whether a click can become a history entry rather than a page load. On
+     file:// it cannot, and the real links take over instead. */
+  var CAN_PUSH = !IS_FILE && !!(window.history && window.history.pushState);
+
+  function routeHref(path) {
+    var href = BASE + path;
+    if (IS_FILE) href += 'index.html';
+    return href || './';
+  }
+
+  function poemHref(id) { return routeHref('poems/' + id + '/'); }
+  function homeHref() { return routeHref(''); }
+  function aboutHref() { return routeHref('about/'); }
+
+  /* Where this document was actually loaded from. It matters because pushState
+     changes the address in the bar and relative URLs resolve against that: push
+     "poems/le-vampire/" while the bar already says /poems/une-charogne/ and you
+     get /poems/une-charogne/poems/le-vampire/. Resolving against the load
+     address instead keeps every push correct however many have come before —
+     and, because it is derived rather than assumed, the site still works served
+     from a subdirectory. */
+  var DOC_URL = window.location.href;
+
+  function setUrl(href, replace) {
+    if (!CAN_PUSH) return;
+    try {
+      var url = new URL(href, DOC_URL);
+      /* No fragment: the poem has a path of its own now, and a stale
+         #une-charogne left in the bar would outrank it on the next read. */
+      window.history[replace ? 'replaceState' : 'pushState'](null, '', url.pathname + url.search);
+    } catch (e) { /* nothing to do; the page is still on the right view */ }
+  }
+
+  /* Should a click on this link be handled in the page? Only a plain left
+     click on a same-tab link: a modified click is the reader asking for a new
+     tab, and a real href is now there to give them one. */
+  function isPlainClick(e) {
+    return CAN_PUSH && e.button === 0 &&
+      !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && !e.defaultPrevented;
   }
 
   /* --- Routes -------------------------------------------------------------
      Three views share this document: a poem, the home page and the about page.
-     `data-view` on <body> says which one the stylesheet reveals, and the hash
-     is the address: a poem id, `#home` or `#about`. Anything unrecognised —
-     including no hash at all, i.e. a first visit — lands on home. The static
-     views never write the hash themselves: they are only ever reached from it
-     (the sidebar links are plain anchors), which keeps Back working on a first
-     visit with no hash to return to. */
+     `data-view` on <body> says which one the stylesheet reveals, and the path
+     is the address. Anything unrecognised lands on home. */
 
   var STATIC_VIEWS = { home: 1, about: 1 };
+
+  /* What the current address names. The path is read first, since that is the
+     real address; the hash is only consulted for links written back when the
+     poems had no URLs of their own, and is marked `legacy` so applyRoute()
+     knows to replace it. */
+  function currentRoute() {
+    var path = window.location.pathname;
+    var m = path.match(/\/poems\/([^\/]+)(?:\/(?:index\.html)?)?$/);
+    if (m) return { view: 'poem', id: decodeURIComponent(m[1]) };
+    if (/\/about(?:\/(?:index\.html)?)?$/.test(path)) return { view: 'about' };
+
+    var hash = window.location.hash.slice(1);
+    if (hash && window.POEMS && window.POEMS[hash]) {
+      return { view: 'poem', id: hash, legacy: true };
+    }
+    if (STATIC_VIEWS[hash]) return { view: hash, legacy: true };
+    return { view: 'home' };
+  }
+
+  /* --- Page metadata ------------------------------------------------------
+     The title, the description, the canonical URL, the link-preview cards and
+     the schema.org graph. tools/build-pages.mjs writes all of it into every
+     generated page, so a crawler reads it without running anything; what
+     follows keeps it true when a reader moves between poems without a page
+     load, which is what the browser tab and a copied URL show.
+
+     The strings themselves are in meta.js, which the build script loads too —
+     the one way to be sure the page describes itself the same way to a crawler
+     and to a reader. */
+
+  /* The human name of a poem's section, read off the sidebar rather than
+     duplicated — the same trick search.js uses for its result labels. It is
+     the only page context meta.js cannot work out for itself. */
+  function sectionName(id) {
+    var slug = POEM_SECTIONS[id];
+    if (!slug) return '';
+    var el = document.querySelector('[data-section-toggle="' + slug + '"] .sidebar-section-name');
+    return el ? el.textContent.trim() : '';
+  }
+
+  function setMetaContent(selector, value) {
+    var el = document.head.querySelector(selector);
+    if (el && value) el.setAttribute('content', value);
+  }
+
+  /* Called whenever the view changes: after a poem switch, and after a written
+     page is shown. Degrades to leaving the markup alone if meta.js is absent. */
+  function updateMeta() {
+    var META = window.META;
+    if (!META) return;
+    var view = getView();
+    var id = window.CURRENT_POEM_ID;
+    var poem = view === 'poem' && window.POEMS ? window.POEMS[id] : null;
+    var title, description, url, type, data = null;
+
+    if (poem) {
+      var codes = META.translationCodes(id, window.POEMS, window.BRAVO);
+      var langs = META.translationLangsOf(codes);
+      title = META.poemTitle(poem, langs);
+      description = META.poemDescription(poem, langs);
+      url = META.poemUrl(id);
+      type = 'article';
+      data = META.poemJsonLd({ id: id, poem: poem, codes: codes, section: sectionName(id) });
+    } else if (view === 'about') {
+      title = META.ABOUT_TITLE;
+      description = META.ABOUT_DESCRIPTION;
+      url = META.absoluteUrl('about/');
+      type = 'website';
+    } else {
+      title = META.HOME_TITLE;
+      description = META.HOME_DESCRIPTION;
+      url = META.absoluteUrl('');
+      type = 'website';
+    }
+
+    document.title = title;
+    setMetaContent('meta[name="description"]', description);
+    var canonical = document.head.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute('href', url);
+    setMetaContent('meta[property="og:title"]', title);
+    setMetaContent('meta[property="og:description"]', description);
+    setMetaContent('meta[property="og:url"]', url);
+    setMetaContent('meta[property="og:type"]', type);
+    setMetaContent('meta[name="twitter:title"]', title);
+    setMetaContent('meta[name="twitter:description"]', description);
+
+    var el = document.getElementById('ld-json');
+    if (el && data) el.textContent = JSON.stringify(data, null, 2);
+  }
 
   /* The handful of strings the written pages build in script rather than carry
      in the markup; everything else bilingual lives in index.html. */
@@ -406,6 +559,7 @@
     setView(view);
     closeDrawer();
     setPoemTitle(staticTitle(view));
+    updateMeta();
     if (scroll !== false && window.scrollTo) {
       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     }
@@ -414,12 +568,21 @@
   /* Runs on load and on every hash change, so Back and Forward move between
      poems and pages as one would expect. */
   function applyRoute(scroll) {
-    var hash = window.location.hash.slice(1);
-    if (window.POEMS && window.POEMS[hash]) {
-      if (hash !== window.CURRENT_POEM_ID || getView() !== 'poem') switchPoem(hash);
+    var route = currentRoute();
+    if (route.view === 'poem' && window.POEMS && window.POEMS[route.id]) {
+      /* An old #poem-id link: swap the bar over to the real address without
+         adding a history entry, so the poem has one URL from here on. */
+      if (route.legacy) setUrl(poemHref(route.id), true);
+      if (route.id !== window.CURRENT_POEM_ID || getView() !== 'poem') {
+        switchPoem(route.id, false);
+      } else {
+        updateMeta();
+      }
       return;
     }
-    showStatic(STATIC_VIEWS[hash] ? hash : 'home', scroll);
+    var view = STATIC_VIEWS[route.view] ? route.view : 'home';
+    if (route.legacy) setUrl(view === 'about' ? aboutHref() : homeHref(), true);
+    showStatic(view, scroll);
   }
 
   function initRoutes() {
@@ -436,7 +599,27 @@
         if (id) switchPoem(id);
       });
     });
+    /* Real URLs mean real history entries, so popstate is now the one that
+       matters; hashchange stays for links still written with a fragment. */
+    window.addEventListener('popstate', function () { applyRoute(); });
     window.addEventListener('hashchange', function () { applyRoute(); });
+
+    /* Home and About are ordinary links — a crawler follows them, a reader can
+       open them in a new tab — and a plain click is handled here instead. */
+    document.querySelectorAll('a[data-route]').forEach(function (a) {
+      var view = a.getAttribute('data-route');
+      if (!STATIC_VIEWS[view]) return;
+      /* The markup carries the address a server would serve — "about/" — and
+         opened off disk there is no directory index to serve it, so name the
+         file. The sidebar and the prev/next links get this from poemHref(). */
+      a.href = view === 'about' ? aboutHref() : homeHref();
+      a.addEventListener('click', function (e) {
+        if (!isPlainClick(e)) return;
+        e.preventDefault();
+        setUrl(a.getAttribute('href'));
+        showStatic(view);
+      });
+    });
   }
 
   /* The poem title shows in the page header and, on narrow screens, in the bar. */
@@ -473,28 +656,34 @@
   }
 
   function updatePoemNav() {
-    var prevBtn = document.querySelector('.poem-nav-prev');
-    var nextBtn = document.querySelector('.poem-nav-next');
-    var prevId = getPrevPoemId();
-    var nextId = getNextPoemId();
-    if (prevBtn) {
-      prevBtn.disabled = !prevId;
-      var prevTitle = prevBtn.querySelector('.poem-nav-title');
-      if (prevTitle) prevTitle.textContent = prevId && window.POEMS[prevId] ? window.POEMS[prevId].title : '';
-    }
-    if (nextBtn) {
-      nextBtn.disabled = !nextId;
-      var nextTitle = nextBtn.querySelector('.poem-nav-title');
-      if (nextTitle) nextTitle.textContent = nextId && window.POEMS[nextId] ? window.POEMS[nextId].title : '';
-    }
+    setNavLink(document.querySelector('.poem-nav-prev'), getPrevPoemId());
+    setNavLink(document.querySelector('.poem-nav-next'), getNextPoemId());
   }
 
-  function switchPoem(id) {
+  function setNavLink(a, id) {
+    if (!a) return;
+    var poem = id && window.POEMS ? window.POEMS[id] : null;
+    if (poem) {
+      a.href = poemHref(id);
+      a.removeAttribute('aria-disabled');
+    } else {
+      a.removeAttribute('href');
+      a.setAttribute('aria-disabled', 'true');
+    }
+    var title = a.querySelector('.poem-nav-title');
+    if (title) title.textContent = poem ? poem.title : '';
+  }
+
+  function switchPoem(id, push) {
     if (!window.POEMS || !window.POEMS[id]) return;
     window.CURRENT_POEM_ID = id;
     window.TRANSLATION_SEGMENTS = window.POEMS[id].segments;
     window.TRANSLATION_BLOCKS = window.POEMS[id].blocks;
-    window.location.hash = id;
+    /* Only if the address does not already name this poem: edit mode
+       re-switches to the poem already open after a save, and that must not
+       leave a second copy of the same page in the history. */
+    var here = currentRoute();
+    if (push !== false && !(here.view === 'poem' && here.id === id)) setUrl(poemHref(id));
     closeDrawer();
     setView('poem');
 
@@ -514,6 +703,7 @@
       buildComparison();
     }
     updateSources();
+    updateMeta();
 
     // After switching poems via navigation, scroll viewport to top
     if (typeof window !== 'undefined' && window.scrollTo) {
@@ -677,12 +867,13 @@
     window.POEM_IDS.forEach(function (id) {
       var li = document.createElement('li');
       var a = document.createElement('a');
-      a.href = '#' + id;
+      a.href = poemHref(id);
       a.setAttribute('data-poem-id', id);
       a.textContent = window.POEMS[id].title;
       a.classList.toggle('active', id === window.CURRENT_POEM_ID);
       if (id === window.CURRENT_POEM_ID) a.setAttribute('aria-current', 'true');
       a.addEventListener('click', function (e) {
+        if (!isPlainClick(e)) return;
         e.preventDefault();
         switchPoem(id);
       });
@@ -739,8 +930,19 @@
     if (lps) LINES_PER_STANZA = parseInt(lps, 10);
 
     var translationLangs = availableTranslationLangs();
-    var lang = currentTranslationLang;
+    var lang = preferredTranslationLang;
     if (translationLangs.indexOf(lang) === -1) lang = translationLangs[0];
+    /* Scott translated 50 of these poems and Marquina 114, so most have only
+       one of the two. Opening every poem in English would put a "no English
+       translation yet" note where a Spanish one exists — and that note, not
+       the verse, is what a search engine would take the page to be about. So
+       fall back to a language the poem actually carries. The dropdown names
+       whichever one that is, and still offers the empty one. */
+    if (!poemHasLang(lang)) {
+      for (var pick = 0; pick < translationLangs.length; pick++) {
+        if (poemHasLang(translationLangs[pick])) { lang = translationLangs[pick]; break; }
+      }
+    }
     currentTranslationLang = lang;
 
     var langs = ['fr', lang];
@@ -750,6 +952,12 @@
       if (!bl.length) return;
       blocksByLang[langs[l]] = bl;
     }
+
+    /* A generated page ships the poem already written into this container, so
+       that a crawler — or a reader whose JavaScript never arrives — sees the
+       verse without running anything. Now that we have something to put in its
+       place, it goes. */
+    comparison.innerHTML = '';
 
     var numRows = blocksByLang[langs[0]].length + 2; /* header + stanzas + sources */
     var rowIndex = 0;
@@ -832,6 +1040,7 @@
 
   function switchTranslationLang(newLang) {
     currentTranslationLang = newLang;
+    preferredTranslationLang = newLang;
     var comparison = document.querySelector('.comparison');
     if (!comparison) return;
     /* the cell wears its language as a class; clear whichever one it had */
@@ -1384,17 +1593,20 @@
   }
 
   function initPoemNav() {
-    var prevBtn = document.querySelector('.poem-nav-prev');
-    var nextBtn = document.querySelector('.poem-nav-next');
-    if (prevBtn) prevBtn.addEventListener('click', function () {
-      var id = getPrevPoemId();
-      if (id) switchPoem(id);
-    });
-    if (nextBtn) nextBtn.addEventListener('click', function () {
-      var id = getNextPoemId();
-      if (id) switchPoem(id);
-    });
+    bindNavLink(document.querySelector('.poem-nav-prev'), getPrevPoemId);
+    bindNavLink(document.querySelector('.poem-nav-next'), getNextPoemId);
     updatePoemNav();
+  }
+
+  function bindNavLink(a, pick) {
+    if (!a) return;
+    a.addEventListener('click', function (e) {
+      var id = pick();
+      if (!id) { e.preventDefault(); return; }
+      if (!isPlainClick(e)) return;
+      e.preventDefault();
+      switchPoem(id);
+    });
   }
 
   /* --- Page language ------------------------------------------------------
@@ -1531,10 +1743,16 @@
 
   /* Point the translation column at `lang`, as picking it in the dropdown would. */
   function setTranslationLang(lang) {
-    if (!lang || lang === currentTranslationLang) return;
+    if (!lang) return;
     var comparison = document.querySelector('.comparison');
     if (!comparison) return;
     if (availableTranslationLangs().indexOf(lang) === -1) return;
+
+    /* Asking for the language already on screen is still the reader stating a
+       preference — it may be the one this poem fell back to — so record it
+       before deciding there is nothing to redraw. */
+    preferredTranslationLang = lang;
+    if (lang === currentTranslationLang) return;
 
     switchTranslationLang(lang);
     var panel = document.querySelector('.translation-dropdown-panel');
@@ -1753,14 +1971,14 @@
 
     /* A first visit opens in the translation that matches the page language;
        the dropdown overrides it from there. */
-    currentTranslationLang = siteLang() === 'es' ? 'es' : 'en';
+    currentTranslationLang = preferredTranslationLang = siteLang() === 'es' ? 'es' : 'en';
 
     initSidebarToggle();
     initSidebarControls();
     initTopbarTitle();
 
     if (window.POEMS && window.POEM_IDS && window.POEM_IDS.length) {
-      applyHash();
+      applyInitialRoute();
       buildSidebar();
       hideEmptySections();
       initSectionToggles();

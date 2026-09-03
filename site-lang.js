@@ -82,6 +82,11 @@
 
   function apply(lang) {
     if (document.body) document.body.setAttribute('data-lang', lang);
+    /* The document language is the language of the prose around the poems, not
+       of the poems themselves — every line of French carries its own lang="fr".
+       Search engines read this one to decide who the page is written for, so it
+       has to follow the toggle. */
+    document.documentElement.setAttribute('lang', lang);
   }
 
   /* Remembered from the first visit on, so a reload never re-resolves. */

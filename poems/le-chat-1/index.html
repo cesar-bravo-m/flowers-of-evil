@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<!-- `lang` is the language of the prose around the poems, not of the poems:
+     every line of French carries its own lang="fr". site-lang.js rewrites it
+     when the reader picks the other language.
+     `data-base` is how far this page sits below the site root — "" at the root,
+     "../../" on a generated poem page. translation.js builds every internal
+     link from it. Both are rewritten by tools/build-pages.mjs. -->
+<html lang="en" data-base="../../">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f5f0e8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1e1a17" media="(prefers-color-scheme: dark)">
+
+  <!-- SEO. The title, description, canonical, card and JSON-LD below are all
+       rewritten per poem: at build time by tools/build-pages.mjs, and again in
+       the browser by updateMeta() in translation.js when the reader navigates
+       without a page load. Both read their strings from meta.js.
+       Do not name a tag here in angle brackets — the build script matches on
+       those, and would rewrite the comment along with the real thing. -->
+  <title>Le Chat — Baudelaire, from Les Fleurs du mal (1861)</title>
+  <meta name="description" content="“Viens, mon beau chat, sur mon cœur amoureux” — Le Chat, from Charles Baudelaire’s Les Fleurs du mal (1861).">
+  <link rel="canonical" href="https://floresdelmal.org/poems/le-chat-1/">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta name="author" content="César Bravo">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Les Fleurs du mal">
+  <meta property="og:title" content="Le Chat — Baudelaire, from Les Fleurs du mal (1861)">
+  <meta property="og:description" content="“Viens, mon beau chat, sur mon cœur amoureux” — Le Chat, from Charles Baudelaire’s Les Fleurs du mal (1861).">
+  <meta property="og:url" content="https://floresdelmal.org/poems/le-chat-1/">
+  <meta property="og:image" content="https://floresdelmal.org/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Portrait of Charles Baudelaire beside the title Les Fleurs du mal">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Le Chat — Baudelaire, from Les Fleurs du mal (1861)">
+  <meta name="twitter:description" content="“Viens, mon beau chat, sur mon cœur amoureux” — Le Chat, from Charles Baudelaire’s Les Fleurs du mal (1861).">
+  <meta name="twitter:image" content="https://floresdelmal.org/assets/og-image.jpg">
+
+  <script type="application/ld+json" id="ld-json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Poem",
+      "@id": "https://floresdelmal.org/poems/le-chat-1/#poem",
+      "name": "Le Chat",
+      "url": "https://floresdelmal.org/poems/le-chat-1/",
+      "description": "“Viens, mon beau chat, sur mon cœur amoureux” — Le Chat, from Charles Baudelaire’s Les Fleurs du mal (1861).",
+      "inLanguage": "fr",
+      "datePublished": "1861",
+      "genre": "Poetry",
+      "author": {
+        "@type": "Person",
+        "@id": "https://floresdelmal.org/#baudelaire",
+        "name": "Charles Baudelaire",
+        "birthDate": "1821-04-09",
+        "deathDate": "1867-08-31",
+        "sameAs": "https://en.wikipedia.org/wiki/Charles_Baudelaire"
+      },
+      "isPartOf": {
+        "@id": "https://floresdelmal.org/#book"
+      }
+    },
+    {
+      "@type": "Book",
+      "@id": "https://floresdelmal.org/#book",
+      "name": "Les Fleurs du mal",
+      "alternateName": [
+        "The Flowers of Evil",
+        "Las flores del mal"
+      ],
+      "datePublished": "1861",
+      "inLanguage": "fr",
+      "genre": "Poetry",
+      "author": {
+        "@type": "Person",
+        "@id": "https://floresdelmal.org/#baudelaire",
+        "name": "Charles Baudelaire",
+        "birthDate": "1821-04-09",
+        "deathDate": "1867-08-31",
+        "sameAs": "https://en.wikipedia.org/wiki/Charles_Baudelaire"
+      },
+      "url": "https://floresdelmal.org/",
+      "sameAs": "https://en.wikipedia.org/wiki/Les_Fleurs_du_mal"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Les Fleurs du mal",
+          "item": "https://floresdelmal.org/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Spleen et Idéal"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Le Chat",
+          "item": "https://floresdelmal.org/poems/le-chat-1/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <link rel="icon" href="../../assets/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital@0;1&display=swap" rel="stylesheet">
+</head>
+<body data-view="poem">
+  <!-- Resolves and applies the page language (English / Spanish) before the
+       written pages below are parsed. -->
+  <script src="../../site-lang.js"></script>
+  <script>
+    /* Pick the route before the page paints, so a deep link never flashes the
+       wrong view first. The path is the address — /poems/<id>/ or /about/ —
+       and a generated page already carries the right data-view in its markup,
+       so this only has to decide anything at the root, where the fragment form
+       an older link may still use is the only clue. translation.js re-checks
+       once the poems have loaded. */
+    (function () {
+      var path = window.location.pathname;
+      var view;
+      if (/\/poems\/[^\/]+(?:\/(?:index\.html)?)?$/.test(path)) view = 'poem';
+      else if (/\/about(?:\/(?:index\.html)?)?$/.test(path)) view = 'about';
+      else {
+        var h = window.location.hash.slice(1);
+        view = !h || h === 'home' ? 'home' : (h === 'about' ? 'about' : 'poem');
+      }
+      document.body.setAttribute('data-view', view);
+    })();
+  </script>
+  <script>
+    /* Edit mode is an authoring tool, not part of the site. It is fetched only
+       when this page is being served from a local dev server
+       (`node tools/dev-server.mjs`), so a published copy never carries it and
+       neither does index.html opened straight off disk — where the hostname is
+       the empty string. edit.js then waits for the server to answer before it
+       shows anything. */
+    (function () {
+      var host = window.location.hostname;
+      if (window.location.protocol.indexOf('http') !== 0) return;
+      if (['localhost', '127.0.0.1', '[::1]', '::1'].indexOf(host) === -1) return;
+      var css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'edit.css';
+      document.head.appendChild(css);
+      /* The syllable counter and its English word list go in ahead of edit.js.
+         A script added this way is async by default, so `async = false` is what
+         holds them in order; edit.js feature-detects anyway. */
+      ['syllables.js', 'en-syllables.js', 'edit.js'].forEach(function (src) {
+        var js = document.createElement('script');
+        js.src = src;
+        js.async = false;
+        document.head.appendChild(js);
+      });
+    })();
+  </script>
+
+  <!-- Narrow screens: fixed bar that opens the poem drawer and the search palette -->
+  <div class="topbar">
+    <button type="button" class="topbar-btn topbar-menu" aria-label="Show poem list" title="Show poem list" aria-expanded="false" aria-controls="sidebar">☰</button>
+    <span class="topbar-title">Le Chat</span>
+    <button type="button" class="topbar-btn topbar-search" aria-label="Search poems" title="Search titles and lines in any language">
+      <svg class="search-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <circle cx="6.75" cy="6.75" r="4.25"></circle>
+        <line x1="9.9" y1="9.9" x2="14" y2="14"></line>
+      </svg>
+    </button>
+  </div>
+
+  <button type="button" class="sidebar-show" aria-label="Show poem list" title="Show poem list">☰</button>
+  <div class="sidebar-scrim" aria-hidden="true"></div>
+  <aside class="sidebar" id="sidebar" aria-label="Choose poem">
+    <div class="sidebar-head">
+      <a class="sidebar-title" href="../../" data-route="home" title="Home">Les Fleurs du mal</a>
+      <button type="button" class="sidebar-close" aria-label="Close poem list" title="Close poem list">×</button>
+    </div>
+    <button type="button" class="sidebar-search" aria-label="Search poems" title="Search titles and lines in any language">
+      <svg class="search-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <circle cx="6.75" cy="6.75" r="4.25"></circle>
+        <line x1="9.9" y1="9.9" x2="14" y2="14"></line>
+      </svg>
+      <span class="sidebar-search-label">
+        <span class="lang-en" lang="en">Search</span>
+        <span class="lang-es" lang="es">Buscar</span>
+      </span>
+      <kbd class="sidebar-search-key" aria-hidden="true">Ctrl K</kbd>
+    </button>
+    <nav>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-au-lecteur" data-section-toggle="au-lecteur">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Au Lecteur</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-au-lecteur" data-section="au-lecteur">
+          <li><a href="../../poems/au-lecteur/" data-poem-id="au-lecteur">Au lecteur</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-spleen-et-ideal" data-section-toggle="spleen-et-ideal">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Spleen et Idéal</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-spleen-et-ideal" data-section="spleen-et-ideal">
+          <li><a href="../../poems/benediction/" data-poem-id="benediction">Bénédiction</a></li>
+          <li><a href="../../poems/l-albatros/" data-poem-id="l-albatros">L’Albatros</a></li>
+          <li><a href="../../poems/elevation/" data-poem-id="elevation">Élévation</a></li>
+          <li><a href="../../poems/correspondances/" data-poem-id="correspondances">Correspondances</a></li>
+          <li><a href="../../poems/j-aime-le-souvenir/" data-poem-id="j-aime-le-souvenir">J’aime le souvenir de ces époques nues</a></li>
+          <li><a href="../../poems/les-phares/" data-poem-id="les-phares">Les Phares</a></li>
+          <li><a href="../../poems/la-muse-malade/" data-poem-id="la-muse-malade">La Muse malade</a></li>
+          <li><a href="../../poems/la-muse-venale/" data-poem-id="la-muse-venale">La Muse vénale</a></li>
+          <li><a href="../../poems/le-mauvais-moine/" data-poem-id="le-mauvais-moine">Le Mauvais Moine</a></li>
+          <li><a href="../../poems/l-ennemi/" data-poem-id="l-ennemi">L’Ennemi</a></li>
+          <li><a href="../../poems/le-guignon/" data-poem-id="le-guignon">Le Guignon</a></li>
+          <li><a href="../../poems/la-vie-anterieure/" data-poem-id="la-vie-anterieure">La Vie antérieure</a></li>
+          <li><a href="../../poems/bohemiens-en-voyage/" data-poem-id="bohemiens-en-voyage">Bohémiens en voyage</a></li>
+          <li><a href="../../poems/l-homme-et-la-mer/" data-poem-id="l-homme-et-la-mer">L’Homme et la Mer</a></li>
+          <li><a href="../../poems/don-juan-aux-enfers/" data-poem-id="don-juan-aux-enfers">Don Juan aux enfers</a></li>
+          <li><a href="../../poems/chatiment-de-l-orgueil/" data-poem-id="chatiment-de-l-orgueil">Châtiment de l’orgueil</a></li>
+          <li><a href="../../poems/la-beaute/" data-poem-id="la-beaute">La Beauté</a></li>
+          <li><a href="../../poems/l-ideal/" data-poem-id="l-ideal">L’Idéal</a></li>
+          <li><a href="../../poems/la-geante/" data-poem-id="la-geante">La Géante</a></li>
+          <li><a href="../../poems/le-masque/" data-poem-id="le-masque">Le Masque</a></li>
+          <li><a href="../../poems/hymne-a-la-beaute/" data-poem-id="hymne-a-la-beaute">Hymne à la beauté</a></li>
+          <li><a href="../../poems/parfum-exotique/" data-poem-id="parfum-exotique">Parfum exotique</a></li>
+          <li><a href="../../poems/la-chevelure/" data-poem-id="la-chevelure">La Chevelure</a></li>
+          <li><a href="../../poems/je-t-adore/" data-poem-id="je-t-adore">Je t’adore à l’égal de la voûte nocturne</a></li>
+          <li><a href="../../poems/tu-mettrais-l-univers/" data-poem-id="tu-mettrais-l-univers">Tu mettrais l’univers entier dans ta ruelle</a></li>
+          <li><a href="../../poems/sed-non-satiata/" data-poem-id="sed-non-satiata">Sed non satiata</a></li>
+          <li><a href="../../poems/vetements-ondoyants/" data-poem-id="vetements-ondoyants">Avec ses vêtements ondoyants et nacrés</a></li>
+          <li><a href="../../poems/le-serpent-qui-danse/" data-poem-id="le-serpent-qui-danse">Le Serpent qui danse</a></li>
+          <li><a href="../../poems/une-charogne/" data-poem-id="une-charogne">Une Charogne</a></li>
+          <li><a href="../../poems/de-profundis-clamavi/" data-poem-id="de-profundis-clamavi">De profundis clamavi</a></li>
+          <li><a href="../../poems/le-vampire/" data-poem-id="le-vampire">Le Vampire</a></li>
+          <li><a href="../../poems/une-nuit-que-j-etais/" data-poem-id="une-nuit-que-j-etais">Une nuit que j’étais près d’une affreuse Juive</a></li>
+          <li><a href="../../poems/remords-posthume/" data-poem-id="remords-posthume">Remords posthume</a></li>
+          <li><a href="../../poems/le-chat-1/" data-poem-id="le-chat-1">Le Chat</a></li>
+          <li><a href="../../poems/duellum/" data-poem-id="duellum">Duellum</a></li>
+          <li><a href="../../poems/le-balcon/" data-poem-id="le-balcon">Le Balcon</a></li>
+          <li><a href="../../poems/le-possede/" data-poem-id="le-possede">Le Possédé</a></li>
+          <li><a href="../../poems/un-fantome/" data-poem-id="un-fantome">Un Fantôme</a></li>
+          <li><a href="../../poems/je-te-donne-ces-vers/" data-poem-id="je-te-donne-ces-vers">Je te donne ces vers afin que si mon nom</a></li>
+          <li><a href="../../poems/semper-eadem/" data-poem-id="semper-eadem">Semper eadem</a></li>
+          <li><a href="../../poems/tout-entiere/" data-poem-id="tout-entiere">Tout entière</a></li>
+          <li><a href="../../poems/que-diras-tu-ce-soir/" data-poem-id="que-diras-tu-ce-soir">Que diras-tu ce soir, pauvre âme solitaire</a></li>
+          <li><a href="../../poems/le-flambeau-vivant/" data-poem-id="le-flambeau-vivant">Le Flambeau vivant</a></li>
+          <li><a href="../../poems/reversibilite/" data-poem-id="reversibilite">Réversibilité</a></li>
+          <li><a href="../../poems/confession/" data-poem-id="confession">Confession</a></li>
+          <li><a href="../../poems/l-aube-spirituelle/" data-poem-id="l-aube-spirituelle">L’Aube spirituelle</a></li>
+          <li><a href="../../poems/harmonie-du-soir/" data-poem-id="harmonie-du-soir">Harmonie du soir</a></li>
+          <li><a href="../../poems/le-flacon/" data-poem-id="le-flacon">Le Flacon</a></li>
+          <li><a href="../../poems/le-poison/" data-poem-id="le-poison">Le Poison</a></li>
+          <li><a href="../../poems/ciel-brouille/" data-poem-id="ciel-brouille">Ciel brouillé</a></li>
+          <li><a href="../../poems/le-chat-2/" data-poem-id="le-chat-2">Le Chat</a></li>
+          <li><a href="../../poems/le-beau-navire/" data-poem-id="le-beau-navire">Le beau Navire</a></li>
+          <li><a href="../../poems/l-invitation-au-voyage/" data-poem-id="l-invitation-au-voyage">L’Invitation au voyage</a></li>
+          <li><a href="../../poems/l-irreparable/" data-poem-id="l-irreparable">L’Irréparable</a></li>
+          <li><a href="../../poems/causerie/" data-poem-id="causerie">Causerie</a></li>
+          <li><a href="../../poems/chant-d-automne/" data-poem-id="chant-d-automne">Chant d’automne</a></li>
+          <li><a href="../../poems/a-une-madone/" data-poem-id="a-une-madone">À une Madone</a></li>
+          <li><a href="../../poems/chanson-d-apres-midi/" data-poem-id="chanson-d-apres-midi">Chanson d’après-midi</a></li>
+          <li><a href="../../poems/sisina/" data-poem-id="sisina">Sisina</a></li>
+          <li><a href="../../poems/franciscae-meae-laudes/" data-poem-id="franciscae-meae-laudes">Franciscæ meæ Laudes</a></li>
+          <li><a href="../../poems/a-une-dame-creole/" data-poem-id="a-une-dame-creole">À une dame créole</a></li>
+          <li><a href="../../poems/moesta-et-errabunda/" data-poem-id="moesta-et-errabunda">Moesta et errabunda</a></li>
+          <li><a href="../../poems/le-revenant/" data-poem-id="le-revenant">Le Revenant</a></li>
+          <li><a href="../../poems/sonnet-d-automne/" data-poem-id="sonnet-d-automne">Sonnet d’automne</a></li>
+          <li><a href="../../poems/tristesses-de-la-lune/" data-poem-id="tristesses-de-la-lune">Tristesses de la lune</a></li>
+          <li><a href="../../poems/les-chats/" data-poem-id="les-chats">Les Chats</a></li>
+          <li><a href="../../poems/les-hiboux/" data-poem-id="les-hiboux">Les Hiboux</a></li>
+          <li><a href="../../poems/la-pipe/" data-poem-id="la-pipe">La Pipe</a></li>
+          <li><a href="../../poems/la-musique/" data-poem-id="la-musique">La Musique</a></li>
+          <li><a href="../../poems/sepulture/" data-poem-id="sepulture">Sépulture</a></li>
+          <li><a href="../../poems/une-gravure-fantastique/" data-poem-id="une-gravure-fantastique">Une Gravure fantastique</a></li>
+          <li><a href="../../poems/le-mort-joyeux/" data-poem-id="le-mort-joyeux">Le Mort joyeux</a></li>
+          <li><a href="../../poems/le-tonneau-de-la-haine/" data-poem-id="le-tonneau-de-la-haine">Le Tonneau de la haine</a></li>
+          <li><a href="../../poems/la-cloche-felee/" data-poem-id="la-cloche-felee">La Cloche fêlée</a></li>
+          <li><a href="../../poems/spleen-1/" data-poem-id="spleen-1">Spleen</a></li>
+          <li><a href="../../poems/spleen-2/" data-poem-id="spleen-2">Spleen</a></li>
+          <li><a href="../../poems/spleen-3/" data-poem-id="spleen-3">Spleen</a></li>
+          <li><a href="../../poems/spleen-4/" data-poem-id="spleen-4">Spleen</a></li>
+          <li><a href="../../poems/obsession/" data-poem-id="obsession">Obsession</a></li>
+          <li><a href="../../poems/le-gout-du-neant/" data-poem-id="le-gout-du-neant">Le Goût du néant</a></li>
+          <li><a href="../../poems/alchimie-de-la-douleur/" data-poem-id="alchimie-de-la-douleur">Alchimie de la douleur</a></li>
+          <li><a href="../../poems/horreur-sympathique/" data-poem-id="horreur-sympathique">Horreur sympathique</a></li>
+          <li><a href="../../poems/l-heautontimoroumenos/" data-poem-id="l-heautontimoroumenos">L’Héautontimorouménos</a></li>
+          <li><a href="../../poems/l-irremediable/" data-poem-id="l-irremediable">L’Irremédiable</a></li>
+          <li><a href="../../poems/l-horloge/" data-poem-id="l-horloge">L’Horloge</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-tableaux-parisiens" data-section-toggle="tableaux-parisiens">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Tableaux Parisiens</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-tableaux-parisiens" data-section="tableaux-parisiens">
+          <li><a href="../../poems/paysage/" data-poem-id="paysage">Paysage</a></li>
+          <li><a href="../../poems/le-soleil/" data-poem-id="le-soleil">Le Soleil</a></li>
+          <li><a href="../../poems/a-une-mendiante-rousse/" data-poem-id="a-une-mendiante-rousse">À une mendiante rousse</a></li>
+          <li><a href="../../poems/le-cygne/" data-poem-id="le-cygne">Le Cygne</a></li>
+          <li><a href="../../poems/les-sept-vieillards/" data-poem-id="les-sept-vieillards">Les sept Vieillards</a></li>
+          <li><a href="../../poems/les-petites-vieilles/" data-poem-id="les-petites-vieilles">Les petites Vieilles</a></li>
+          <li><a href="../../poems/les-aveugles/" data-poem-id="les-aveugles">Les Aveugles</a></li>
+          <li><a href="../../poems/a-une-passante/" data-poem-id="a-une-passante">À une passante</a></li>
+          <li><a href="../../poems/le-squelette-laboureur/" data-poem-id="le-squelette-laboureur">Le Squelette laboureur</a></li>
+          <li><a href="../../poems/le-crepuscule-du-soir/" data-poem-id="le-crepuscule-du-soir">Le Crépuscule du soir</a></li>
+          <li><a href="../../poems/le-jeu/" data-poem-id="le-jeu">Le Jeu</a></li>
+          <li><a href="../../poems/danse-macabre/" data-poem-id="danse-macabre">Danse macabre</a></li>
+          <li><a href="../../poems/l-amour-du-mensonge/" data-poem-id="l-amour-du-mensonge">L’Amour du mensonge</a></li>
+          <li><a href="../../poems/je-n-ai-pas-oublie/" data-poem-id="je-n-ai-pas-oublie">Je n’ai pas oublié, voisine de la ville</a></li>
+          <li><a href="../../poems/la-servante-au-grand-coeur/" data-poem-id="la-servante-au-grand-coeur">La servante au grand cœur dont vous étiez jalouse</a></li>
+          <li><a href="../../poems/brumes-et-pluies/" data-poem-id="brumes-et-pluies">Brumes et Pluies</a></li>
+          <li><a href="../../poems/reve-parisien/" data-poem-id="reve-parisien">Rêve parisien</a></li>
+          <li><a href="../../poems/le-crepuscule-du-matin/" data-poem-id="le-crepuscule-du-matin">Le Crépuscule du matin</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-le-vin" data-section-toggle="le-vin">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Le Vin</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-le-vin" data-section="le-vin">
+          <li><a href="../../poems/l-ame-du-vin/" data-poem-id="l-ame-du-vin">L’Âme du vin</a></li>
+          <li><a href="../../poems/le-vin-des-chiffonniers/" data-poem-id="le-vin-des-chiffonniers">Le Vin des chiffonniers</a></li>
+          <li><a href="../../poems/le-vin-de-l-assassin/" data-poem-id="le-vin-de-l-assassin">Le Vin de l’assassin</a></li>
+          <li><a href="../../poems/le-vin-du-solitaire/" data-poem-id="le-vin-du-solitaire">Le Vin du solitaire</a></li>
+          <li><a href="../../poems/le-vin-des-amants/" data-poem-id="le-vin-des-amants">Le Vin des amants</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-fleurs-du-mal" data-section-toggle="fleurs-du-mal">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Fleurs du Mal</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-fleurs-du-mal" data-section="fleurs-du-mal">
+          <li><a href="../../poems/la-destruction/" data-poem-id="la-destruction">La Destruction</a></li>
+          <li><a href="../../poems/une-martyre/" data-poem-id="une-martyre">Une Martyre</a></li>
+          <li><a href="../../poems/femmes-damnees/" data-poem-id="femmes-damnees">Femmes damnées</a></li>
+          <li><a href="../../poems/les-deux-bonnes-soeurs/" data-poem-id="les-deux-bonnes-soeurs">Les deux bonnes Sœurs</a></li>
+          <li><a href="../../poems/la-fontaine-de-sang/" data-poem-id="la-fontaine-de-sang">La Fontaine de sang</a></li>
+          <li><a href="../../poems/allegorie/" data-poem-id="allegorie">Allégorie</a></li>
+          <li><a href="../../poems/la-beatrice/" data-poem-id="la-beatrice">La Béatrice</a></li>
+          <li><a href="../../poems/un-voyage-a-cythere/" data-poem-id="un-voyage-a-cythere">Un Voyage à Cythère</a></li>
+          <li><a href="../../poems/l-amour-et-le-crane/" data-poem-id="l-amour-et-le-crane">L’Amour et le Crâne</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-revolte" data-section-toggle="revolte">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Révolte</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-revolte" data-section="revolte">
+          <li><a href="../../poems/le-reniement-de-saint-pierre/" data-poem-id="le-reniement-de-saint-pierre">Le Reniement de saint Pierre</a></li>
+          <li><a href="../../poems/abel-et-cain/" data-poem-id="abel-et-cain">Abel et Caïn</a></li>
+          <li><a href="../../poems/les-litanies-de-satan/" data-poem-id="les-litanies-de-satan">Les Litanies de Satan</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-la-mort" data-section-toggle="la-mort">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">La Mort</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-la-mort" data-section="la-mort">
+          <li><a href="../../poems/la-mort-des-amants/" data-poem-id="la-mort-des-amants">La Mort des amants</a></li>
+          <li><a href="../../poems/la-mort-des-pauvres/" data-poem-id="la-mort-des-pauvres">La Mort des pauvres</a></li>
+          <li><a href="../../poems/la-mort-des-artistes/" data-poem-id="la-mort-des-artistes">La Mort des artistes</a></li>
+          <li><a href="../../poems/la-fin-de-la-journee/" data-poem-id="la-fin-de-la-journee">La Fin de la journée</a></li>
+          <li><a href="../../poems/le-reve-d-un-curieux/" data-poem-id="le-reve-d-un-curieux">Le Rêve d’un curieux</a></li>
+          <li><a href="../../poems/le-voyage/" data-poem-id="le-voyage">Le Voyage</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-pieces-condamnees" data-section-toggle="pieces-condamnees">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Pieces Condamnées</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-pieces-condamnees" data-section="pieces-condamnees">
+          <li><a href="../../poems/les-bijoux/" data-poem-id="les-bijoux">Les Bijoux</a></li>
+          <li><a href="../../poems/le-lethe/" data-poem-id="le-lethe">Le Léthé</a></li>
+          <li><a href="../../poems/a-celle-qui-est-trop-gaie/" data-poem-id="a-celle-qui-est-trop-gaie">À celle qui est trop gaie</a></li>
+          <li><a href="../../poems/lesbos/" data-poem-id="lesbos">Lesbos</a></li>
+          <li><a href="../../poems/femmes-damnees-delphine-et-hippolyte/" data-poem-id="femmes-damnees-delphine-et-hippolyte">Femmes damnées (Delphine et Hippolyte)</a></li>
+          <li><a href="../../poems/les-metamorphoses-du-vampire/" data-poem-id="les-metamorphoses-du-vampire">Les Métamorphoses du Vampire</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="sidebar-foot">
+      <a class="sidebar-foot-link" href="../../about/" data-route="about">
+        <span class="lang-en" lang="en">About</span>
+        <span class="lang-es" lang="es">Acerca de</span>
+      </a>
+    </div>
+    <div class="sidebar-controls">
+      <button type="button" class="sidebar-control sidebar-toggle" aria-label="Hide sidebar" title="Hide sidebar">«</button>
+      <button type="button" class="sidebar-control font-down" aria-label="Decrease font size" title="Decrease font size">A−</button>
+      <button type="button" class="sidebar-control font-up" aria-label="Increase font size" title="Increase font size">A+</button>
+      <button type="button" class="sidebar-control theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+    </div>
+  </aside>
+
+  <div class="page">
+    <header class="header">
+      <h1 class="title">Le Chat</h1>
+      <p class="subtitle">Charles Baudelaire — <cite>Les Fleurs du mal</cite></p>
+      <div class="header-ornament"></div>
+    </header>
+
+    <div class="comparison-wrap">
+      <main class="comparison" data-lines-per-stanza="4" data-langs="fr,en" data-translation-langs="en,es" aria-label="Comparison French / translation">
+      <div class="cell cell-fr row-first column-left" data-lang="fr" role="cell" style="grid-row: 1; grid-column: 1;"><h2 class="column-title" id="column-title-fr">Français</h2></div>
+      <div class="cell cell-en cell-translation row-first column-right" data-lang="en" role="cell" style="grid-row: 1; grid-column: 2;"><div class="column-title column-title--translation"><span class="column-title-text">Le Chat</span></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 2; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">1</span><span class="translation-segment" data-tid="0">Viens, mon beau chat, sur mon cœur amoureux ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="1">Retiens les griffes de ta patte,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="2">Et laisse-moi plonger dans tes beaux yeux,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="3">Mêlés de métal et d’agate.</span></div></div></div>
+      <div class="cell cell-en cell-translation column-right" data-lang="en" role="cell" style="grid-row: 2; grid-column: 2;"><div class="stanza stanza--missing"><div class="translation-missing"><p class="translation-missing-title">No English (Scott) translation yet</p><p class="translation-missing-note"></p></div></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 3; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-en cell-blank cell-translation column-right" data-lang="en" role="cell" style="grid-row: 3; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 4; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">5</span><span class="translation-segment" data-tid="4">Lorsque mes doigts caressent à loisir</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="5">Ta tête et ton dos élastique,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="6">Et que ma main s’enivre du plaisir</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="7">De palper ton corps électrique,</span></div></div></div>
+      <div class="cell cell-en cell-translation column-right" data-lang="en" role="cell" style="grid-row: 4; grid-column: 2;"><div class="stanza stanza--missing"></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 5; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-en cell-blank cell-translation column-right" data-lang="en" role="cell" style="grid-row: 5; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 6; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="8">Je vois ma femme en esprit. Son regard,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">10</span><span class="translation-segment" data-tid="9">Comme le tien, aimable bête,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="10">Profond et froid, coupe et fend comme un dard,</span></div></div></div>
+      <div class="cell cell-en cell-translation column-right" data-lang="en" role="cell" style="grid-row: 6; grid-column: 2;"><div class="stanza stanza--missing"></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 7; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-en cell-blank cell-translation column-right" data-lang="en" role="cell" style="grid-row: 7; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 8; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="11">Et, des pieds jusques à la tête,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="12">Un air subtil, un dangereux parfum</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="13">Nagent autour de son corps brun.</span></div></div></div>
+      <div class="cell cell-en cell-translation column-right" data-lang="en" role="cell" style="grid-row: 8; grid-column: 2;"><div class="stanza stanza--missing"></div></div>
+      <div class="cell cell-fr cell-source row-last column-left" data-lang="fr" role="cell" style="grid-row: 9; grid-column: 1;"><div class="column-source"><span class="column-source-label">Source</span><span class="column-source-text"><a href="https://fr.wikisource.org/wiki/Les_Fleurs_du_mal_%281861%29/Le_Chat_%28%C2%AB_Viens%2C_mon_beau_chat%2C_sur_mon_c%C5%93ur_amoureux_%C2%BB%29" target="_blank" rel="noopener noreferrer">Les Fleurs du mal (1861) — French Wikisource</a></span></div></div>
+      <div class="cell cell-en cell-source cell-translation row-last column-right" data-lang="en" role="cell" style="grid-row: 9; grid-column: 2;"></div>
+      </main>
+    </div>
+
+    <nav class="poem-nav" aria-label="Previous, random and next poem">
+      <!-- Prev and next are anchors, not buttons: they are the only links from
+           one poem to the next, so a crawler has to be able to follow them, and
+           a reader has to be able to middle-click them. updatePoemNav() writes
+           the href; the two ends of the sequence say aria-disabled instead,
+           which an <a> understands and `disabled` does not. Random has no URL
+           to point at and stays a button. -->
+      <a class="poem-nav-btn poem-nav-prev" aria-label="Previous poem" href="../../poems/remords-posthume/"><span class="poem-nav-label">Previous</span> <cite class="poem-nav-title">Remords posthume</cite></a>
+      <button type="button" class="poem-nav-btn poem-nav-random random-poem" aria-label="Open a poem at random" title="Open a poem at random"><span class="poem-nav-glyph" aria-hidden="true">&#8258;</span> <span class="poem-nav-label">Random</span></button>
+      <a class="poem-nav-btn poem-nav-next" aria-label="Next poem" href="../../poems/duellum/"><cite class="poem-nav-title">Duellum</cite> <span class="poem-nav-label">Next</span></a>
+    </nav>
+
+    <!-- Home and About. Only one of the three views (poem / home / about) is
+         shown at a time; `data-view` on <body> says which. -->
+    <article class="static-view" id="view-home" aria-labelledby="home-heading">
+      <div class="static-langs" role="group" aria-label="Page language — idioma de la página">
+        <button type="button" class="static-lang" data-lang="en" lang="en">English</button>
+        <button type="button" class="static-lang" data-lang="es" lang="es">Español</button>
+      </div>
+      <header class="static-head">
+        <h1 class="static-title" id="home-heading">Les Fleurs du mal</h1>
+        <p class="static-lede">
+          <span class="lang-en" lang="en">Charles Baudelaire, 1861</span>
+          <span class="lang-es" lang="es">Charles Baudelaire, 1861</span>
+        </p>
+        <div class="header-ornament"></div>
+      </header>
+      <div class="static-body">
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;margin-bottom:5px;">
+          <img src="../../assets/beaudelaire.png" width="235" height="300" decoding="async"
+            alt="Engraved portrait of Charles Baudelaire" />
+          <!-- <span class="static-note">English by Cyril Scott (1909) and Spanish by Eduardo Marquina (1905)</span> -->
+        </div>
+        <div class="lang-en" lang="en">
+          <p>This website contains all 126 poems of the 1861 of Charles Baudelaire's <cite>Les Fleurs du mal</cite>
+            plus six
+            <span class="glossary"><button type="button" class="glossary-term"
+              popovertarget="glossary-condamnees-en"><i lang="fr">pièces condamnées</i></button><span
+              class="glossary-note" id="glossary-condamnees-en" popover><b lang="fr">Pièces condamnées</b>The six
+              poems a Paris court ordered cut from the 1857 edition for <i lang="fr">outrage à la morale
+              publique</i>. Baudelaire never put them back: the 1861 edition appeared without them, and they
+              were reprinted in Brussels in <cite>Les Épaves</cite> (1866). The judgment against them stood
+              until 1949.</span></span>, with English and Spanish
+            translations.</p>
+          <p>Hovering over a word highlights its translation, and clicking it shows its definition. Try it out here!</p>
+        </div>
+        <div class="lang-es" lang="es">
+          <p>Este sitio contiene los 126 poemas de la edición de 1861 de <cite>Les Fleurs du mal</cite> de Charles Baudelaire. Aquí están
+            , más las 6
+            <span class="glossary"><button type="button" class="glossary-term"
+              popovertarget="glossary-condamnees-es"><i lang="fr">pièces condamnées</i></button><span
+              class="glossary-note" id="glossary-condamnees-es" popover><b lang="fr">Pièces condamnées</b>Los seis
+              poemas que un tribunal de París mandó suprimir de la edición de 1857 por ultraje a la moral
+              pública. La edición de 1861 se publicó sin ellos, y se reimprimieron en
+              Bruselas en <cite>Les Épaves</cite> (1866). La decisión de la corte no se anuló hasta 1949.</span></span>, con
+            traducciones al inglés y al español.</p>
+          <p>Posa el mouse sobre una palabra para mostrar su traducción, y haz click sobre ella para ver su definición:</p>
+        </div>
+        <figure class="demo" data-demo-poem="correspondances" data-demo-from="0" data-demo-lines="4">
+        </figure>
+        <div class="lang-en" lang="en">
+          <p>The translations used on this site are Cyril Scott's <a href="https://www.gutenberg.org/ebooks/36098">1909 English translation</a>,
+            Eduardo Marquina's <a href="https://es.wikisource.org/wiki/Las_flores_del_mal">1905 Spanish translation</a>, and César Bravo's
+            (yours truly) 2026 Spanish translation.</p>
+          <p>Questions?
+            <a class="static-link" href="https://www.instagram.com/cesar_bravo.x/" target="_blank" rel="noopener noreferrer">send me a DM</a>.</p>
+        </div>
+        <div class="lang-es" lang="es">
+          <p>Las traducciones usadas son la <a href="https://www.gutenberg.org/ebooks/36098">traducción inglesa de 1909</a> de Cyril Scott,
+            la <a href="https://es.wikisource.org/wiki/Las_flores_del_mal">traducción española de 1905</a> de Eduardo Marquina, y traducción al español de César Bravo (2026).</p>
+          <p>
+            <a class="static-link" href="https://www.instagram.com/cesar_bravo.x/" target="_blank" rel="noopener noreferrer">Mandáme un DM por Instagram</a> si tienes cualquier duda o comentario.</p>
+        </div>
+        <p class="static-cta">
+          <button type="button" class="static-btn start-reading">
+            <span class="lang-en" lang="en">Start reading</span>
+            <span class="lang-es" lang="es">Empezar a leer</span>
+          </button>
+          <button type="button" class="static-btn static-btn--quiet random-poem">
+            <span class="lang-en" lang="en">A poem at random</span>
+            <span class="lang-es" lang="es">Poema al azar</span>
+          </button>
+        </p>
+      </div>
+    </article>
+
+    <article class="static-view" id="view-about" aria-labelledby="about-heading">
+      <div class="static-langs" role="group" aria-label="Page language — idioma de la página">
+        <button type="button" class="static-lang" data-lang="en" lang="en">English</button>
+        <button type="button" class="static-lang" data-lang="es" lang="es">Español</button>
+      </div>
+      <header class="static-head">
+        <h1 class="static-title" id="about-heading">
+          <span class="lang-en" lang="en">About</span>
+          <span class="lang-es" lang="es">Acerca del sitio</span>
+        </h1>
+        <div class="header-ornament"></div>
+      </header>
+      <div class="static-body">
+        <div class="lang-en" lang="en">
+          <p>
+            Check this website's source code in <a href="https://github.com/cesar-bravo-m/flowers-of-evil">Github</a>.
+          </p>
+        </div>
+        <div class="lang-es" lang="es">
+          <p>
+            El código fuente de este sitio está disponible en <a href="https://github.com/cesar-bravo-m/flowers-of-evil">Github</a>.
+          </p>
+        </div>
+        <p>
+          <span class="lang-en" lang="en">Please direct any inquiries to my <a href="https://www.instagram.com/cesar_bravo.x/">Instagram</a> or <a href="https://www.linkedin.com/in/cesar-bravo-molina/">Linkedin</a>.</span>
+          <span class="lang-es" lang="es">Dirige cualquier pregunta a mi <a href="https://www.instagram.com/cesar_bravo.x/">Instagram</a> or <a href="https://www.linkedin.com/in/cesar-bravo-molina/">Linkedin</a>.</span>
+        </p>
+        <p class="static-note">
+          <span class="lang-en" lang="en"><a class="static-link" href="../../" data-route="home">Back to the beginning</a></span>
+          <span class="lang-es" lang="es"><a class="static-link" href="../../" data-route="home">Volver al principio</a></span>
+        </p>
+      </div>
+    </article>
+
+    <footer class="footer">
+      <div class="footer-ornament"></div>
+      <p><cite>Les Fleurs du mal</cite> — 1861</p>
+    </footer>
+  </div>
+
+  <div class="privacy-bar" role="region" aria-label="Privacy notice — aviso de privacidad" hidden>
+    <p class="privacy-text">
+      <span class="lang-en" lang="en">This site uses no cookies</span>
+      <span class="lang-es" lang="es">Este sitio no usa cookies.</span>
+    </p>
+    <span class="privacy-actions">
+      <a class="privacy-link" href="../../about/" data-route="about">
+        <span class="lang-en" lang="en">Details</span>
+        <span class="lang-es" lang="es">Detalles</span>
+      </a>
+      <button type="button" class="privacy-ok">
+        <span class="lang-en" lang="en">Got it</span>
+        <span class="lang-es" lang="es">Entendido</span>
+      </button>
+    </span>
+  </div>
+
+  <!-- One file per poem, then the bootstrap and the UI. All deferred: `defer`
+       keeps them in document order but stops them blocking the parser, so the
+       shell — and, on a generated poem page, the poem itself — paints before a
+       megabyte of verse has finished arriving. site-lang.js above is the one
+       exception; it has to run before the body is parsed. -->
+  <script defer src="../../0. Au Lecteur/au-lecteur.js"></script>
+  <script defer src="../../1. Spleen et Ideal/benediction.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-albatros.js"></script>
+  <script defer src="../../1. Spleen et Ideal/elevation.js"></script>
+  <script defer src="../../1. Spleen et Ideal/correspondances.js"></script>
+  <script defer src="../../1. Spleen et Ideal/j-aime-le-souvenir.js"></script>
+  <script defer src="../../1. Spleen et Ideal/les-phares.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-muse-malade.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-muse-venale.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-mauvais-moine.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-ennemi.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-guignon.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-vie-anterieure.js"></script>
+  <script defer src="../../1. Spleen et Ideal/bohemiens-en-voyage.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-homme-et-la-mer.js"></script>
+  <script defer src="../../1. Spleen et Ideal/don-juan-aux-enfers.js"></script>
+  <script defer src="../../1. Spleen et Ideal/chatiment-de-l-orgueil.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-beaute.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-ideal.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-geante.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-masque.js"></script>
+  <script defer src="../../1. Spleen et Ideal/hymne-a-la-beaute.js"></script>
+  <script defer src="../../1. Spleen et Ideal/parfum-exotique.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-chevelure.js"></script>
+  <script defer src="../../1. Spleen et Ideal/je-t-adore.js"></script>
+  <script defer src="../../1. Spleen et Ideal/tu-mettrais-l-univers.js"></script>
+  <script defer src="../../1. Spleen et Ideal/sed-non-satiata.js"></script>
+  <script defer src="../../1. Spleen et Ideal/vetements-ondoyants.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-serpent-qui-danse.js"></script>
+  <script defer src="../../1. Spleen et Ideal/une-charogne.js"></script>
+  <script defer src="../../1. Spleen et Ideal/de-profundis-clamavi.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-vampire.js"></script>
+  <script defer src="../../1. Spleen et Ideal/une-nuit-que-j-etais.js"></script>
+  <script defer src="../../1. Spleen et Ideal/remords-posthume.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-chat-1.js"></script>
+  <script defer src="../../1. Spleen et Ideal/duellum.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-balcon.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-possede.js"></script>
+  <script defer src="../../1. Spleen et Ideal/un-fantome.js"></script>
+  <script defer src="../../1. Spleen et Ideal/je-te-donne-ces-vers.js"></script>
+  <script defer src="../../1. Spleen et Ideal/semper-eadem.js"></script>
+  <script defer src="../../1. Spleen et Ideal/tout-entiere.js"></script>
+  <script defer src="../../1. Spleen et Ideal/que-diras-tu-ce-soir.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-flambeau-vivant.js"></script>
+  <script defer src="../../1. Spleen et Ideal/reversibilite.js"></script>
+  <script defer src="../../1. Spleen et Ideal/confession.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-aube-spirituelle.js"></script>
+  <script defer src="../../1. Spleen et Ideal/harmonie-du-soir.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-flacon.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-poison.js"></script>
+  <script defer src="../../1. Spleen et Ideal/ciel-brouille.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-chat-2.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-beau-navire.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-invitation-au-voyage.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-irreparable.js"></script>
+  <script defer src="../../1. Spleen et Ideal/causerie.js"></script>
+  <script defer src="../../1. Spleen et Ideal/chant-d-automne.js"></script>
+  <script defer src="../../1. Spleen et Ideal/a-une-madone.js"></script>
+  <script defer src="../../1. Spleen et Ideal/chanson-d-apres-midi.js"></script>
+  <script defer src="../../1. Spleen et Ideal/sisina.js"></script>
+  <script defer src="../../1. Spleen et Ideal/franciscae-meae-laudes.js"></script>
+  <script defer src="../../1. Spleen et Ideal/a-une-dame-creole.js"></script>
+  <script defer src="../../1. Spleen et Ideal/moesta-et-errabunda.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-revenant.js"></script>
+  <script defer src="../../1. Spleen et Ideal/sonnet-d-automne.js"></script>
+  <script defer src="../../1. Spleen et Ideal/tristesses-de-la-lune.js"></script>
+  <script defer src="../../1. Spleen et Ideal/les-chats.js"></script>
+  <script defer src="../../1. Spleen et Ideal/les-hiboux.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-pipe.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-musique.js"></script>
+  <script defer src="../../1. Spleen et Ideal/sepulture.js"></script>
+  <script defer src="../../1. Spleen et Ideal/une-gravure-fantastique.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-mort-joyeux.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-tonneau-de-la-haine.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-cloche-felee.js"></script>
+  <script defer src="../../1. Spleen et Ideal/spleen-1.js"></script>
+  <script defer src="../../1. Spleen et Ideal/spleen-2.js"></script>
+  <script defer src="../../1. Spleen et Ideal/spleen-3.js"></script>
+  <script defer src="../../1. Spleen et Ideal/spleen-4.js"></script>
+  <script defer src="../../1. Spleen et Ideal/obsession.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-gout-du-neant.js"></script>
+  <script defer src="../../1. Spleen et Ideal/alchimie-de-la-douleur.js"></script>
+  <script defer src="../../1. Spleen et Ideal/horreur-sympathique.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-heautontimoroumenos.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-irremediable.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-horloge.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/paysage.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-soleil.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/a-une-mendiante-rousse.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-cygne.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/les-sept-vieillards.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/les-petites-vieilles.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/les-aveugles.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/a-une-passante.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-squelette-laboureur.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-crepuscule-du-soir.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-jeu.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/danse-macabre.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/l-amour-du-mensonge.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/je-n-ai-pas-oublie.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/la-servante-au-grand-coeur.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/brumes-et-pluies.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/reve-parisien.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-crepuscule-du-matin.js"></script>
+  <script defer src="../../3. Le Vin/l-ame-du-vin.js"></script>
+  <script defer src="../../3. Le Vin/le-vin-des-chiffonniers.js"></script>
+  <script defer src="../../3. Le Vin/le-vin-de-l-assassin.js"></script>
+  <script defer src="../../3. Le Vin/le-vin-du-solitaire.js"></script>
+  <script defer src="../../3. Le Vin/le-vin-des-amants.js"></script>
+  <script defer src="../../4. Fleurs du Mal/la-destruction.js"></script>
+  <script defer src="../../4. Fleurs du Mal/une-martyre.js"></script>
+  <script defer src="../../4. Fleurs du Mal/femmes-damnees.js"></script>
+  <script defer src="../../4. Fleurs du Mal/les-deux-bonnes-soeurs.js"></script>
+  <script defer src="../../4. Fleurs du Mal/la-fontaine-de-sang.js"></script>
+  <script defer src="../../4. Fleurs du Mal/allegorie.js"></script>
+  <script defer src="../../4. Fleurs du Mal/la-beatrice.js"></script>
+  <script defer src="../../4. Fleurs du Mal/un-voyage-a-cythere.js"></script>
+  <script defer src="../../4. Fleurs du Mal/l-amour-et-le-crane.js"></script>
+  <script defer src="../../5. Revolte/le-reniement-de-saint-pierre.js"></script>
+  <script defer src="../../5. Revolte/abel-et-cain.js"></script>
+  <script defer src="../../5. Revolte/les-litanies-de-satan.js"></script>
+  <script defer src="../../6. La Mort/la-mort-des-amants.js"></script>
+  <script defer src="../../6. La Mort/la-mort-des-pauvres.js"></script>
+  <script defer src="../../6. La Mort/la-mort-des-artistes.js"></script>
+  <script defer src="../../6. La Mort/la-fin-de-la-journee.js"></script>
+  <script defer src="../../6. La Mort/le-reve-d-un-curieux.js"></script>
+  <script defer src="../../6. La Mort/le-voyage.js"></script>
+  <script defer src="../../7. Pieces Condamnees/les-bijoux.js"></script>
+  <script defer src="../../7. Pieces Condamnees/le-lethe.js"></script>
+  <script defer src="../../7. Pieces Condamnees/a-celle-qui-est-trop-gaie.js"></script>
+  <script defer src="../../7. Pieces Condamnees/lesbos.js"></script>
+  <script defer src="../../7. Pieces Condamnees/femmes-damnees-delphine-et-hippolyte.js"></script>
+  <script defer src="../../7. Pieces Condamnees/les-metamorphoses-du-vampire.js"></script>
+  <script defer src="../../translation-data.js"></script>
+  <script defer src="../../bravo.js"></script>
+  <script defer src="../../meta.js"></script>
+  <script defer src="../../translation.js"></script>
+  <script defer src="../../search.js"></script>
+</body>
+</html>

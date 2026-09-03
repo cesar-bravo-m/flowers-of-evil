@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<!-- `lang` is the language of the prose around the poems, not of the poems:
+     every line of French carries its own lang="fr". site-lang.js rewrites it
+     when the reader picks the other language.
+     `data-base` is how far this page sits below the site root — "" at the root,
+     "../../" on a generated poem page. translation.js builds every internal
+     link from it. Both are rewritten by tools/build-pages.mjs. -->
+<html lang="en" data-base="../../">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f5f0e8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1e1a17" media="(prefers-color-scheme: dark)">
+
+  <!-- SEO. The title, description, canonical, card and JSON-LD below are all
+       rewritten per poem: at build time by tools/build-pages.mjs, and again in
+       the browser by updateMeta() in translation.js when the reader navigates
+       without a page load. Both read their strings from meta.js.
+       Do not name a tag here in angle brackets — the build script matches on
+       those, and would rewrite the comment along with the real thing. -->
+  <title>Le Voyage — Baudelaire, with Spanish translation</title>
+  <meta name="description" content="“Pour l’enfant, amoureux de cartes et d’estampes” — Le Voyage, from Charles Baudelaire’s Les Fleurs du mal (1861), with Spanish translation line by line.">
+  <link rel="canonical" href="https://floresdelmal.org/poems/le-voyage/">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta name="author" content="César Bravo">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Les Fleurs du mal">
+  <meta property="og:title" content="Le Voyage — Baudelaire, with Spanish translation">
+  <meta property="og:description" content="“Pour l’enfant, amoureux de cartes et d’estampes” — Le Voyage, from Charles Baudelaire’s Les Fleurs du mal (1861), with Spanish translation line by line.">
+  <meta property="og:url" content="https://floresdelmal.org/poems/le-voyage/">
+  <meta property="og:image" content="https://floresdelmal.org/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Portrait of Charles Baudelaire beside the title Les Fleurs du mal">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Le Voyage — Baudelaire, with Spanish translation">
+  <meta name="twitter:description" content="“Pour l’enfant, amoureux de cartes et d’estampes” — Le Voyage, from Charles Baudelaire’s Les Fleurs du mal (1861), with Spanish translation line by line.">
+  <meta name="twitter:image" content="https://floresdelmal.org/assets/og-image.jpg">
+
+  <script type="application/ld+json" id="ld-json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Poem",
+      "@id": "https://floresdelmal.org/poems/le-voyage/#poem",
+      "name": "Le Voyage",
+      "url": "https://floresdelmal.org/poems/le-voyage/",
+      "description": "“Pour l’enfant, amoureux de cartes et d’estampes” — Le Voyage, from Charles Baudelaire’s Les Fleurs du mal (1861), with Spanish translation line by line.",
+      "inLanguage": "fr",
+      "datePublished": "1861",
+      "genre": "Poetry",
+      "author": {
+        "@type": "Person",
+        "@id": "https://floresdelmal.org/#baudelaire",
+        "name": "Charles Baudelaire",
+        "birthDate": "1821-04-09",
+        "deathDate": "1867-08-31",
+        "sameAs": "https://en.wikipedia.org/wiki/Charles_Baudelaire"
+      },
+      "isPartOf": {
+        "@id": "https://floresdelmal.org/#book"
+      },
+      "alternateName": [
+        "El viaje"
+      ],
+      "workTranslation": [
+        {
+          "@type": "Poem",
+          "name": "El viaje",
+          "inLanguage": "es",
+          "translator": {
+            "@type": "Person",
+            "name": "Eduardo Marquina"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "Book",
+      "@id": "https://floresdelmal.org/#book",
+      "name": "Les Fleurs du mal",
+      "alternateName": [
+        "The Flowers of Evil",
+        "Las flores del mal"
+      ],
+      "datePublished": "1861",
+      "inLanguage": "fr",
+      "genre": "Poetry",
+      "author": {
+        "@type": "Person",
+        "@id": "https://floresdelmal.org/#baudelaire",
+        "name": "Charles Baudelaire",
+        "birthDate": "1821-04-09",
+        "deathDate": "1867-08-31",
+        "sameAs": "https://en.wikipedia.org/wiki/Charles_Baudelaire"
+      },
+      "url": "https://floresdelmal.org/",
+      "sameAs": "https://en.wikipedia.org/wiki/Les_Fleurs_du_mal"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Les Fleurs du mal",
+          "item": "https://floresdelmal.org/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "La Mort"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Le Voyage",
+          "item": "https://floresdelmal.org/poems/le-voyage/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <link rel="icon" href="../../assets/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital@0;1&display=swap" rel="stylesheet">
+</head>
+<body data-view="poem">
+  <!-- Resolves and applies the page language (English / Spanish) before the
+       written pages below are parsed. -->
+  <script src="../../site-lang.js"></script>
+  <script>
+    /* Pick the route before the page paints, so a deep link never flashes the
+       wrong view first. The path is the address — /poems/<id>/ or /about/ —
+       and a generated page already carries the right data-view in its markup,
+       so this only has to decide anything at the root, where the fragment form
+       an older link may still use is the only clue. translation.js re-checks
+       once the poems have loaded. */
+    (function () {
+      var path = window.location.pathname;
+      var view;
+      if (/\/poems\/[^\/]+(?:\/(?:index\.html)?)?$/.test(path)) view = 'poem';
+      else if (/\/about(?:\/(?:index\.html)?)?$/.test(path)) view = 'about';
+      else {
+        var h = window.location.hash.slice(1);
+        view = !h || h === 'home' ? 'home' : (h === 'about' ? 'about' : 'poem');
+      }
+      document.body.setAttribute('data-view', view);
+    })();
+  </script>
+  <script>
+    /* Edit mode is an authoring tool, not part of the site. It is fetched only
+       when this page is being served from a local dev server
+       (`node tools/dev-server.mjs`), so a published copy never carries it and
+       neither does index.html opened straight off disk — where the hostname is
+       the empty string. edit.js then waits for the server to answer before it
+       shows anything. */
+    (function () {
+      var host = window.location.hostname;
+      if (window.location.protocol.indexOf('http') !== 0) return;
+      if (['localhost', '127.0.0.1', '[::1]', '::1'].indexOf(host) === -1) return;
+      var css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'edit.css';
+      document.head.appendChild(css);
+      /* The syllable counter and its English word list go in ahead of edit.js.
+         A script added this way is async by default, so `async = false` is what
+         holds them in order; edit.js feature-detects anyway. */
+      ['syllables.js', 'en-syllables.js', 'edit.js'].forEach(function (src) {
+        var js = document.createElement('script');
+        js.src = src;
+        js.async = false;
+        document.head.appendChild(js);
+      });
+    })();
+  </script>
+
+  <!-- Narrow screens: fixed bar that opens the poem drawer and the search palette -->
+  <div class="topbar">
+    <button type="button" class="topbar-btn topbar-menu" aria-label="Show poem list" title="Show poem list" aria-expanded="false" aria-controls="sidebar">☰</button>
+    <span class="topbar-title">Le Voyage</span>
+    <button type="button" class="topbar-btn topbar-search" aria-label="Search poems" title="Search titles and lines in any language">
+      <svg class="search-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <circle cx="6.75" cy="6.75" r="4.25"></circle>
+        <line x1="9.9" y1="9.9" x2="14" y2="14"></line>
+      </svg>
+    </button>
+  </div>
+
+  <button type="button" class="sidebar-show" aria-label="Show poem list" title="Show poem list">☰</button>
+  <div class="sidebar-scrim" aria-hidden="true"></div>
+  <aside class="sidebar" id="sidebar" aria-label="Choose poem">
+    <div class="sidebar-head">
+      <a class="sidebar-title" href="../../" data-route="home" title="Home">Les Fleurs du mal</a>
+      <button type="button" class="sidebar-close" aria-label="Close poem list" title="Close poem list">×</button>
+    </div>
+    <button type="button" class="sidebar-search" aria-label="Search poems" title="Search titles and lines in any language">
+      <svg class="search-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <circle cx="6.75" cy="6.75" r="4.25"></circle>
+        <line x1="9.9" y1="9.9" x2="14" y2="14"></line>
+      </svg>
+      <span class="sidebar-search-label">
+        <span class="lang-en" lang="en">Search</span>
+        <span class="lang-es" lang="es">Buscar</span>
+      </span>
+      <kbd class="sidebar-search-key" aria-hidden="true">Ctrl K</kbd>
+    </button>
+    <nav>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-au-lecteur" data-section-toggle="au-lecteur">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Au Lecteur</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-au-lecteur" data-section="au-lecteur">
+          <li><a href="../../poems/au-lecteur/" data-poem-id="au-lecteur">Au lecteur</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-spleen-et-ideal" data-section-toggle="spleen-et-ideal">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Spleen et Idéal</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-spleen-et-ideal" data-section="spleen-et-ideal">
+          <li><a href="../../poems/benediction/" data-poem-id="benediction">Bénédiction</a></li>
+          <li><a href="../../poems/l-albatros/" data-poem-id="l-albatros">L’Albatros</a></li>
+          <li><a href="../../poems/elevation/" data-poem-id="elevation">Élévation</a></li>
+          <li><a href="../../poems/correspondances/" data-poem-id="correspondances">Correspondances</a></li>
+          <li><a href="../../poems/j-aime-le-souvenir/" data-poem-id="j-aime-le-souvenir">J’aime le souvenir de ces époques nues</a></li>
+          <li><a href="../../poems/les-phares/" data-poem-id="les-phares">Les Phares</a></li>
+          <li><a href="../../poems/la-muse-malade/" data-poem-id="la-muse-malade">La Muse malade</a></li>
+          <li><a href="../../poems/la-muse-venale/" data-poem-id="la-muse-venale">La Muse vénale</a></li>
+          <li><a href="../../poems/le-mauvais-moine/" data-poem-id="le-mauvais-moine">Le Mauvais Moine</a></li>
+          <li><a href="../../poems/l-ennemi/" data-poem-id="l-ennemi">L’Ennemi</a></li>
+          <li><a href="../../poems/le-guignon/" data-poem-id="le-guignon">Le Guignon</a></li>
+          <li><a href="../../poems/la-vie-anterieure/" data-poem-id="la-vie-anterieure">La Vie antérieure</a></li>
+          <li><a href="../../poems/bohemiens-en-voyage/" data-poem-id="bohemiens-en-voyage">Bohémiens en voyage</a></li>
+          <li><a href="../../poems/l-homme-et-la-mer/" data-poem-id="l-homme-et-la-mer">L’Homme et la Mer</a></li>
+          <li><a href="../../poems/don-juan-aux-enfers/" data-poem-id="don-juan-aux-enfers">Don Juan aux enfers</a></li>
+          <li><a href="../../poems/chatiment-de-l-orgueil/" data-poem-id="chatiment-de-l-orgueil">Châtiment de l’orgueil</a></li>
+          <li><a href="../../poems/la-beaute/" data-poem-id="la-beaute">La Beauté</a></li>
+          <li><a href="../../poems/l-ideal/" data-poem-id="l-ideal">L’Idéal</a></li>
+          <li><a href="../../poems/la-geante/" data-poem-id="la-geante">La Géante</a></li>
+          <li><a href="../../poems/le-masque/" data-poem-id="le-masque">Le Masque</a></li>
+          <li><a href="../../poems/hymne-a-la-beaute/" data-poem-id="hymne-a-la-beaute">Hymne à la beauté</a></li>
+          <li><a href="../../poems/parfum-exotique/" data-poem-id="parfum-exotique">Parfum exotique</a></li>
+          <li><a href="../../poems/la-chevelure/" data-poem-id="la-chevelure">La Chevelure</a></li>
+          <li><a href="../../poems/je-t-adore/" data-poem-id="je-t-adore">Je t’adore à l’égal de la voûte nocturne</a></li>
+          <li><a href="../../poems/tu-mettrais-l-univers/" data-poem-id="tu-mettrais-l-univers">Tu mettrais l’univers entier dans ta ruelle</a></li>
+          <li><a href="../../poems/sed-non-satiata/" data-poem-id="sed-non-satiata">Sed non satiata</a></li>
+          <li><a href="../../poems/vetements-ondoyants/" data-poem-id="vetements-ondoyants">Avec ses vêtements ondoyants et nacrés</a></li>
+          <li><a href="../../poems/le-serpent-qui-danse/" data-poem-id="le-serpent-qui-danse">Le Serpent qui danse</a></li>
+          <li><a href="../../poems/une-charogne/" data-poem-id="une-charogne">Une Charogne</a></li>
+          <li><a href="../../poems/de-profundis-clamavi/" data-poem-id="de-profundis-clamavi">De profundis clamavi</a></li>
+          <li><a href="../../poems/le-vampire/" data-poem-id="le-vampire">Le Vampire</a></li>
+          <li><a href="../../poems/une-nuit-que-j-etais/" data-poem-id="une-nuit-que-j-etais">Une nuit que j’étais près d’une affreuse Juive</a></li>
+          <li><a href="../../poems/remords-posthume/" data-poem-id="remords-posthume">Remords posthume</a></li>
+          <li><a href="../../poems/le-chat-1/" data-poem-id="le-chat-1">Le Chat</a></li>
+          <li><a href="../../poems/duellum/" data-poem-id="duellum">Duellum</a></li>
+          <li><a href="../../poems/le-balcon/" data-poem-id="le-balcon">Le Balcon</a></li>
+          <li><a href="../../poems/le-possede/" data-poem-id="le-possede">Le Possédé</a></li>
+          <li><a href="../../poems/un-fantome/" data-poem-id="un-fantome">Un Fantôme</a></li>
+          <li><a href="../../poems/je-te-donne-ces-vers/" data-poem-id="je-te-donne-ces-vers">Je te donne ces vers afin que si mon nom</a></li>
+          <li><a href="../../poems/semper-eadem/" data-poem-id="semper-eadem">Semper eadem</a></li>
+          <li><a href="../../poems/tout-entiere/" data-poem-id="tout-entiere">Tout entière</a></li>
+          <li><a href="../../poems/que-diras-tu-ce-soir/" data-poem-id="que-diras-tu-ce-soir">Que diras-tu ce soir, pauvre âme solitaire</a></li>
+          <li><a href="../../poems/le-flambeau-vivant/" data-poem-id="le-flambeau-vivant">Le Flambeau vivant</a></li>
+          <li><a href="../../poems/reversibilite/" data-poem-id="reversibilite">Réversibilité</a></li>
+          <li><a href="../../poems/confession/" data-poem-id="confession">Confession</a></li>
+          <li><a href="../../poems/l-aube-spirituelle/" data-poem-id="l-aube-spirituelle">L’Aube spirituelle</a></li>
+          <li><a href="../../poems/harmonie-du-soir/" data-poem-id="harmonie-du-soir">Harmonie du soir</a></li>
+          <li><a href="../../poems/le-flacon/" data-poem-id="le-flacon">Le Flacon</a></li>
+          <li><a href="../../poems/le-poison/" data-poem-id="le-poison">Le Poison</a></li>
+          <li><a href="../../poems/ciel-brouille/" data-poem-id="ciel-brouille">Ciel brouillé</a></li>
+          <li><a href="../../poems/le-chat-2/" data-poem-id="le-chat-2">Le Chat</a></li>
+          <li><a href="../../poems/le-beau-navire/" data-poem-id="le-beau-navire">Le beau Navire</a></li>
+          <li><a href="../../poems/l-invitation-au-voyage/" data-poem-id="l-invitation-au-voyage">L’Invitation au voyage</a></li>
+          <li><a href="../../poems/l-irreparable/" data-poem-id="l-irreparable">L’Irréparable</a></li>
+          <li><a href="../../poems/causerie/" data-poem-id="causerie">Causerie</a></li>
+          <li><a href="../../poems/chant-d-automne/" data-poem-id="chant-d-automne">Chant d’automne</a></li>
+          <li><a href="../../poems/a-une-madone/" data-poem-id="a-une-madone">À une Madone</a></li>
+          <li><a href="../../poems/chanson-d-apres-midi/" data-poem-id="chanson-d-apres-midi">Chanson d’après-midi</a></li>
+          <li><a href="../../poems/sisina/" data-poem-id="sisina">Sisina</a></li>
+          <li><a href="../../poems/franciscae-meae-laudes/" data-poem-id="franciscae-meae-laudes">Franciscæ meæ Laudes</a></li>
+          <li><a href="../../poems/a-une-dame-creole/" data-poem-id="a-une-dame-creole">À une dame créole</a></li>
+          <li><a href="../../poems/moesta-et-errabunda/" data-poem-id="moesta-et-errabunda">Moesta et errabunda</a></li>
+          <li><a href="../../poems/le-revenant/" data-poem-id="le-revenant">Le Revenant</a></li>
+          <li><a href="../../poems/sonnet-d-automne/" data-poem-id="sonnet-d-automne">Sonnet d’automne</a></li>
+          <li><a href="../../poems/tristesses-de-la-lune/" data-poem-id="tristesses-de-la-lune">Tristesses de la lune</a></li>
+          <li><a href="../../poems/les-chats/" data-poem-id="les-chats">Les Chats</a></li>
+          <li><a href="../../poems/les-hiboux/" data-poem-id="les-hiboux">Les Hiboux</a></li>
+          <li><a href="../../poems/la-pipe/" data-poem-id="la-pipe">La Pipe</a></li>
+          <li><a href="../../poems/la-musique/" data-poem-id="la-musique">La Musique</a></li>
+          <li><a href="../../poems/sepulture/" data-poem-id="sepulture">Sépulture</a></li>
+          <li><a href="../../poems/une-gravure-fantastique/" data-poem-id="une-gravure-fantastique">Une Gravure fantastique</a></li>
+          <li><a href="../../poems/le-mort-joyeux/" data-poem-id="le-mort-joyeux">Le Mort joyeux</a></li>
+          <li><a href="../../poems/le-tonneau-de-la-haine/" data-poem-id="le-tonneau-de-la-haine">Le Tonneau de la haine</a></li>
+          <li><a href="../../poems/la-cloche-felee/" data-poem-id="la-cloche-felee">La Cloche fêlée</a></li>
+          <li><a href="../../poems/spleen-1/" data-poem-id="spleen-1">Spleen</a></li>
+          <li><a href="../../poems/spleen-2/" data-poem-id="spleen-2">Spleen</a></li>
+          <li><a href="../../poems/spleen-3/" data-poem-id="spleen-3">Spleen</a></li>
+          <li><a href="../../poems/spleen-4/" data-poem-id="spleen-4">Spleen</a></li>
+          <li><a href="../../poems/obsession/" data-poem-id="obsession">Obsession</a></li>
+          <li><a href="../../poems/le-gout-du-neant/" data-poem-id="le-gout-du-neant">Le Goût du néant</a></li>
+          <li><a href="../../poems/alchimie-de-la-douleur/" data-poem-id="alchimie-de-la-douleur">Alchimie de la douleur</a></li>
+          <li><a href="../../poems/horreur-sympathique/" data-poem-id="horreur-sympathique">Horreur sympathique</a></li>
+          <li><a href="../../poems/l-heautontimoroumenos/" data-poem-id="l-heautontimoroumenos">L’Héautontimorouménos</a></li>
+          <li><a href="../../poems/l-irremediable/" data-poem-id="l-irremediable">L’Irremédiable</a></li>
+          <li><a href="../../poems/l-horloge/" data-poem-id="l-horloge">L’Horloge</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-tableaux-parisiens" data-section-toggle="tableaux-parisiens">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Tableaux Parisiens</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-tableaux-parisiens" data-section="tableaux-parisiens">
+          <li><a href="../../poems/paysage/" data-poem-id="paysage">Paysage</a></li>
+          <li><a href="../../poems/le-soleil/" data-poem-id="le-soleil">Le Soleil</a></li>
+          <li><a href="../../poems/a-une-mendiante-rousse/" data-poem-id="a-une-mendiante-rousse">À une mendiante rousse</a></li>
+          <li><a href="../../poems/le-cygne/" data-poem-id="le-cygne">Le Cygne</a></li>
+          <li><a href="../../poems/les-sept-vieillards/" data-poem-id="les-sept-vieillards">Les sept Vieillards</a></li>
+          <li><a href="../../poems/les-petites-vieilles/" data-poem-id="les-petites-vieilles">Les petites Vieilles</a></li>
+          <li><a href="../../poems/les-aveugles/" data-poem-id="les-aveugles">Les Aveugles</a></li>
+          <li><a href="../../poems/a-une-passante/" data-poem-id="a-une-passante">À une passante</a></li>
+          <li><a href="../../poems/le-squelette-laboureur/" data-poem-id="le-squelette-laboureur">Le Squelette laboureur</a></li>
+          <li><a href="../../poems/le-crepuscule-du-soir/" data-poem-id="le-crepuscule-du-soir">Le Crépuscule du soir</a></li>
+          <li><a href="../../poems/le-jeu/" data-poem-id="le-jeu">Le Jeu</a></li>
+          <li><a href="../../poems/danse-macabre/" data-poem-id="danse-macabre">Danse macabre</a></li>
+          <li><a href="../../poems/l-amour-du-mensonge/" data-poem-id="l-amour-du-mensonge">L’Amour du mensonge</a></li>
+          <li><a href="../../poems/je-n-ai-pas-oublie/" data-poem-id="je-n-ai-pas-oublie">Je n’ai pas oublié, voisine de la ville</a></li>
+          <li><a href="../../poems/la-servante-au-grand-coeur/" data-poem-id="la-servante-au-grand-coeur">La servante au grand cœur dont vous étiez jalouse</a></li>
+          <li><a href="../../poems/brumes-et-pluies/" data-poem-id="brumes-et-pluies">Brumes et Pluies</a></li>
+          <li><a href="../../poems/reve-parisien/" data-poem-id="reve-parisien">Rêve parisien</a></li>
+          <li><a href="../../poems/le-crepuscule-du-matin/" data-poem-id="le-crepuscule-du-matin">Le Crépuscule du matin</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-le-vin" data-section-toggle="le-vin">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Le Vin</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-le-vin" data-section="le-vin">
+          <li><a href="../../poems/l-ame-du-vin/" data-poem-id="l-ame-du-vin">L’Âme du vin</a></li>
+          <li><a href="../../poems/le-vin-des-chiffonniers/" data-poem-id="le-vin-des-chiffonniers">Le Vin des chiffonniers</a></li>
+          <li><a href="../../poems/le-vin-de-l-assassin/" data-poem-id="le-vin-de-l-assassin">Le Vin de l’assassin</a></li>
+          <li><a href="../../poems/le-vin-du-solitaire/" data-poem-id="le-vin-du-solitaire">Le Vin du solitaire</a></li>
+          <li><a href="../../poems/le-vin-des-amants/" data-poem-id="le-vin-des-amants">Le Vin des amants</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-fleurs-du-mal" data-section-toggle="fleurs-du-mal">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Fleurs du Mal</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-fleurs-du-mal" data-section="fleurs-du-mal">
+          <li><a href="../../poems/la-destruction/" data-poem-id="la-destruction">La Destruction</a></li>
+          <li><a href="../../poems/une-martyre/" data-poem-id="une-martyre">Une Martyre</a></li>
+          <li><a href="../../poems/femmes-damnees/" data-poem-id="femmes-damnees">Femmes damnées</a></li>
+          <li><a href="../../poems/les-deux-bonnes-soeurs/" data-poem-id="les-deux-bonnes-soeurs">Les deux bonnes Sœurs</a></li>
+          <li><a href="../../poems/la-fontaine-de-sang/" data-poem-id="la-fontaine-de-sang">La Fontaine de sang</a></li>
+          <li><a href="../../poems/allegorie/" data-poem-id="allegorie">Allégorie</a></li>
+          <li><a href="../../poems/la-beatrice/" data-poem-id="la-beatrice">La Béatrice</a></li>
+          <li><a href="../../poems/un-voyage-a-cythere/" data-poem-id="un-voyage-a-cythere">Un Voyage à Cythère</a></li>
+          <li><a href="../../poems/l-amour-et-le-crane/" data-poem-id="l-amour-et-le-crane">L’Amour et le Crâne</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-revolte" data-section-toggle="revolte">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Révolte</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-revolte" data-section="revolte">
+          <li><a href="../../poems/le-reniement-de-saint-pierre/" data-poem-id="le-reniement-de-saint-pierre">Le Reniement de saint Pierre</a></li>
+          <li><a href="../../poems/abel-et-cain/" data-poem-id="abel-et-cain">Abel et Caïn</a></li>
+          <li><a href="../../poems/les-litanies-de-satan/" data-poem-id="les-litanies-de-satan">Les Litanies de Satan</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-la-mort" data-section-toggle="la-mort">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">La Mort</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-la-mort" data-section="la-mort">
+          <li><a href="../../poems/la-mort-des-amants/" data-poem-id="la-mort-des-amants">La Mort des amants</a></li>
+          <li><a href="../../poems/la-mort-des-pauvres/" data-poem-id="la-mort-des-pauvres">La Mort des pauvres</a></li>
+          <li><a href="../../poems/la-mort-des-artistes/" data-poem-id="la-mort-des-artistes">La Mort des artistes</a></li>
+          <li><a href="../../poems/la-fin-de-la-journee/" data-poem-id="la-fin-de-la-journee">La Fin de la journée</a></li>
+          <li><a href="../../poems/le-reve-d-un-curieux/" data-poem-id="le-reve-d-un-curieux">Le Rêve d’un curieux</a></li>
+          <li><a href="../../poems/le-voyage/" data-poem-id="le-voyage">Le Voyage</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <button type="button" class="sidebar-section-toggle" aria-expanded="true" aria-controls="poem-list-pieces-condamnees" data-section-toggle="pieces-condamnees">
+            <span class="sidebar-section-caret" aria-hidden="true"></span>
+            <span class="sidebar-section-name">Pieces Condamnées</span>
+          </button>
+        </h2>
+        <ul class="poem-list" role="list" id="poem-list-pieces-condamnees" data-section="pieces-condamnees">
+          <li><a href="../../poems/les-bijoux/" data-poem-id="les-bijoux">Les Bijoux</a></li>
+          <li><a href="../../poems/le-lethe/" data-poem-id="le-lethe">Le Léthé</a></li>
+          <li><a href="../../poems/a-celle-qui-est-trop-gaie/" data-poem-id="a-celle-qui-est-trop-gaie">À celle qui est trop gaie</a></li>
+          <li><a href="../../poems/lesbos/" data-poem-id="lesbos">Lesbos</a></li>
+          <li><a href="../../poems/femmes-damnees-delphine-et-hippolyte/" data-poem-id="femmes-damnees-delphine-et-hippolyte">Femmes damnées (Delphine et Hippolyte)</a></li>
+          <li><a href="../../poems/les-metamorphoses-du-vampire/" data-poem-id="les-metamorphoses-du-vampire">Les Métamorphoses du Vampire</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="sidebar-foot">
+      <a class="sidebar-foot-link" href="../../about/" data-route="about">
+        <span class="lang-en" lang="en">About</span>
+        <span class="lang-es" lang="es">Acerca de</span>
+      </a>
+    </div>
+    <div class="sidebar-controls">
+      <button type="button" class="sidebar-control sidebar-toggle" aria-label="Hide sidebar" title="Hide sidebar">«</button>
+      <button type="button" class="sidebar-control font-down" aria-label="Decrease font size" title="Decrease font size">A−</button>
+      <button type="button" class="sidebar-control font-up" aria-label="Increase font size" title="Increase font size">A+</button>
+      <button type="button" class="sidebar-control theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+    </div>
+  </aside>
+
+  <div class="page">
+    <header class="header">
+      <h1 class="title">Le Voyage</h1>
+      <p class="subtitle">Charles Baudelaire — <cite>Les Fleurs du mal</cite></p>
+      <div class="header-ornament"></div>
+    </header>
+
+    <div class="comparison-wrap">
+      <main class="comparison" data-lines-per-stanza="4" data-langs="fr,en" data-translation-langs="en,es" aria-label="Comparison French / translation">
+      <div class="cell cell-fr row-first column-left" data-lang="fr" role="cell" style="grid-row: 1; grid-column: 1;"><h2 class="column-title" id="column-title-fr">Français</h2></div>
+      <div class="cell cell-es cell-translation row-first column-right" data-lang="es" role="cell" style="grid-row: 1; grid-column: 2;"><div class="column-title column-title--translation"><span class="column-title-text">El viaje</span></div></div>
+      <div class="cell cell-fr cell-part column-left" data-lang="fr" role="cell" style="grid-row: 2; grid-column: 1;"><div class="stanza-part">I</div></div>
+      <div class="cell cell-es cell-part cell-translation column-right" data-lang="es" role="cell" style="grid-row: 2; grid-column: 2;"><div class="stanza-part">I</div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 3; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">1</span><span class="translation-segment" data-tid="0">Pour l’enfant, amoureux de cartes et d’estampes,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="1">L’univers est égal à son vaste appétit.</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="2">Ah ! que le monde est grand à la clarté des lampes !</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="3">Aux yeux du souvenir que le monde est petit !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 3; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="0">Para el niño, enamorado de mapas y estampas,</span><br>
+        <span class="translation-segment" data-tid="1">El universo es igual a su vasto apetito.</span><br>
+        <span class="translation-segment" data-tid="2">¡Ah! ¡Cuan grande es el mundo a la claridad de las lámparas!</span><br>
+        <span class="translation-segment" data-tid="3">¡Para las miradas del recuerdo, el mundo qué pequeño!</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 4; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 4; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 5; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">5</span><span class="translation-segment" data-tid="4">Un matin nous partons, le cerveau plein de flamme,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="5">Le cœur gros de rancune et de désirs amers,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="6">Et nous allons, suivant le rhythme de la lame,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="7">Berçant notre infini sur le fini des mers :</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 5; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="4">Una mañana zarpamos, la mente inflamada,</span><br>
+        <span class="translation-segment" data-tid="5">El corazón desbordante de rencor y de amargos deseos,</span><br>
+        <span class="translation-segment" data-tid="6">Y nos marchamos, siguiendo el ritmo de la onda</span><br>
+        <span class="translation-segment" data-tid="7">Meciendo nuestro infinito sobre el confín de los mares.</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 6; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 6; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 7; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="8">Les uns, joyeux de fuir une patrie infâme ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">10</span><span class="translation-segment" data-tid="9">D’autres, l’horreur de leurs berceaux, et quelques-uns,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="10">Astrologues noyés dans les yeux d’une femme,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="11">La Circé tyrannique aux dangereux parfums.</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 7; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="8">Algunos, dichosos al huir de una patria infame;</span><br>
+        <span class="translation-segment" data-tid="9">Otros, del horror de sus orígenes, y unos contados,</span><br>
+        <span class="translation-segment" data-tid="10">Astrólogos sumergidos en los ojos de una mujer,</span><br>
+        <span class="translation-segment" data-tid="11">La Circe tiránica de los peligrosos perfumes.</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 8; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 8; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 9; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="12">Pour n’être pas changés en bêtes, ils s’enivrent</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="13">D’espace et de lumière et de cieux embrasés ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">15</span><span class="translation-segment" data-tid="14">La glace qui les mord, les soleils qui les cuivrent,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="15">Effacent lentement la marque des baisers.</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 9; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="12">Para no convertirse en bestias, se embriagan</span><br>
+        <span class="translation-segment" data-tid="13">De espacio y de luz, y de cielos incendiados;</span><br>
+        <span class="translation-segment" data-tid="14">El hielo que los muerde, los soles que los broncean,</span><br>
+        <span class="translation-segment" data-tid="15">Borran lentamente la huella de los besos.</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 10; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 10; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 11; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="16">Mais les vrais voyageurs sont ceux-là seuls qui partent</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="17">Pour partir ; cœurs légers, semblables aux ballons,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="18">De leur fatalité jamais ils ne s’écartent,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">20</span><span class="translation-segment" data-tid="19">Et, sans savoir pourquoi, disent toujours : Allons !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 11; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="16">Pero los verdaderos viajeros son los únicos que parten</span><br>
+        <span class="translation-segment" data-tid="17">Por partir; corazones ligeros, semejantes a los globos,</span><br>
+        <span class="translation-segment" data-tid="18">De su fatalidad jamás ellos se apartan,</span><br>
+        <span class="translation-segment" data-tid="19">Y, sin saber por qué, dicen siempre: ¡Vamos!</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 12; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 12; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 13; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="20">Ceux-là dont les désirs ont la forme des nues,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="21">Et qui rêvent, ainsi qu’un conscrit le canon,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="22">De vastes voluptés, changeantes, inconnues,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="23">Et dont l’esprit humain n’a jamais su le nom !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 13; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="20">¡Son aquellos cuyos deseos tienen forma de nubes,</span><br>
+        <span class="translation-segment" data-tid="21">Y que como el conscripto, sueñan con el cañón,</span><br>
+        <span class="translation-segment" data-tid="22">En intensas voluptuosidades, mutables, desconocidas,</span><br>
+        <span class="translation-segment" data-tid="23">Y de las que el espíritu humano jamás ha conocido el nombre!</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 14; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 14; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 15; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">25</span><span class="translation-segment" data-tid="24">Nous imitons, horreur ! la toupie et la boule</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="25">Dans leur valse et leurs bonds ; même dans nos sommeils</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="26">La Curiosité nous tourmente et nous roule,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="27">Comme un Ange cruel qui fouette des soleils.</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 15; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="24">Imitamos ¡horror! al trompo y la pelota</span><br>
+        <span class="translation-segment" data-tid="25">En su danza y sus saltos; hasta en nuestros sueños</span><br>
+        <span class="translation-segment" data-tid="26">La Curiosidad nos atormenta y nos envuelve,</span><br>
+        <span class="translation-segment" data-tid="27">Como un Ángel cruel que fustigará soles.</span></div></div>
+      <div class="cell cell-fr cell-part column-left" data-lang="fr" role="cell" style="grid-row: 16; grid-column: 1;"><div class="stanza-part">II</div></div>
+      <div class="cell cell-es cell-part cell-translation column-right" data-lang="es" role="cell" style="grid-row: 16; grid-column: 2;"><div class="stanza-part">II</div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 17; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="28">Singulière fortune où le but se déplace,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">30</span><span class="translation-segment" data-tid="29">Et, n’étant nulle part, peut être n’importe où !</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="30">Où l’Homme, dont jamais l’espérance n’est lasse,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="31">Pour trouver le repos court toujours comme un fou !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 17; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="28">¡Singular fortuna en la que el final se desplaza,</span><br>
+        <span class="translation-segment" data-tid="29">Y no estando en parte alguna, puede hallarse por doquier!</span><br>
+        <span class="translation-segment" data-tid="30">¡Donde el Hombre, que jamás la esperanza abandona,</span><br>
+        <span class="translation-segment" data-tid="31">Para lograr el reposo corre siempre como un loco!</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 18; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 18; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 19; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="32">Notre âme est un trois-mâts cherchant son Icarie ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="33">Une voix retentit sur le pont : « Ouvre l’œil ! »</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">35</span><span class="translation-segment" data-tid="34">Une voix de la hune, ardente et folle, crie :</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="35">« Amour… gloire… bonheur ! » Enfer ! c’est un écueil !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 19; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="32">Nuestra alma es nave de tres palos buscando su Icaria;</span><br>
+        <span class="translation-segment" data-tid="33">Una voz resuena en el puente: &quot;¡Atención!&quot;</span><br>
+        <span class="translation-segment" data-tid="34">Una voz desde la cofa, ardiente y loca, clama:</span><br>
+        <span class="translation-segment" data-tid="35">&quot;¡Amor...  gloria... felicidad!&quot; ¡Infierno! ¡Es un escollo!</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 20; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 20; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 21; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="36">Chaque îlot signalé par l’homme de vigie</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="37">Est un Eldorado promis par le Destin ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="38">L’Imagination qui dresse son orgie</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">40</span><span class="translation-segment" data-tid="39">Ne trouve qu’un récif aux clartés du matin.</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 21; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="36">Cada islote señalado por el vigía</span><br>
+        <span class="translation-segment" data-tid="37">Es un El dorado prometido por el Destino;</span><br>
+        <span class="translation-segment" data-tid="38">La imaginación, que acucia su orgía</span><br>
+        <span class="translation-segment" data-tid="39">No halla más que un arrecife al amanecer.</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 22; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 22; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 23; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="40">Ô le pauvre amoureux des pays chimériques !</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="41">Faut-il le mettre aux fers, le jeter à la mer,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="42">Ce matelot ivrogne, inventeur d’Amériques</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="43">Dont le mirage rend le gouffre plus amer</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 23; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="40">¡Oh, el infeliz enamorado de tierras quiméricas!</span><br>
+        <span class="translation-segment" data-tid="41">¿Habrá que engrillar y arrojar al mar,</span><br>
+        <span class="translation-segment" data-tid="42">A este marinero borracho, inventor de Américas</span><br>
+        <span class="translation-segment" data-tid="43">Para el cual el espejismo toma el remolino más amargo?</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 24; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 24; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 25; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">45</span><span class="translation-segment" data-tid="44">Tel le vieux vagabond, piétinant dans la boue,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="45">Rêve, le nez en l’air, de brillants paradis ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="46">Son œil ensorcelé découvre une Capoue</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="47">Partout où la chandelle illumine un taudis.</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 25; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="44">Como el viejo vagabundo, chapaleando en el lodo</span><br>
+        <span class="translation-segment" data-tid="45">Sueña, husmeando en el aire, brillantes paraísos;</span><br>
+        <span class="translation-segment" data-tid="46">Su mirada hechizada descubre una Capúa</span><br>
+        <span class="translation-segment" data-tid="47">En cuanto lugar la candela alumbra un tugurio.</span></div></div>
+      <div class="cell cell-fr cell-part column-left" data-lang="fr" role="cell" style="grid-row: 26; grid-column: 1;"><div class="stanza-part">III</div></div>
+      <div class="cell cell-es cell-part cell-translation column-right" data-lang="es" role="cell" style="grid-row: 26; grid-column: 2;"><div class="stanza-part">III</div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 27; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="48">Étonnants voyageurs ! quelles nobles histoires</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">50</span><span class="translation-segment" data-tid="49">Nous lisons dans vos yeux profonds comme les mers !</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="50">Montrez-nous les écrins de vos riches mémoires,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="51">Ces bijoux merveilleux, faits d’astres et d’éthers.</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 27; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="48">¡Asombrosos viajeros! ¡Qué nobles relatos</span><br>
+        <span class="translation-segment" data-tid="49">Leemos en vuestros ojos profundos como los mares!</span><br>
+        <span class="translation-segment" data-tid="50">Mostradnos los joyeros de vuestras ricas memorias,</span><br>
+        <span class="translation-segment" data-tid="51">Esas alhajas maravillosas, hechas de astros y de éter.</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 28; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 28; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 29; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="52">Nous voulons voyager sans vapeur et sans voile !</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="53">Faites, pour égayer l’ennui de nos prisons,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">55</span><span class="translation-segment" data-tid="54">Passer sur nos esprits, tendus comme une toile,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="55">Vos souvenirs avec leurs cadres d’horizons.</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 29; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="52">¡Deseamos viajar sin vapor y sin velas!</span><br>
+        <span class="translation-segment" data-tid="53">Para ahuyentar el tedio de nuestras prisiones,</span><br>
+        <span class="translation-segment" data-tid="54">Haced desfilar nuestros espíritus, tensos como un lienzo,</span><br>
+        <span class="translation-segment" data-tid="55">Vuestros recuerdos enmarcados por horizontes.</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 30; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 30; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 31; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="56">Dites, qu’avez-vous vu ?</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 31; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="56">Decid, ¿qué habéis visto?</span></div></div>
+      <div class="cell cell-fr cell-part column-left" data-lang="fr" role="cell" style="grid-row: 32; grid-column: 1;"><div class="stanza-part">IV</div></div>
+      <div class="cell cell-es cell-part cell-translation column-right" data-lang="es" role="cell" style="grid-row: 32; grid-column: 2;"><div class="stanza-part">IV</div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 33; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="57">Dites, qu’avez-vous vu ? « Nous avons vu des astres</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="58">Et des flots ; nous avons vu des sables aussi ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">60</span><span class="translation-segment" data-tid="59">Et, malgré bien des chocs et d’imprévus désastres,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="60">Nous nous sommes souvent ennuyés, comme ici.</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 33; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="57">&quot;Hemos visto astros</span><br>
+        <span class="translation-segment" data-tid="58">Y olas; hemos visto playas además;</span><br>
+        <span class="translation-segment" data-tid="59">Y, malgrado muchos choques e imprevistos desastres,</span><br>
+        <span class="translation-segment" data-tid="60">Nos hemos hastiado, a menudo, como aquí.</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 34; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 34; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 35; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="61">La gloire du soleil sur la mer violette,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="62">La gloire des cités dans le soleil couchant,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="63">Allumaient dans nos cœurs une ardeur inquiète</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">65</span><span class="translation-segment" data-tid="64">De plonger dans un ciel au reflet alléchant.</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 35; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="61">El esplendor del sol sobre el mar violáceo,</span><br>
+        <span class="translation-segment" data-tid="62">El esplendor de las ciudades en el sol poniente,</span><br>
+        <span class="translation-segment" data-tid="63">Encendían en nuestros corazones el impulso inquietante</span><br>
+        <span class="translation-segment" data-tid="64">De sumergirnos en el cielo con su reflejo fascinante.</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 36; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 36; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 37; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="65">Les plus riches cités, les plus grands paysages,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="66">Jamais ne contenaient l’attrait mystérieux</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="67">De ceux que le hasard fait avec les nuages,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="68">Et toujours le désir nous rendait soucieux !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 37; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="65">Las más ricas ciudades, los más amplios paisajes,</span><br>
+        <span class="translation-segment" data-tid="66">Jamás contenían el atractivo misterioso</span><br>
+        <span class="translation-segment" data-tid="67">De aquellos que el azar forma con las nubes.</span><br>
+        <span class="translation-segment" data-tid="68">¡Y siempre el deseo nos tornaba inquietos!</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 38; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 38; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 39; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">70</span><span class="translation-segment" data-tid="69">— La jouissance ajoute au désir de la force.</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="70">Désir, vieil arbre à qui le plaisir sert d’engrais,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="71">Cependant que grossit et durcit ton écorce,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="72">Tes branches veulent voir le soleil de plus près !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 39; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="69">—El gozo acrecienta del deseo la fuerza.</span><br>
+        <span class="translation-segment" data-tid="70">¡Deseo, viejo árbol, al cual el placer sirviéndole de abono,</span><br>
+        <span class="translation-segment" data-tid="71">Entretanto acrecienta y endurece tu corteza,</span><br>
+        <span class="translation-segment" data-tid="72">Tus ramas quieren ver el sol de más cerca!</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 40; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 40; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 41; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="73">Grandiras-tu toujours, grand arbre plus vivace</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">75</span><span class="translation-segment" data-tid="74">Que le cyprès ? — Pourtant nous avons, avec soin,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="75">Cueilli quelques croquis pour votre album vorace,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="76">Frères qui trouvez beau tout ce qui vient de loin !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 41; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="73">¿Crecerás siempre, gran árbol, más vivaz</span><br>
+        <span class="translation-segment" data-tid="74">Que el ciprés? —Sin embargo, nosotros, con cuidado,</span><br>
+        <span class="translation-segment" data-tid="75">Recogimos algunos croquis para vuestro álbum voraz,</span><br>
+        <span class="translation-segment" data-tid="76">¡Hermanos que encontráis bello todo cuanto viene de lejos!</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 42; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 42; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 43; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="77">Nous avons salué des idoles à trompe ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="78">Des trônes constellés de joyaux lumineux ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">80</span><span class="translation-segment" data-tid="79">Des palais ouvragés dont la féerique pompe</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="80">Serait pour vos banquiers un rêve ruineux ;</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 43; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="77">Hemos saludado ídolos engañosos;</span><br>
+        <span class="translation-segment" data-tid="78">Tronos constelados de joyas luminosas;</span><br>
+        <span class="translation-segment" data-tid="79">Palacios adornados cuya feérica pompa</span><br>
+        <span class="translation-segment" data-tid="80">Sería para vuestros banqueros un sueño ruinoso;</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 44; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 44; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 45; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="81">Des costumes qui sont pour les yeux une ivresse ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="82">Des femmes dont les dents et les ongles sont teints,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="83">Et des jongleurs savants que le serpent caresse. »</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 45; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="81">Vestimentas que son para la vista una embriaguez;</span><br>
+        <span class="translation-segment" data-tid="82">Mujeres cuyos dientes y las uñas están pintados,</span><br>
+        <span class="translation-segment" data-tid="83">Y juglares sabios que la serpiente acaricia.&quot;</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 46; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 46; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 47; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">85</span><span class="translation-segment" data-tid="84">Et puis, et puis encore ?</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 47; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="84">Y después, y después. ¿Todavía, qué más?</span></div></div>
+      <div class="cell cell-fr cell-part column-left" data-lang="fr" role="cell" style="grid-row: 48; grid-column: 1;"><div class="stanza-part">V</div></div>
+      <div class="cell cell-es cell-part cell-translation column-right" data-lang="es" role="cell" style="grid-row: 48; grid-column: 2;"><div class="stanza-part">V</div></div>
+      <div class="cell cell-fr cell-part column-left" data-lang="fr" role="cell" style="grid-row: 49; grid-column: 1;"><div class="stanza-part">VI</div></div>
+      <div class="cell cell-es cell-part cell-translation column-right" data-lang="es" role="cell" style="grid-row: 49; grid-column: 2;"><div class="stanza-part">VI</div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 50; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="85">Et puis, et puis encore ? « Ô cerveaux enfantins !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 50; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="85">&quot;¡Oh, cerebros infantiles!&quot;</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 51; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 51; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 52; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="86">Pour ne pas oublier la chose capitale,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="87">Nous avons vu partout, et sans l’avoir cherché,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="88">Du haut jusques en bas de l’échelle fatale,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">90</span><span class="translation-segment" data-tid="89">Le spectacle ennuyeux de l’immortel péché :</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 52; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="86">Para no olvidar el tema capital,</span><br>
+        <span class="translation-segment" data-tid="87">Hemos visto en todas partes, y sin haberlo buscado,</span><br>
+        <span class="translation-segment" data-tid="88">Desde arriba hasta abajo la escala fatal,</span><br>
+        <span class="translation-segment" data-tid="89">El espectáculo enojoso del inmortal pecado:</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 53; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 53; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 54; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="90">La femme, esclave vile, orgueilleuse et stupide,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="91">Sans rire s’adorant et s’aimant sans dégoût ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="92">L’homme, tyran goulu, paillard, dur et cupide,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="93">Esclave de l’esclave et ruisseau dans l’égout ;</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 54; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="90">La mujer, esclava vil, orgullosa y estúpida,</span><br>
+        <span class="translation-segment" data-tid="91">Sin reír extasiándose y adorándose sin repugnancia;</span><br>
+        <span class="translation-segment" data-tid="92">El hombre, tirano goloso, lascivo, duro y ávido,</span><br>
+        <span class="translation-segment" data-tid="93">Esclavo de la esclava y arroyo en la cloaca;</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 55; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 55; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 56; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">95</span><span class="translation-segment" data-tid="94">Le bourreau qui jouit, le martyr qui sanglote ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="95">La fête qu’assaisonne et parfume le sang ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="96">Le poison du pouvoir énervant le despote,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="97">Et le peuple amoureux du fouet abrutissant ;</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 56; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="94">El verdugo que goza, el mártir que solloza;</span><br>
+        <span class="translation-segment" data-tid="95">La fiesta que sazona y perfuma la sangre;</span><br>
+        <span class="translation-segment" data-tid="96">El veneno del poder enervando al déspota,</span><br>
+        <span class="translation-segment" data-tid="97">Y el pueblo amoroso del látigo embrutecedor;</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 57; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 57; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 58; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="98">Plusieurs religions semblables à la nôtre,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">100</span><span class="translation-segment" data-tid="99">Toutes escaladant le ciel ; la Sainteté,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="100">Comme en un lit de plume un délicat se vautre,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="101">Dans les clous et le crin cherchant la volupté ;</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 58; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="98">Muchas religiones semejantes a la nuestra,</span><br>
+        <span class="translation-segment" data-tid="99">Todas escalando el cielo; la Santidad,</span><br>
+        <span class="translation-segment" data-tid="100">Cual un lecho de plumas donde un refinado se revuelca,</span><br>
+        <span class="translation-segment" data-tid="101">En los clavos y la cerda, buscando la voluptuosidad;</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 59; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 59; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 60; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="102">L’Humanité bavarde, ivre de son génie,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="103">Et, folle maintenant comme elle était jadis,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">105</span><span class="translation-segment" data-tid="104">Criant à Dieu, dans sa furibonde agonie :</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="105">« Ô mon semblable, ô mon maître, je te maudis ! »</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 60; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="102">La Humanidad habladora, ebria de su genialidad,</span><br>
+        <span class="translation-segment" data-tid="103">Y enloquecida, hoy como lo estaba ayer,</span><br>
+        <span class="translation-segment" data-tid="104">Clamando a Dios, en su furibunda agonía:</span><br>
+        <span class="translation-segment" data-tid="105">&quot;¡Oh, mi semejante, oh mi señor, yo te maldigo!&quot;</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 61; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 61; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 62; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="106">Et les moins sots, hardis amants de la Démence,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="107">Fuyant le grand troupeau parqué par le Destin,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="108">Et se réfugiant dans l’opium immense !</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">110</span><span class="translation-segment" data-tid="109">— Tel est du globe entier l’éternel bulletin. »</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 62; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="106">Y los menos necios, atrevidos amantes de la Demencia,</span><br>
+        <span class="translation-segment" data-tid="107">Huyendo del gran rebaño acorralado por el Destino,</span><br>
+        <span class="translation-segment" data-tid="108">Refugiándose en el opio inconmensurable!</span><br>
+        <span class="translation-segment" data-tid="109">—Tal es del globo entero el eterno boletín.&quot;</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 63; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 63; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 64; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="110">Amer savoir, celui qu’on tire du voyage !</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="111">Le monde, monotone et petit, aujourd’hui,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="112">Hier, demain, toujours, nous fait voir notre image :</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="113">Une oasis d’horreur dans un désert d’ennui !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 64; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="110">¡Amargo sabor, aquel que se extrae del viaje!</span><br>
+        <span class="translation-segment" data-tid="111">El mundo, monótono y pequeño, en el presente,</span><br>
+        <span class="translation-segment" data-tid="112">Ayer, mañana, siempre, nos hace ver nuestra imagen;</span><br>
+        <span class="translation-segment" data-tid="113">Un oasis de horror en un desierto de tedio!</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 65; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 65; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 66; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">115</span><span class="translation-segment" data-tid="114">Faut-il partir ? rester ? Si tu peux rester, reste ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="115">Pars, s’il le faut. L’un court, et l’autre se tapit</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="116">Pour tromper l’ennemi vigilant et funeste,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="117">Le Temps ! Il est, hélas ! des coureurs sans répit,</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 66; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="114">¿Es menester partir? ¿Quedarse? Si te puedes quedar, quédate;</span><br>
+        <span class="translation-segment" data-tid="115">Parte, si es menester. Uno corre, el otro se oculta</span><br>
+        <span class="translation-segment" data-tid="116">Para engañar ese enemigo vigilante y funesto,</span><br>
+        <span class="translation-segment" data-tid="117">¡El Tiempo! El pertenece, a los corredores sin respiro,</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 67; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 67; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 68; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="118">Comme le Juif errant et comme les apôtres,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">120</span><span class="translation-segment" data-tid="119">À qui rien ne suffit, ni wagon ni vaisseau,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="120">Pour fuir ce rétiaire infâme ; il en est d’autres</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="121">Qui savent le tuer sans quitter leur berceau.</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 68; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="118">Como el Judío Errante y como los apóstoles,</span><br>
+        <span class="translation-segment" data-tid="119">A quien nada basta, ni vagón ni navío,</span><br>
+        <span class="translation-segment" data-tid="120">Para huir de este retiro infame; y aun hay otros</span><br>
+        <span class="translation-segment" data-tid="121">Que saben matarlo sin abandonar su cuna.</span></div></div>
+      <div class="cell cell-fr cell-part column-left" data-lang="fr" role="cell" style="grid-row: 69; grid-column: 1;"><div class="stanza-part">VII</div></div>
+      <div class="cell cell-es cell-part cell-translation column-right" data-lang="es" role="cell" style="grid-row: 69; grid-column: 2;"><div class="stanza-part">VII</div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 70; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="122">Lorsque enfin il mettra le pied sur notre échine,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="123">Nous pourrons espérer et crier : En avant !</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">125</span><span class="translation-segment" data-tid="124">De même qu’autrefois nous partions pour la Chine,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="125">Les yeux fixés au large et les cheveux au vent,</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 70; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="122">Cuando, finalmente, él ponga su planta sobre nuestro espinazo,</span><br>
+        <span class="translation-segment" data-tid="123">Podremos esperar y clamar: ¡Adelante!</span><br>
+        <span class="translation-segment" data-tid="124">Lo mismo que otras veces, cuando zarpamos para la China,</span><br>
+        <span class="translation-segment" data-tid="125">Con la mirada hacia lo lejos y los cabellos al viento,</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 71; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 71; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 72; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="126">Nous nous embarquerons sur la mer des Ténèbres</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="127">Avec le cœur joyeux d’un jeune passager.</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="128">Entendez-vous ces voix, charmantes et funèbres,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">130</span><span class="translation-segment" data-tid="129">Qui chantent : « Par ici ! vous qui voulez manger</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 72; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="126">Nos embarcaremos sobre el mar de las Tinieblas</span><br>
+        <span class="translation-segment" data-tid="127">Con el corazón gozoso del joven pasajero.</span><br>
+        <span class="translation-segment" data-tid="128">Escucháis esas voces, embelesadoras y fúnebres,</span><br>
+        <span class="translation-segment" data-tid="129">Que cantan: &quot;¡Por aquí! vosotros que queréis saborear</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 73; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 73; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 74; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="130">Le Lotus parfumé ! c’est ici qu’on vendange</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="131">Les fruits miraculeux dont votre cœur a faim ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="132">Venez vous enivrer de la douceur étrange</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="133">De cette après-midi qui n’a jamais de fin ? »</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 74; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="130">¡El Loto perfumado! Es aquí donde se cosechan</span><br>
+        <span class="translation-segment" data-tid="131">Los frutos milagrosos que vuestro corazón apetece;</span><br>
+        <span class="translation-segment" data-tid="132">Acudid a embriagaros con la dulzura extraña</span><br>
+        <span class="translation-segment" data-tid="133">De esta siesta que jamás tiene fin!&quot;</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 75; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 75; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 76; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">135</span><span class="translation-segment" data-tid="134">À l’accent familier nous devinons le spectre ;</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="135">Nos Pylades là-bas tendent leurs bras vers nous.</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="136">« Pour rafraîchir ton cœur nage vers ton Électre ! »</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="137">Dit celle dont jadis nous baisions les genoux.</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 76; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="134">Por el acento familiar barruntamos al espectro;</span><br>
+        <span class="translation-segment" data-tid="135">Nuestros Pilades, allá, nos tienden sus brazos.</span><br>
+        <span class="translation-segment" data-tid="136">&quot;¡Para refrescar tu corazón boga hacia tu Electra!&quot;</span><br>
+        <span class="translation-segment" data-tid="137">Dice aquella a la que en otros días besábamos las rodillas.</span></div></div>
+      <div class="cell cell-fr cell-blank column-left" data-lang="fr" role="cell" style="grid-row: 77; grid-column: 1;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-es cell-blank cell-translation column-right" data-lang="es" role="cell" style="grid-row: 77; grid-column: 2;"><div class="stanza-blank" aria-hidden="true"></div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 78; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="138">Ô Mort, vieux capitaine, il est temps ! levons l’ancre !</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">140</span><span class="translation-segment" data-tid="139">Ce pays nous ennuie, ô Mort ! Appareillons !</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="140">Si le ciel et la mer sont noirs comme de l’encre,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="141">Nos cœurs que tu connais sont remplis de rayons !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 78; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="138">¡Oh, Muerte, venerable capitana, ya es tiempo! ¡Levemos el ancla!</span><br>
+        <span class="translation-segment" data-tid="139">Esta tierra nos hastía, ¡oh, Muerte! ¡Aparejemos!</span><br>
+        <span class="translation-segment" data-tid="140">¡Si el cielo y la mar están negros como la tinta,</span><br>
+        <span class="translation-segment" data-tid="141">Nuestros corazones, a los que tú conoces, están radiantes!</span></div></div>
+      <div class="cell cell-fr cell-part column-left" data-lang="fr" role="cell" style="grid-row: 79; grid-column: 1;"><div class="stanza-part">VIII</div></div>
+      <div class="cell cell-es cell-part cell-translation column-right" data-lang="es" role="cell" style="grid-row: 79; grid-column: 2;"><div class="stanza-part">VIII</div></div>
+      <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 80; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="142">Verse-nous ton poison pour qu’il nous réconforte !</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="143">Nous voulons, tant ce feu nous brûle le cerveau,</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true">145</span><span class="translation-segment" data-tid="144">Plonger au fond du gouffre, Enfer ou Ciel, qu’importe ?</span></div>
+        <div class="line"><span class="line-number" aria-hidden="true"></span><span class="translation-segment" data-tid="145">Au fond de l’Inconnu pour trouver du nouveau !</span></div></div></div>
+      <div class="cell cell-es cell-translation column-right" data-lang="es" role="cell" style="grid-row: 80; grid-column: 2;"><div class="stanza"><span class="translation-segment" data-tid="142">¡Viértenos tu veneno para que nos reconforte!</span><br>
+        <span class="translation-segment" data-tid="143">Este fuego tanto nos abraza el cerebro, que queremos</span><br>
+        <span class="translation-segment" data-tid="144">Sumergirnos en el fondo del abismo, Infierno o Cielo, ¿qué importa?</span><br>
+        <span class="translation-segment" data-tid="145">¡Hasta el fondo de lo Desconocido, para encontrar lo nuevo!</span></div></div>
+      <div class="cell cell-fr cell-source row-last column-left" data-lang="fr" role="cell" style="grid-row: 81; grid-column: 1;"><div class="column-source"><span class="column-source-label">Source</span><span class="column-source-text"><a href="https://fr.wikisource.org/wiki/Les_Fleurs_du_mal_%281861%29/Le_Voyage" target="_blank" rel="noopener noreferrer">Les Fleurs du mal (1861) — French Wikisource</a></span></div></div>
+      <div class="cell cell-es cell-source cell-translation row-last column-right" data-lang="es" role="cell" style="grid-row: 81; grid-column: 2;"><div class="column-source"><span class="column-source-label">Translation</span><span class="column-source-text"><a href="https://es.wikisource.org/wiki/El_viaje_%28Baudelaire%29" target="_blank" rel="noopener noreferrer">Traducido por Eduardo Marquina, «Las flores del mal» (1905)</a></span></div></div>
+      </main>
+    </div>
+
+    <nav class="poem-nav" aria-label="Previous, random and next poem">
+      <!-- Prev and next are anchors, not buttons: they are the only links from
+           one poem to the next, so a crawler has to be able to follow them, and
+           a reader has to be able to middle-click them. updatePoemNav() writes
+           the href; the two ends of the sequence say aria-disabled instead,
+           which an <a> understands and `disabled` does not. Random has no URL
+           to point at and stays a button. -->
+      <a class="poem-nav-btn poem-nav-prev" aria-label="Previous poem" href="../../poems/le-reve-d-un-curieux/"><span class="poem-nav-label">Previous</span> <cite class="poem-nav-title">Le Rêve d’un curieux</cite></a>
+      <button type="button" class="poem-nav-btn poem-nav-random random-poem" aria-label="Open a poem at random" title="Open a poem at random"><span class="poem-nav-glyph" aria-hidden="true">&#8258;</span> <span class="poem-nav-label">Random</span></button>
+      <a class="poem-nav-btn poem-nav-next" aria-label="Next poem" href="../../poems/les-bijoux/"><cite class="poem-nav-title">Les Bijoux</cite> <span class="poem-nav-label">Next</span></a>
+    </nav>
+
+    <!-- Home and About. Only one of the three views (poem / home / about) is
+         shown at a time; `data-view` on <body> says which. -->
+    <article class="static-view" id="view-home" aria-labelledby="home-heading">
+      <div class="static-langs" role="group" aria-label="Page language — idioma de la página">
+        <button type="button" class="static-lang" data-lang="en" lang="en">English</button>
+        <button type="button" class="static-lang" data-lang="es" lang="es">Español</button>
+      </div>
+      <header class="static-head">
+        <h1 class="static-title" id="home-heading">Les Fleurs du mal</h1>
+        <p class="static-lede">
+          <span class="lang-en" lang="en">Charles Baudelaire, 1861</span>
+          <span class="lang-es" lang="es">Charles Baudelaire, 1861</span>
+        </p>
+        <div class="header-ornament"></div>
+      </header>
+      <div class="static-body">
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;margin-bottom:5px;">
+          <img src="../../assets/beaudelaire.png" width="235" height="300" decoding="async"
+            alt="Engraved portrait of Charles Baudelaire" />
+          <!-- <span class="static-note">English by Cyril Scott (1909) and Spanish by Eduardo Marquina (1905)</span> -->
+        </div>
+        <div class="lang-en" lang="en">
+          <p>This website contains all 126 poems of the 1861 of Charles Baudelaire's <cite>Les Fleurs du mal</cite>
+            plus six
+            <span class="glossary"><button type="button" class="glossary-term"
+              popovertarget="glossary-condamnees-en"><i lang="fr">pièces condamnées</i></button><span
+              class="glossary-note" id="glossary-condamnees-en" popover><b lang="fr">Pièces condamnées</b>The six
+              poems a Paris court ordered cut from the 1857 edition for <i lang="fr">outrage à la morale
+              publique</i>. Baudelaire never put them back: the 1861 edition appeared without them, and they
+              were reprinted in Brussels in <cite>Les Épaves</cite> (1866). The judgment against them stood
+              until 1949.</span></span>, with English and Spanish
+            translations.</p>
+          <p>Hovering over a word highlights its translation, and clicking it shows its definition. Try it out here!</p>
+        </div>
+        <div class="lang-es" lang="es">
+          <p>Este sitio contiene los 126 poemas de la edición de 1861 de <cite>Les Fleurs du mal</cite> de Charles Baudelaire. Aquí están
+            , más las 6
+            <span class="glossary"><button type="button" class="glossary-term"
+              popovertarget="glossary-condamnees-es"><i lang="fr">pièces condamnées</i></button><span
+              class="glossary-note" id="glossary-condamnees-es" popover><b lang="fr">Pièces condamnées</b>Los seis
+              poemas que un tribunal de París mandó suprimir de la edición de 1857 por ultraje a la moral
+              pública. La edición de 1861 se publicó sin ellos, y se reimprimieron en
+              Bruselas en <cite>Les Épaves</cite> (1866). La decisión de la corte no se anuló hasta 1949.</span></span>, con
+            traducciones al inglés y al español.</p>
+          <p>Posa el mouse sobre una palabra para mostrar su traducción, y haz click sobre ella para ver su definición:</p>
+        </div>
+        <figure class="demo" data-demo-poem="correspondances" data-demo-from="0" data-demo-lines="4">
+        </figure>
+        <div class="lang-en" lang="en">
+          <p>The translations used on this site are Cyril Scott's <a href="https://www.gutenberg.org/ebooks/36098">1909 English translation</a>,
+            Eduardo Marquina's <a href="https://es.wikisource.org/wiki/Las_flores_del_mal">1905 Spanish translation</a>, and César Bravo's
+            (yours truly) 2026 Spanish translation.</p>
+          <p>Questions?
+            <a class="static-link" href="https://www.instagram.com/cesar_bravo.x/" target="_blank" rel="noopener noreferrer">send me a DM</a>.</p>
+        </div>
+        <div class="lang-es" lang="es">
+          <p>Las traducciones usadas son la <a href="https://www.gutenberg.org/ebooks/36098">traducción inglesa de 1909</a> de Cyril Scott,
+            la <a href="https://es.wikisource.org/wiki/Las_flores_del_mal">traducción española de 1905</a> de Eduardo Marquina, y traducción al español de César Bravo (2026).</p>
+          <p>
+            <a class="static-link" href="https://www.instagram.com/cesar_bravo.x/" target="_blank" rel="noopener noreferrer">Mandáme un DM por Instagram</a> si tienes cualquier duda o comentario.</p>
+        </div>
+        <p class="static-cta">
+          <button type="button" class="static-btn start-reading">
+            <span class="lang-en" lang="en">Start reading</span>
+            <span class="lang-es" lang="es">Empezar a leer</span>
+          </button>
+          <button type="button" class="static-btn static-btn--quiet random-poem">
+            <span class="lang-en" lang="en">A poem at random</span>
+            <span class="lang-es" lang="es">Poema al azar</span>
+          </button>
+        </p>
+      </div>
+    </article>
+
+    <article class="static-view" id="view-about" aria-labelledby="about-heading">
+      <div class="static-langs" role="group" aria-label="Page language — idioma de la página">
+        <button type="button" class="static-lang" data-lang="en" lang="en">English</button>
+        <button type="button" class="static-lang" data-lang="es" lang="es">Español</button>
+      </div>
+      <header class="static-head">
+        <h1 class="static-title" id="about-heading">
+          <span class="lang-en" lang="en">About</span>
+          <span class="lang-es" lang="es">Acerca del sitio</span>
+        </h1>
+        <div class="header-ornament"></div>
+      </header>
+      <div class="static-body">
+        <div class="lang-en" lang="en">
+          <p>
+            Check this website's source code in <a href="https://github.com/cesar-bravo-m/flowers-of-evil">Github</a>.
+          </p>
+        </div>
+        <div class="lang-es" lang="es">
+          <p>
+            El código fuente de este sitio está disponible en <a href="https://github.com/cesar-bravo-m/flowers-of-evil">Github</a>.
+          </p>
+        </div>
+        <p>
+          <span class="lang-en" lang="en">Please direct any inquiries to my <a href="https://www.instagram.com/cesar_bravo.x/">Instagram</a> or <a href="https://www.linkedin.com/in/cesar-bravo-molina/">Linkedin</a>.</span>
+          <span class="lang-es" lang="es">Dirige cualquier pregunta a mi <a href="https://www.instagram.com/cesar_bravo.x/">Instagram</a> or <a href="https://www.linkedin.com/in/cesar-bravo-molina/">Linkedin</a>.</span>
+        </p>
+        <p class="static-note">
+          <span class="lang-en" lang="en"><a class="static-link" href="../../" data-route="home">Back to the beginning</a></span>
+          <span class="lang-es" lang="es"><a class="static-link" href="../../" data-route="home">Volver al principio</a></span>
+        </p>
+      </div>
+    </article>
+
+    <footer class="footer">
+      <div class="footer-ornament"></div>
+      <p><cite>Les Fleurs du mal</cite> — 1861</p>
+    </footer>
+  </div>
+
+  <div class="privacy-bar" role="region" aria-label="Privacy notice — aviso de privacidad" hidden>
+    <p class="privacy-text">
+      <span class="lang-en" lang="en">This site uses no cookies</span>
+      <span class="lang-es" lang="es">Este sitio no usa cookies.</span>
+    </p>
+    <span class="privacy-actions">
+      <a class="privacy-link" href="../../about/" data-route="about">
+        <span class="lang-en" lang="en">Details</span>
+        <span class="lang-es" lang="es">Detalles</span>
+      </a>
+      <button type="button" class="privacy-ok">
+        <span class="lang-en" lang="en">Got it</span>
+        <span class="lang-es" lang="es">Entendido</span>
+      </button>
+    </span>
+  </div>
+
+  <!-- One file per poem, then the bootstrap and the UI. All deferred: `defer`
+       keeps them in document order but stops them blocking the parser, so the
+       shell — and, on a generated poem page, the poem itself — paints before a
+       megabyte of verse has finished arriving. site-lang.js above is the one
+       exception; it has to run before the body is parsed. -->
+  <script defer src="../../0. Au Lecteur/au-lecteur.js"></script>
+  <script defer src="../../1. Spleen et Ideal/benediction.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-albatros.js"></script>
+  <script defer src="../../1. Spleen et Ideal/elevation.js"></script>
+  <script defer src="../../1. Spleen et Ideal/correspondances.js"></script>
+  <script defer src="../../1. Spleen et Ideal/j-aime-le-souvenir.js"></script>
+  <script defer src="../../1. Spleen et Ideal/les-phares.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-muse-malade.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-muse-venale.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-mauvais-moine.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-ennemi.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-guignon.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-vie-anterieure.js"></script>
+  <script defer src="../../1. Spleen et Ideal/bohemiens-en-voyage.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-homme-et-la-mer.js"></script>
+  <script defer src="../../1. Spleen et Ideal/don-juan-aux-enfers.js"></script>
+  <script defer src="../../1. Spleen et Ideal/chatiment-de-l-orgueil.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-beaute.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-ideal.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-geante.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-masque.js"></script>
+  <script defer src="../../1. Spleen et Ideal/hymne-a-la-beaute.js"></script>
+  <script defer src="../../1. Spleen et Ideal/parfum-exotique.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-chevelure.js"></script>
+  <script defer src="../../1. Spleen et Ideal/je-t-adore.js"></script>
+  <script defer src="../../1. Spleen et Ideal/tu-mettrais-l-univers.js"></script>
+  <script defer src="../../1. Spleen et Ideal/sed-non-satiata.js"></script>
+  <script defer src="../../1. Spleen et Ideal/vetements-ondoyants.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-serpent-qui-danse.js"></script>
+  <script defer src="../../1. Spleen et Ideal/une-charogne.js"></script>
+  <script defer src="../../1. Spleen et Ideal/de-profundis-clamavi.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-vampire.js"></script>
+  <script defer src="../../1. Spleen et Ideal/une-nuit-que-j-etais.js"></script>
+  <script defer src="../../1. Spleen et Ideal/remords-posthume.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-chat-1.js"></script>
+  <script defer src="../../1. Spleen et Ideal/duellum.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-balcon.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-possede.js"></script>
+  <script defer src="../../1. Spleen et Ideal/un-fantome.js"></script>
+  <script defer src="../../1. Spleen et Ideal/je-te-donne-ces-vers.js"></script>
+  <script defer src="../../1. Spleen et Ideal/semper-eadem.js"></script>
+  <script defer src="../../1. Spleen et Ideal/tout-entiere.js"></script>
+  <script defer src="../../1. Spleen et Ideal/que-diras-tu-ce-soir.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-flambeau-vivant.js"></script>
+  <script defer src="../../1. Spleen et Ideal/reversibilite.js"></script>
+  <script defer src="../../1. Spleen et Ideal/confession.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-aube-spirituelle.js"></script>
+  <script defer src="../../1. Spleen et Ideal/harmonie-du-soir.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-flacon.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-poison.js"></script>
+  <script defer src="../../1. Spleen et Ideal/ciel-brouille.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-chat-2.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-beau-navire.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-invitation-au-voyage.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-irreparable.js"></script>
+  <script defer src="../../1. Spleen et Ideal/causerie.js"></script>
+  <script defer src="../../1. Spleen et Ideal/chant-d-automne.js"></script>
+  <script defer src="../../1. Spleen et Ideal/a-une-madone.js"></script>
+  <script defer src="../../1. Spleen et Ideal/chanson-d-apres-midi.js"></script>
+  <script defer src="../../1. Spleen et Ideal/sisina.js"></script>
+  <script defer src="../../1. Spleen et Ideal/franciscae-meae-laudes.js"></script>
+  <script defer src="../../1. Spleen et Ideal/a-une-dame-creole.js"></script>
+  <script defer src="../../1. Spleen et Ideal/moesta-et-errabunda.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-revenant.js"></script>
+  <script defer src="../../1. Spleen et Ideal/sonnet-d-automne.js"></script>
+  <script defer src="../../1. Spleen et Ideal/tristesses-de-la-lune.js"></script>
+  <script defer src="../../1. Spleen et Ideal/les-chats.js"></script>
+  <script defer src="../../1. Spleen et Ideal/les-hiboux.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-pipe.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-musique.js"></script>
+  <script defer src="../../1. Spleen et Ideal/sepulture.js"></script>
+  <script defer src="../../1. Spleen et Ideal/une-gravure-fantastique.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-mort-joyeux.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-tonneau-de-la-haine.js"></script>
+  <script defer src="../../1. Spleen et Ideal/la-cloche-felee.js"></script>
+  <script defer src="../../1. Spleen et Ideal/spleen-1.js"></script>
+  <script defer src="../../1. Spleen et Ideal/spleen-2.js"></script>
+  <script defer src="../../1. Spleen et Ideal/spleen-3.js"></script>
+  <script defer src="../../1. Spleen et Ideal/spleen-4.js"></script>
+  <script defer src="../../1. Spleen et Ideal/obsession.js"></script>
+  <script defer src="../../1. Spleen et Ideal/le-gout-du-neant.js"></script>
+  <script defer src="../../1. Spleen et Ideal/alchimie-de-la-douleur.js"></script>
+  <script defer src="../../1. Spleen et Ideal/horreur-sympathique.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-heautontimoroumenos.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-irremediable.js"></script>
+  <script defer src="../../1. Spleen et Ideal/l-horloge.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/paysage.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-soleil.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/a-une-mendiante-rousse.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-cygne.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/les-sept-vieillards.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/les-petites-vieilles.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/les-aveugles.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/a-une-passante.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-squelette-laboureur.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-crepuscule-du-soir.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-jeu.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/danse-macabre.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/l-amour-du-mensonge.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/je-n-ai-pas-oublie.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/la-servante-au-grand-coeur.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/brumes-et-pluies.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/reve-parisien.js"></script>
+  <script defer src="../../2. Tableaux Parisiens/le-crepuscule-du-matin.js"></script>
+  <script defer src="../../3. Le Vin/l-ame-du-vin.js"></script>
+  <script defer src="../../3. Le Vin/le-vin-des-chiffonniers.js"></script>
+  <script defer src="../../3. Le Vin/le-vin-de-l-assassin.js"></script>
+  <script defer src="../../3. Le Vin/le-vin-du-solitaire.js"></script>
+  <script defer src="../../3. Le Vin/le-vin-des-amants.js"></script>
+  <script defer src="../../4. Fleurs du Mal/la-destruction.js"></script>
+  <script defer src="../../4. Fleurs du Mal/une-martyre.js"></script>
+  <script defer src="../../4. Fleurs du Mal/femmes-damnees.js"></script>
+  <script defer src="../../4. Fleurs du Mal/les-deux-bonnes-soeurs.js"></script>
+  <script defer src="../../4. Fleurs du Mal/la-fontaine-de-sang.js"></script>
+  <script defer src="../../4. Fleurs du Mal/allegorie.js"></script>
+  <script defer src="../../4. Fleurs du Mal/la-beatrice.js"></script>
+  <script defer src="../../4. Fleurs du Mal/un-voyage-a-cythere.js"></script>
+  <script defer src="../../4. Fleurs du Mal/l-amour-et-le-crane.js"></script>
+  <script defer src="../../5. Revolte/le-reniement-de-saint-pierre.js"></script>
+  <script defer src="../../5. Revolte/abel-et-cain.js"></script>
+  <script defer src="../../5. Revolte/les-litanies-de-satan.js"></script>
+  <script defer src="../../6. La Mort/la-mort-des-amants.js"></script>
+  <script defer src="../../6. La Mort/la-mort-des-pauvres.js"></script>
+  <script defer src="../../6. La Mort/la-mort-des-artistes.js"></script>
+  <script defer src="../../6. La Mort/la-fin-de-la-journee.js"></script>
+  <script defer src="../../6. La Mort/le-reve-d-un-curieux.js"></script>
+  <script defer src="../../6. La Mort/le-voyage.js"></script>
+  <script defer src="../../7. Pieces Condamnees/les-bijoux.js"></script>
+  <script defer src="../../7. Pieces Condamnees/le-lethe.js"></script>
+  <script defer src="../../7. Pieces Condamnees/a-celle-qui-est-trop-gaie.js"></script>
+  <script defer src="../../7. Pieces Condamnees/lesbos.js"></script>
+  <script defer src="../../7. Pieces Condamnees/femmes-damnees-delphine-et-hippolyte.js"></script>
+  <script defer src="../../7. Pieces Condamnees/les-metamorphoses-du-vampire.js"></script>
+  <script defer src="../../translation-data.js"></script>
+  <script defer src="../../bravo.js"></script>
+  <script defer src="../../meta.js"></script>
+  <script defer src="../../translation.js"></script>
+  <script defer src="../../search.js"></script>
+</body>
+</html>

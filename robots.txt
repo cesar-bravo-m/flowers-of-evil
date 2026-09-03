@@ -1,0 +1,8 @@
+# Everything here is public: 133 poems, each at its own address.
+User-agent: *
+Allow: /
+
+# Authoring tool, localhost only — it is never deployed, but say so anyway.
+Disallow: /api/
+
+Sitemap: https://floresdelmal.org/sitemap.xml

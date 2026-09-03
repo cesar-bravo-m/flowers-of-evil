@@ -307,8 +307,28 @@ function serveStatic(req, res, url) {
 
   let stat;
   try { stat = fs.statSync(full); } catch { res.writeHead(404).end('Not found'); return; }
-  if (stat.isDirectory()) { res.writeHead(403).end('Forbidden'); return; }
 
+  /* A generated poem page is a directory with an index.html in it, and that is
+     the address the site now uses — /poems/une-charogne/. Serve it the way a
+     static host would, so what is tested here is what is deployed. */
+  if (stat.isDirectory()) {
+    const index = path.join(full, 'index.html');
+    let indexStat;
+    try { indexStat = fs.statSync(index); } catch { res.writeHead(403).end('Forbidden'); return; }
+    if (!indexStat.isFile()) { res.writeHead(403).end('Forbidden'); return; }
+    /* Without the trailing slash the page's relative links would resolve one
+       level too high, so send the browser to the canonical form first. */
+    if (!url.pathname.endsWith('/')) {
+      res.writeHead(301, { Location: url.pathname + '/' + url.search }).end();
+      return;
+    }
+    return sendFile(res, index, indexStat);
+  }
+
+  return sendFile(res, full, stat);
+}
+
+function sendFile(res, full, stat) {
   res.writeHead(200, {
     'Content-Type': MIME[path.extname(full).toLowerCase()] || 'application/octet-stream',
     'Content-Length': stat.size,

@@ -4,11 +4,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Static website for viewing Charles Baudelaire's *Les Fleurs du mal* with side-by-side aligned translations (French, English, Spanish). No build system, no bundler, no framework — just vanilla HTML/CSS/JS opened directly in a browser.
+Static website for viewing Charles Baudelaire's *Les Fleurs du mal* with side-by-side aligned translations (French, English, Spanish). No bundler, no framework — just vanilla HTML/CSS/JS opened directly in a browser.
+
+The one build step is `node tools/build-pages.mjs`, which gives each poem a page
+of its own so that a search engine can index it. It generates from `index.html`
+rather than replacing it, needs no dependencies, and the site still opens
+straight off disk. See *Addresses and generated pages*.
 
 ## Running
 
-Open `index.html` in a browser. No server required (all file:// compatible). The URL hash is the route: a poem id (e.g. `#une-charogne`), `#home` or `#about`.
+Open `index.html` in a browser. No server required (all file:// compatible).
+The path is the route: `/poems/<id>/` for a poem, `/about/`, `/` for home. Those
+pages are generated — run `node tools/build-pages.mjs` after adding a poem — and
+the old hash form (`#une-charogne`) still resolves, to the real address. See
+*Addresses and generated pages* below.
 
 The one exception is *Edit mode*, which needs somewhere to write to:
 `node tools/dev-server.mjs`, then `http://localhost:8181/`. That serves the same
@@ -27,7 +36,8 @@ on one poem would race on the same file.
 
 **`translation-data.js`** — Bootstrap file that defines poem display order and sets initial globals (`window.POEM_IDS`, `window.CURRENT_POEM_ID`, `window.TRANSLATION_SEGMENTS`, `window.TRANSLATION_BLOCKS`). Poems not in the `order` array won't appear in navigation.
 
-**`translation.js`** — All UI logic: builds the two-column comparison grid, the home page extract, sidebar navigation, poem switching, translation language dropdown, line hover/selection highlighting, font size, and dark mode. Contains a hardcoded `POEM_SECTIONS` map that assigns each poem ID to a sidebar section (`data-section`). Owns the three views and the hash routing between them (see *Views* below), and the two sidebar modes (see *Responsive layout* below): the `sidebar-hidden` body class is the remembered wide-screen collapse, `sidebar-open` is the narrow-screen drawer, and `syncSidebarMode()` keeps exactly one of them live for the current width.
+**`translation.js`** — All UI logic: builds the two-column comparison grid, the home page extract, sidebar navigation, poem switching, translation language dropdown, line hover/selection highlighting, font size, and dark mode. Contains a hardcoded `POEM_SECTIONS` map that assigns each poem ID to a sidebar section (`data-section`). Owns the three views and the routing between them (see *Views* and *Addresses
+and generated pages* below), and the two sidebar modes (see *Responsive layout* below): the `sidebar-hidden` body class is the remembered wide-screen collapse, `sidebar-open` is the narrow-screen drawer, and `syncSidebarMode()` keeps exactly one of them live for the current width.
 
 **`search.js`** — Unified backend-free search over every loaded poem. Builds its index lazily from `window.POEMS` on first open: each title and line is "folded" once (lowercased, accents stripped, `œ`/`æ`/`ß` expanded, curly quotes and dashes normalised), so a query matches regardless of language or accents (`ame` → `âme`, `corazon` → `corazón`, `coeur` → `cœur`). A poem qualifies when every query term appears somewhere in it; title hits outrank line hits. Opens as a palette on Ctrl/Cmd+K, `/`, or either search trigger (`.sidebar-search` in the sidebar, `.topbar-search` on narrow screens), and reaches back into the page through `window.FLOWERS` (see below). Section labels in results are read from the sidebar markup rather than duplicating `POEM_SECTIONS`.
 
@@ -71,6 +81,17 @@ a reader who picks the other language keeps it. Exposes
 `pick({en, es})`. It owns only the resolving and the storing; the DOM side —
 the toggle, and what follows a change — lives in `translation.js`.
 
+**`meta.js`** — What a page says about itself: its title, its description and
+its schema.org graph, worked out from a poem's own data. Two callers need
+byte-identical answers — `tools/build-pages.mjs`, writing them into each
+generated page, which is what a crawler and a link preview read, and
+`translation.js`, rewriting them in the browser when a reader moves between
+poems without a page load — so the strings live here once and both sides call
+them. Nothing in it touches the DOM (the one piece of page context it needs, a
+poem's section name, is passed in), which is what lets the build script load it
+under `node:vm` the way it loads the poem files. Loaded between `bravo.js` and
+`translation.js`.
+
 **`styles.css`** — Complete styling including dark mode (`[data-theme="dark"]`), font size variants (`[data-font-size]`), and responsive layout.
 
 ## Responsive layout
@@ -105,21 +126,26 @@ renderer tags them: blank spacer rows get `cell-blank` and part-numeral rows get
 
 ## Views
 
-Three views share `index.html`; `data-view` on `<body>` decides which one the
-stylesheet reveals, and the hash is the address:
+Three views share one document; `data-view` on `<body>` decides which one the
+stylesheet reveals, and the path is the address:
 
-- `#<poem-id>` — the reader (header, comparison grid, prev / random / next)
-- `#home` — landing page: what the site does, and the *Start reading* and
+- `/poems/<poem-id>/` — the reader (header, comparison grid, prev / random / next)
+- `/` — landing page: what the site does, and the *Start reading* and
   *A poem at random* buttons
-- `#about` — the project and its author
+- `/about/` — the project and its author
 
-`applyRoute()` in `translation.js` runs on load and on `hashchange`, so Back and
-Forward move between poems and pages. An unrecognised hash — including none at
-all, i.e. a first visit — lands on `#home`. The static views never write the hash
-themselves: they are only reached from it, since the sidebar title and the About
-link at the foot of the sidebar are plain anchors. A small inline script at the
-top of `<body>` sets `data-view` before paint so a deep link never flashes the
-reader first.
+Each of those is a real page on disk, generated from `index.html`; see
+*Addresses and generated pages*. The old `#<poem-id>` / `#home` / `#about` form
+still resolves, and `applyRoute()` replaces it with the real address so a poem
+never has two.
+
+`applyRoute()` in `translation.js` runs on load and on `popstate` (and still on
+`hashchange`, for links written before the poems had addresses), so Back and
+Forward move between poems and pages. An unrecognised address lands on home. A
+small inline script at the top of `<body>` sets `data-view` before paint so a
+deep link never flashes the reader first — though a generated page already
+carries the right `data-view` in its markup, so it only has anything to decide
+at the root.
 
 Both ways to a poem at random — the button beside *Start reading* on home and
 the middle seat of the reader's own nav — carry the class `.random-poem` and are
@@ -185,12 +211,69 @@ language the extract was left in. It is always laid out interleaved: an
 alexandrine needs more than half the prose measure, so two columns would only
 wrap.
 
+## Addresses and generated pages
+
+Every poem has a URL of its own. This matters for one reason: a search engine
+treats `#une-charogne` and `#le-vampire` as the same page, so under the old
+hash-only scheme all 133 poems competed for a single result.
+
+    /                        home
+    /about/                  about
+    /poems/une-charogne/     one poem
+
+`tools/build-pages.mjs` writes those out — 133 poem pages, the about page,
+`sitemap.xml` and `robots.txt` — **from `index.html` itself**, so there is no
+second copy of the markup to keep in step. Re-run it after adding a poem, after
+editing the head of `index.html`, or after changing anything it mirrors
+(`meta.js`, the grid renderer, `POEM_SECTIONS`). It is idempotent, and it clears
+`poems/` and `about/` first so a renamed poem leaves no page behind.
+
+Each generated page is still **the whole site** — same sidebar, same search,
+same reader — so arriving from a search result and arriving from the sidebar are
+the same thing. What it adds is:
+
+- its own title, description, canonical URL, Open Graph / Twitter card and
+  schema.org graph (`Poem`, the `Book` it belongs to, and a `BreadcrumbList`),
+  all of them from `meta.js`;
+- **the poem already rendered into the HTML**, so a crawler that runs no
+  JavaScript still reads the verse, and so something paints before a megabyte of
+  poem data has arrived. `buildComparison()` clears the container and replaces
+  it with the interactive grid as soon as it runs;
+- the sidebar pre-filled with all 133 links, since `buildSidebar()` would
+  otherwise be the only thing that ever creates them and a crawler would find
+  no way from one poem to another. `index.html` gets the same treatment.
+
+**How the three URL forms stay straight.** `data-base` on `<html>` says how far
+the page sits below the root (`""` at the root, `"../../"` on a poem page) and
+`poemHref()` / `homeHref()` / `aboutHref()` build every link from it. Opened off
+disk there are no directory indexes, so those append `index.html`. Navigation is
+a `pushState` where the browser allows one and a plain page load otherwise —
+which is what keeps the site working from `file://`, where each generated page
+is self-sufficient.
+
+Two things are easy to get wrong here:
+
+- **`pushState` resolves a relative URL against the address in the bar, not
+  against the page that was loaded.** Pushing `poems/le-vampire/` while the bar
+  already says `/poems/une-charogne/` yields `/poems/une-charogne/poems/le-vampire/`.
+  `setUrl()` resolves against `DOC_URL`, captured at load, which also lets the
+  site work served from a subdirectory.
+- **A link is a link.** The sidebar entries and prev/next are real anchors with
+  real `href`s, and the click handler bows out (`isPlainClick()`) for a
+  modified click, so middle-click and ⌘-click open a new tab as they should.
+
+`tools/dev-server.mjs` serves a directory's `index.html` and redirects the
+missing trailing slash, so what is tested locally is what a static host will
+serve.
+
 ## Adding a New Poem
 
 1. Create `<section-dir>/<poem-id>.js` following the pattern in existing files (see README.md for full data model)
 2. Add a `<script>` tag for it in `index.html` **before** `translation-data.js`
 3. Add the poem ID to the `order` array in `translation-data.js`
 4. Add a `'<poem-id>': '<section>'` entry in the `POEM_SECTIONS` map in `translation.js` (line ~13)
+5. Run `node tools/build-pages.mjs`, which gives the poem its page and adds it
+   to the sidebar of every other one and to `sitemap.xml`
 
 Search needs no step of its own: it indexes whatever is in `window.POEMS`.
 
@@ -228,6 +311,16 @@ A poem simply omits the `en` / `es` key on every segment when no free translatio
 exists; `poemHasLang()` in `translation.js` spots that and the column renders the
 `.translation-missing` note instead of verse. A language is all-or-nothing per
 poem — half a column would mis-pair lines against the French.
+
+Because Scott did 50 of these poems and Marquina 114, most have only one of the
+two, and opening every poem in English would put that note where a Spanish
+translation exists — on 64 poems, and it is the note rather than the verse that
+a search engine would then take the page to be about. So `buildComparison()`
+falls back to a language the poem actually carries. The dropdown names whichever
+one that is and still offers the empty one, and the reader's own choice is
+remembered separately (`preferredTranslationLang`), so one Spanish-only poem
+does not leave every poem after it in Spanish. 114 of the 133 show a translation;
+19 carry the French alone.
 
 Two rules when adding somebody else's translation:
 
