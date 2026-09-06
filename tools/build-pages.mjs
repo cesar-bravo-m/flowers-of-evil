@@ -31,7 +31,7 @@
  * Re-run it after adding a poem, or after changing the head of index.html.
  */
 import { mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 
@@ -62,12 +62,24 @@ function poemFiles(dir, inSection) {
 function loadSite() {
   const ctx = vm.createContext({ window: { POEMS: {} } });
   const run = (file) => vm.runInContext(readFileSync(file, 'utf8'), ctx, { filename: file });
+
+  /* Which file each poem came out of. Nothing needed this while every page
+     named all 133 of them; now a page names only its own and corpus.js fetches
+     the rest, so the manifest has to say where each one lives. A poem file
+     announces itself only by what it adds to window.POEMS, so watch for that
+     rather than trusting the file name to match the id. */
+  const src = {};
   for (const f of poemFiles(ROOT)) {
-    try { run(f); } catch { /* not a poem file */ }
+    const before = new Set(Object.keys(ctx.window.POEMS));
+    try { run(f); } catch { continue; /* not a poem file */ }
+    for (const id of Object.keys(ctx.window.POEMS)) {
+      if (!before.has(id)) src[id] = relative(ROOT, f).split(sep).join('/');
+    }
   }
   run(join(ROOT, 'translation-data.js'));
   run(join(ROOT, 'bravo.js'));
   run(join(ROOT, 'meta.js'));
+  ctx.window.POEM_SRC = src;
   return ctx.window;
 }
 
@@ -270,6 +282,14 @@ function fillSidebar(html, lists) {
   );
 }
 
+/* And the other way. index.html is the template as well as the root page, so
+   what fillSidebar() writes into it is what every other page is then cut from;
+   a page that does not want the list has to say so rather than simply not
+   asking for it. buildSidebar() puts the links back in the browser. */
+function clearSidebar(html) {
+  return fillSidebar(html, {});
+}
+
 /* --- assembling a page ---------------------------------------------------- */
 
 /* Re-point every relative link and script for a page `depth` directories below
@@ -315,14 +335,56 @@ function setHead(html, { title, description, url, type, jsonLd }) {
   return html;
 }
 
+/* Name the poems this page loads for itself, at the marker in the template —
+   its own, on a poem page; the one the home extract quotes, at the root. The
+   rest of the book is corpus.js's business, once the page has painted.
+
+   The markers are put back rather than consumed, and what is between them is
+   replaced rather than added to: index.html is both the root page and the
+   template every other page is cut from, so what this writes into it has to
+   leave it still cuttable, and has to not accumulate across runs. Done before
+   rebase(), so the paths pick up the page's prefix with everything else. */
+function poemScripts(html, win, ids) {
+  const tags = (ids || [])
+    .filter((id) => win.POEM_SRC[id])
+    .map((id) => `  <script defer src="${win.POEM_SRC[id]}"></script>\n`)
+    .join('');
+  return replaceOnce(html, /^[ \t]*<!--POEM-SCRIPT-->\n[\s\S]*?[ \t]*<!--\/POEM-SCRIPT-->\n/m,
+    `  <!--POEM-SCRIPT-->\n${tags}  <!--/POEM-SCRIPT-->\n`,
+    'the poem-script markers');
+}
+
 function buildPage(template, win, sections, opts) {
   const prefix = opts.prefix;
-  let html = rebase(template, prefix);
+  let html = template;
+
+  /* The poems this page names in a script tag of its own — its own, and no
+     others. corpus.js fetches the rest once the page has painted, out of the
+     manifest. Done before rebase() so the paths get the prefix with
+     everything else. */
+  html = poemScripts(html, win, opts.poems);
+
+  /* Home and About are 8 KB of prose that a poem page never shows. They stay
+     on the two pages that are them; everywhere else they go, and a link to
+     one becomes an ordinary page load. */
+  if (!opts.statics) {
+    html = replaceOnce(html, /[ \t]*<!--STATIC-VIEWS-->[\s\S]*?<!--\/STATIC-VIEWS-->\n\n/,
+      '', 'the static-view markers');
+  }
+
+  html = rebase(html, prefix);
 
   html = html.replace('<html lang="en" data-base="">', `<html lang="en" data-base="${prefix}">`);
   html = html.replace('<body data-view="poem">', `<body data-view="${opts.view}">`);
 
-  html = fillSidebar(html, sidebarHtml(win, sections, prefix));
+  /* The full index of the site, in the markup, on the one page that is the
+     index of the site. Writing all 133 links into all 133 poem pages was 2.7 MB
+     of the same list; buildSidebar() fills them in from the manifest instead,
+     and a crawler still reaches every poem — from here, from sitemap.xml, and
+     along the prev/next chain that runs through the whole book. */
+  html = opts.fillSidebar
+    ? fillSidebar(html, sidebarHtml(win, sections, prefix))
+    : clearSidebar(html);
   html = setHead(html, opts.head);
 
   if (opts.view === 'poem') {
@@ -357,6 +419,51 @@ function buildPage(template, win, sections, opts) {
   }
 
   return html;
+}
+
+/* --- the manifest --------------------------------------------------------- */
+
+/**
+ * poems.js — where every poem's file is, and what it is called.
+ *
+ * A page used to name all 133 poem files in a script tag apiece and load the
+ * lot; now it names its own and corpus.js fetches the rest from here. Two
+ * things need a poem before its file has arrived — the sidebar, which lists
+ * every title, and the hover that shows a title in the translation being read
+ * — so the titles come along, and nothing else does. Only translations a
+ * reader can actually select are named: an unfinished Bravo draft is no more
+ * visible here than it is in the dropdown.
+ */
+function manifest(win, META) {
+  const rows = win.POEM_IDS.map((id) => {
+    const poem = win.POEMS[id];
+    const entry = { src: win.POEM_SRC[id], title: poem.title };
+    const titles = {};
+    for (const code of META.translationCodes(id, win.POEMS, win.BRAVO)) {
+      const name = poem.titles && poem.titles[code];
+      if (name) titles[code] = name;
+    }
+    if (Object.keys(titles).length) entry.titles = titles;
+    return `  ${JSON.stringify(id)}: ${JSON.stringify(entry)}`;
+  });
+  return [
+    '/**',
+    ' * poems.js — generated by tools/build-pages.mjs. Do not hand-edit.',
+    ' *',
+    ' * Where each poem\'s file is, and its title in every language a reader can',
+    ' * pick. corpus.js loads the files themselves; this is what the sidebar, the',
+    ' * prev/next links and the meta tags read before the verse arrives.',
+    ' *',
+    ' * The order of the poems is not here — that stays authored, in the `order`',
+    ' * array in translation-data.js — and neither is the section each belongs to,',
+    ' * which stays in POEM_SECTIONS in translation.js. This file is derived from',
+    ' * both, and is the only copy of any of it that is generated.',
+    ' */',
+    'window.POEM_INDEX = {',
+    rows.join(',\n'),
+    '};',
+    ''
+  ].join('\n');
 }
 
 /* --- sitemap and robots --------------------------------------------------- */
@@ -411,6 +518,7 @@ for (const id of win.POEM_IDS) {
     view: 'poem',
     id,
     prefix: '../../',
+    poems: [id],
     head: {
       title: META.poemTitle(poem, langs),
       description: META.poemDescription(poem, langs),
@@ -422,10 +530,13 @@ for (const id of win.POEM_IDS) {
   written += 1;
 }
 
+/* About keeps the written pages, since it is one of them, and loads no poem at
+   all — there is no verse on it. */
 mkdirSync(OUT_ABOUT, { recursive: true });
 writeFileSync(join(OUT_ABOUT, 'index.html'), buildPage(template, win, sections, {
   view: 'about',
   prefix: '../',
+  statics: true,
   head: {
     title: META.ABOUT_TITLE,
     description: META.ABOUT_DESCRIPTION,
@@ -434,12 +545,18 @@ writeFileSync(join(OUT_ABOUT, 'index.html'), buildPage(template, win, sections, 
   }
 }), 'utf8');
 
-/* The root page keeps its own head — it is the template — but its sidebar is
-   filled in here too, so a crawler landing on / finds all 133 poems without
-   running a line of JavaScript. */
+/* The root page keeps its own head — it is the template — so it does not go
+   through buildPage(); what it does get is the two things a page is given
+   there. Its sidebar is filled, so a crawler landing on / finds all 133 poems
+   without running a line of JavaScript, and this is now the one page in the
+   site where that whole list is written down. And it names the poem its
+   extract quotes, which is the only verse on it. */
+const demoPoem = (template.match(/data-demo-poem="([^"]+)"/) || [])[1];
 writeFileSync(join(ROOT, 'index.html'),
-  fillSidebar(template, sidebarHtml(win, sections, '')), 'utf8');
+  poemScripts(fillSidebar(template, sidebarHtml(win, sections, '')), win,
+    demoPoem ? [demoPoem] : []), 'utf8');
 
+writeFileSync(join(ROOT, 'poems.js'), manifest(win, META), 'utf8');
 writeFileSync(join(ROOT, 'sitemap.xml'), sitemap(win), 'utf8');
 writeFileSync(join(ROOT, 'robots.txt'), robots(win), 'utf8');
 
@@ -455,6 +572,7 @@ for (const id of win.POEM_IDS) {
 
 console.log(`poems/       ${written} pages`);
 console.log(`about/       1 page`);
+console.log(`poems.js     ${written} entries`);
 console.log(`sitemap.xml  ${written + 2} urls`);
 console.log(`robots.txt   written`);
 console.log(`

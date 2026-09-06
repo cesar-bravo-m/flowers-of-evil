@@ -141,10 +141,21 @@ window.POEMS = window.POEMS || {};
     'les-metamorphoses-du-vampire'
   ];
 
-  var ids = order.filter(function (id) { return window.POEMS[id]; });
-  if (ids.length === 0) ids = Object.keys(window.POEMS);
+  /* Which of them the site actually has. Every poem used to be loaded by the
+     time this ran, so asking window.POEMS was the same question; now a page
+     loads only the poem it is about and corpus.js fetches the rest later, so
+     it is the manifest that knows the whole book. */
+  var known = (window.POEM_INDEX && Object.keys(window.POEM_INDEX).length)
+    ? window.POEM_INDEX
+    : window.POEMS;
+  var ids = order.filter(function (id) { return known[id]; });
+  if (ids.length === 0) ids = Object.keys(known);
 
-  var defaultId = ids[0];
+  /* The poem this page opens on, which has to be one whose verse is here:
+     applyInitialRoute() will name the right one on a poem page, and on the
+     written pages there is no reader to fill. */
+  var loaded = ids.filter(function (id) { return window.POEMS[id]; });
+  var defaultId = loaded[0] || ids[0];
   var poem = window.POEMS[defaultId];
 
   window.TRANSLATION_SEGMENTS = poem ? poem.segments : [];

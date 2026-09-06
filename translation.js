@@ -350,6 +350,26 @@
 
   /* The poem the address names, picked before the first build so that the grid
      is rendered once rather than built and then switched. */
+  /* --- Knowing a poem before it has arrived --------------------------------
+     A page loads the poem it is about and lets corpus.js fetch the rest in its
+     own time, so window.POEMS is sparse for a moment after load — while the
+     sidebar has to list all 133 titles and prev/next has to name two of them.
+     poems.js carries exactly that much for every poem, so read the file where
+     it is here and the manifest where it is not. Both answer to the same two
+     keys, `title` and `titles`, which is what lets one accessor serve. */
+
+  function poemMeta(id) {
+    if (!id) return null;
+    var loaded = window.POEMS && window.POEMS[id];
+    if (loaded && loaded.segments) return loaded;
+    return (window.POEM_INDEX && window.POEM_INDEX[id]) || loaded || null;
+  }
+
+  /* Is this an id the site has at all — loaded or merely listed? */
+  function poemExists(id) {
+    return !!poemMeta(id);
+  }
+
   function applyInitialRoute() {
     if (!window.POEMS || !window.POEM_IDS || !window.POEM_IDS.length) return;
     var route = currentRoute();
@@ -435,7 +455,7 @@
     if (/\/about(?:\/(?:index\.html)?)?$/.test(path)) return { view: 'about' };
 
     var hash = window.location.hash.slice(1);
-    if (hash && window.POEMS && window.POEMS[hash]) {
+    if (hash && poemExists(hash)) {
       return { view: 'poem', id: hash, legacy: true };
     }
     if (STATIC_VIEWS[hash]) return { view: hash, legacy: true };
@@ -554,8 +574,20 @@
     }
   }
 
+  /* Is the markup for one of the written pages in this document at all? Only
+     the two pages that are them carry it — a poem page would be shipping 8 KB
+     of prose it never shows — so from anywhere else, going to one is an
+     ordinary page load rather than a change of view. */
+  function hasStaticMarkup(view) {
+    return !!document.getElementById('view-' + view);
+  }
+
   function showStatic(view, scroll) {
     if (!STATIC_VIEWS[view]) view = 'home';
+    if (!hasStaticMarkup(view)) {
+      window.location.href = view === 'about' ? aboutHref() : homeHref();
+      return;
+    }
     setView(view);
     closeDrawer();
     setPoemTitle(staticTitle(view));
@@ -569,7 +601,7 @@
      poems and pages as one would expect. */
   function applyRoute(scroll) {
     var route = currentRoute();
-    if (route.view === 'poem' && window.POEMS && window.POEMS[route.id]) {
+    if (route.view === 'poem' && poemExists(route.id)) {
       /* An old #poem-id link: swap the bar over to the real address without
          adding a history entry, so the poem has one URL from here on. */
       if (route.legacy) setUrl(poemHref(route.id), true);
@@ -592,7 +624,7 @@
 
   function firstPoemId() {
     var ids = window.POEM_IDS || [];
-    if (window.POEMS && window.POEMS[FIRST_POEM_ID]) return FIRST_POEM_ID;
+    if (poemExists(FIRST_POEM_ID)) return FIRST_POEM_ID;
     return ids[0];
   }
 
@@ -626,6 +658,10 @@
       a.href = view === 'about' ? aboutHref() : homeHref();
       a.addEventListener('click', function (e) {
         if (!isPlainClick(e)) return;
+        /* From a poem page there is no such view to show — the markup lives
+           only on the two pages that are it — so leave the click to the
+           browser and let the link be a link. */
+        if (!hasStaticMarkup(view)) return;
         e.preventDefault();
         setUrl(a.getAttribute('href'));
         showStatic(view);
@@ -673,7 +709,7 @@
 
   function setNavLink(a, id) {
     if (!a) return;
-    var poem = id && window.POEMS ? window.POEMS[id] : null;
+    var poem = poemMeta(id);
     if (poem) {
       a.href = poemHref(id);
       a.removeAttribute('aria-disabled');
@@ -686,6 +722,17 @@
   }
 
   function switchPoem(id, push) {
+    if (!poemExists(id)) return;
+    /* Known, but its verse has not arrived. Fetch it and come back — the page
+       stays as it was meanwhile, which for a local file is a few milliseconds
+       and, once corpus.js has finished its background pass, never happens at
+       all. Two clicks on the same link share the one fetch. */
+    if (window.CORPUS && !window.CORPUS.has(id)) {
+      window.CORPUS.ensure(id).then(function () {
+        switchPoem(id, push);
+      }, function () { /* the poem stays where it was */ });
+      return;
+    }
     if (!window.POEMS || !window.POEMS[id]) return;
     window.CURRENT_POEM_ID = id;
     window.TRANSLATION_SEGMENTS = window.POEMS[id].segments;
@@ -728,16 +775,23 @@
 
   function initSidebarTitleHover(a, id) {
     if (!canHover) return;
-    var poem = window.POEMS[id];
-    if (!poem || !poem.titles) return;
-    var frTitle = poem.title || poem.titles.fr || '';
-
+    /* Looked up on each hover rather than once here: the manifest answers
+       before the poem's own file has arrived, and the file answers better
+       once it has. */
     a.addEventListener('mouseenter', function () {
-      a.textContent = (poem.titles[currentTranslationLang] || frTitle);
+      var poem = poemMeta(id);
+      if (!poem) return;
+      var titles = poem.titles || {};
+      a.textContent = titles[currentTranslationLang] || frTitleOf(poem);
     });
     a.addEventListener('mouseleave', function () {
-      a.textContent = frTitle;
+      var poem = poemMeta(id);
+      if (poem) a.textContent = frTitleOf(poem);
     });
+  }
+
+  function frTitleOf(poem) {
+    return poem.title || (poem.titles && poem.titles.fr) || '';
   }
 
   function buildSourceCell(lang) {
@@ -858,6 +912,10 @@
     });
   }
 
+  /* The whole index of the site, built from the manifest. Only the root page
+     ships these links in its markup now — writing all 133 into all 133 poem
+     pages was 2.7 MB of the same list — so on every other page this is what
+     puts them there. */
   function buildSidebar() {
     if (!window.POEM_IDS || !window.POEMS) return;
     var lists = document.querySelectorAll('.sidebar .poem-list[data-section]');
@@ -876,11 +934,13 @@
     }
 
     window.POEM_IDS.forEach(function (id) {
+      var meta = poemMeta(id);
+      if (!meta) return;
       var li = document.createElement('li');
       var a = document.createElement('a');
       a.href = poemHref(id);
       a.setAttribute('data-poem-id', id);
-      a.textContent = window.POEMS[id].title;
+      a.textContent = frTitleOf(meta);
       a.classList.toggle('active', id === window.CURRENT_POEM_ID);
       if (id === window.CURRENT_POEM_ID) a.setAttribute('aria-current', 'true');
       a.addEventListener('click', function (e) {
@@ -1978,7 +2038,13 @@
   }
 
   function init() {
-    if (!window.TRANSLATION_SEGMENTS || !window.TRANSLATION_SEGMENTS.length) return;
+    /* A page with no verse on it is now an ordinary case — /about/ loads no
+       poem at all — so having a corpus to work from is the test, not having a
+       poem already open. Everything below that reads the current poem copes
+       with there not being one; buildComparison() simply builds nothing. */
+    var haveCorpus = !!(window.POEM_INDEX && Object.keys(window.POEM_INDEX).length);
+    var haveVerse = !!(window.TRANSLATION_SEGMENTS && window.TRANSLATION_SEGMENTS.length);
+    if (!haveCorpus && !haveVerse) return;
 
     /* A first visit opens in the translation that matches the page language;
        the dropdown overrides it from there. */
@@ -2007,9 +2073,8 @@
       delegateWiktionaryClick(comparison);
     }
 
-    if (window.POEMS && window.CURRENT_POEM_ID) {
-      setPoemTitle(window.POEMS[window.CURRENT_POEM_ID].title);
-    }
+    var current = poemMeta(window.CURRENT_POEM_ID);
+    if (current) setPoemTitle(frTitleOf(current));
 
     initLangToggles();
     initGlossary();

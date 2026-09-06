@@ -445,8 +445,26 @@
     return !!ui && !ui.overlay.hasAttribute('hidden');
   }
 
+  /* Search is the one thing that wants the whole book at once, and a page now
+     starts with a single poem of it. corpus.js is already fetching the rest in
+     the background by the time anyone can open this; asking again here covers
+     the reader who is faster than the prefetch, and searches what has arrived
+     until the rest does. buildIndex() skips a poem it has no text for, so the
+     index simply has to be dropped and rebuilt once the book is complete. */
+  function awaitCorpus() {
+    if (!window.CORPUS || window.CORPUS.isReady()) return;
+    window.CORPUS.whenComplete(function () {
+      index = null;
+      if (isOpen()) {
+        state.result = null;
+        onQuery();
+      }
+    });
+  }
+
   function open() {
     if (!ui) ui = buildUI();
+    awaitCorpus();
     if (!isOpen()) {
       lastFocus = document.activeElement;
       /* the palette covers the page, so the poem drawer must not stay open

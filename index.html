@@ -418,7 +418,13 @@
     </nav>
 
     <!-- Home and About. Only one of the three views (poem / home / about) is
-         shown at a time; `data-view` on <body> says which. -->
+         shown at a time; `data-view` on <body> says which.
+         These two live only on the two pages that are them — / and /about/.
+         A generated poem page has no use for 8 KB of prose it will never show,
+         so tools/build-pages.mjs cuts everything between the markers below out
+         of all 133 of them, and translation.js falls back to a real navigation
+         when a link asks for a view whose markup is not in the document. -->
+    <!--STATIC-VIEWS-->
     <article class="static-view" id="view-home" aria-labelledby="home-heading">
       <div class="static-langs" role="group" aria-label="Page language — idioma de la página">
         <button type="button" class="static-lang" data-lang="en" lang="en">English</button>
@@ -439,7 +445,7 @@
           <!-- <span class="static-note">English by Cyril Scott (1909) and Spanish by Eduardo Marquina (1905)</span> -->
         </div>
         <div class="lang-en" lang="en">
-          <p>This website contains all 126 poems of the 1861 of Charles Baudelaire's <cite>Les Fleurs du mal</cite>
+          <p>This website contains all 126 poems from the 1861 edition of Charles Baudelaire's <cite>Les Fleurs du mal</cite>
             plus six
             <span class="glossary"><button type="button" class="glossary-term"
               popovertarget="glossary-condamnees-en"><i lang="fr">pièces condamnées</i></button><span
@@ -452,8 +458,7 @@
           <p>Hovering over a word highlights its translation, and clicking it shows its definition. Try it out here!</p>
         </div>
         <div class="lang-es" lang="es">
-          <p>Este sitio contiene los 126 poemas de la edición de 1861 de <cite>Les Fleurs du mal</cite> de Charles Baudelaire. Aquí están
-            , más las 6
+          <p>Este sitio contiene los 126 poemas de la edición de 1861 de <cite>Les Fleurs du mal</cite> de Charles Baudelairemás las seis
             <span class="glossary"><button type="button" class="glossary-term"
               popovertarget="glossary-condamnees-es"><i lang="fr">pièces condamnées</i></button><span
               class="glossary-note" id="glossary-condamnees-es" popover><b lang="fr">Pièces condamnées</b>Los seis
@@ -525,6 +530,8 @@
       </div>
     </article>
 
+    <!--/STATIC-VIEWS-->
+
     <footer class="footer">
       <div class="footer-ornament"></div>
       <p><cite>Les Fleurs du mal</cite> — 1861</p>
@@ -548,146 +555,23 @@
     </span>
   </div>
 
-  <!-- One file per poem, then the bootstrap and the UI. All deferred: `defer`
-       keeps them in document order but stops them blocking the parser, so the
-       shell — and, on a generated poem page, the poem itself — paints before a
-       megabyte of verse has finished arriving. site-lang.js above is the one
-       exception; it has to run before the body is parsed. -->
-  <script defer src="0. Au Lecteur/au-lecteur.js"></script>
-  <script defer src="1. Spleen et Ideal/benediction.js"></script>
-  <script defer src="1. Spleen et Ideal/l-albatros.js"></script>
-  <script defer src="1. Spleen et Ideal/elevation.js"></script>
+  <!-- The poems are no longer named here one by one. `poems.js` is the
+       manifest — where each poem's file is, and its title in every language a
+       reader can pick — and corpus.js fetches the files: the one this page is
+       about right away, the rest once the page has painted. That is what keeps
+       a generated page from carrying a script tag per poem, 133 of them, on
+       each of 135 pages, and from pulling a megabyte of verse to show one poem.
+       tools/build-pages.mjs writes the page's own poem in at the marker.
+       All deferred, so they keep this order without blocking the parser;
+       site-lang.js above is the one exception, having to run before the body
+       is parsed. -->
+  <script defer src="poems.js"></script>
+  <!--POEM-SCRIPT-->
   <script defer src="1. Spleen et Ideal/correspondances.js"></script>
-  <script defer src="1. Spleen et Ideal/j-aime-le-souvenir.js"></script>
-  <script defer src="1. Spleen et Ideal/les-phares.js"></script>
-  <script defer src="1. Spleen et Ideal/la-muse-malade.js"></script>
-  <script defer src="1. Spleen et Ideal/la-muse-venale.js"></script>
-  <script defer src="1. Spleen et Ideal/le-mauvais-moine.js"></script>
-  <script defer src="1. Spleen et Ideal/l-ennemi.js"></script>
-  <script defer src="1. Spleen et Ideal/le-guignon.js"></script>
-  <script defer src="1. Spleen et Ideal/la-vie-anterieure.js"></script>
-  <script defer src="1. Spleen et Ideal/bohemiens-en-voyage.js"></script>
-  <script defer src="1. Spleen et Ideal/l-homme-et-la-mer.js"></script>
-  <script defer src="1. Spleen et Ideal/don-juan-aux-enfers.js"></script>
-  <script defer src="1. Spleen et Ideal/chatiment-de-l-orgueil.js"></script>
-  <script defer src="1. Spleen et Ideal/la-beaute.js"></script>
-  <script defer src="1. Spleen et Ideal/l-ideal.js"></script>
-  <script defer src="1. Spleen et Ideal/la-geante.js"></script>
-  <script defer src="1. Spleen et Ideal/le-masque.js"></script>
-  <script defer src="1. Spleen et Ideal/hymne-a-la-beaute.js"></script>
-  <script defer src="1. Spleen et Ideal/parfum-exotique.js"></script>
-  <script defer src="1. Spleen et Ideal/la-chevelure.js"></script>
-  <script defer src="1. Spleen et Ideal/je-t-adore.js"></script>
-  <script defer src="1. Spleen et Ideal/tu-mettrais-l-univers.js"></script>
-  <script defer src="1. Spleen et Ideal/sed-non-satiata.js"></script>
-  <script defer src="1. Spleen et Ideal/vetements-ondoyants.js"></script>
-  <script defer src="1. Spleen et Ideal/le-serpent-qui-danse.js"></script>
-  <script defer src="1. Spleen et Ideal/une-charogne.js"></script>
-  <script defer src="1. Spleen et Ideal/de-profundis-clamavi.js"></script>
-  <script defer src="1. Spleen et Ideal/le-vampire.js"></script>
-  <script defer src="1. Spleen et Ideal/une-nuit-que-j-etais.js"></script>
-  <script defer src="1. Spleen et Ideal/remords-posthume.js"></script>
-  <script defer src="1. Spleen et Ideal/le-chat-1.js"></script>
-  <script defer src="1. Spleen et Ideal/duellum.js"></script>
-  <script defer src="1. Spleen et Ideal/le-balcon.js"></script>
-  <script defer src="1. Spleen et Ideal/le-possede.js"></script>
-  <script defer src="1. Spleen et Ideal/un-fantome.js"></script>
-  <script defer src="1. Spleen et Ideal/je-te-donne-ces-vers.js"></script>
-  <script defer src="1. Spleen et Ideal/semper-eadem.js"></script>
-  <script defer src="1. Spleen et Ideal/tout-entiere.js"></script>
-  <script defer src="1. Spleen et Ideal/que-diras-tu-ce-soir.js"></script>
-  <script defer src="1. Spleen et Ideal/le-flambeau-vivant.js"></script>
-  <script defer src="1. Spleen et Ideal/reversibilite.js"></script>
-  <script defer src="1. Spleen et Ideal/confession.js"></script>
-  <script defer src="1. Spleen et Ideal/l-aube-spirituelle.js"></script>
-  <script defer src="1. Spleen et Ideal/harmonie-du-soir.js"></script>
-  <script defer src="1. Spleen et Ideal/le-flacon.js"></script>
-  <script defer src="1. Spleen et Ideal/le-poison.js"></script>
-  <script defer src="1. Spleen et Ideal/ciel-brouille.js"></script>
-  <script defer src="1. Spleen et Ideal/le-chat-2.js"></script>
-  <script defer src="1. Spleen et Ideal/le-beau-navire.js"></script>
-  <script defer src="1. Spleen et Ideal/l-invitation-au-voyage.js"></script>
-  <script defer src="1. Spleen et Ideal/l-irreparable.js"></script>
-  <script defer src="1. Spleen et Ideal/causerie.js"></script>
-  <script defer src="1. Spleen et Ideal/chant-d-automne.js"></script>
-  <script defer src="1. Spleen et Ideal/a-une-madone.js"></script>
-  <script defer src="1. Spleen et Ideal/chanson-d-apres-midi.js"></script>
-  <script defer src="1. Spleen et Ideal/sisina.js"></script>
-  <script defer src="1. Spleen et Ideal/franciscae-meae-laudes.js"></script>
-  <script defer src="1. Spleen et Ideal/a-une-dame-creole.js"></script>
-  <script defer src="1. Spleen et Ideal/moesta-et-errabunda.js"></script>
-  <script defer src="1. Spleen et Ideal/le-revenant.js"></script>
-  <script defer src="1. Spleen et Ideal/sonnet-d-automne.js"></script>
-  <script defer src="1. Spleen et Ideal/tristesses-de-la-lune.js"></script>
-  <script defer src="1. Spleen et Ideal/les-chats.js"></script>
-  <script defer src="1. Spleen et Ideal/les-hiboux.js"></script>
-  <script defer src="1. Spleen et Ideal/la-pipe.js"></script>
-  <script defer src="1. Spleen et Ideal/la-musique.js"></script>
-  <script defer src="1. Spleen et Ideal/sepulture.js"></script>
-  <script defer src="1. Spleen et Ideal/une-gravure-fantastique.js"></script>
-  <script defer src="1. Spleen et Ideal/le-mort-joyeux.js"></script>
-  <script defer src="1. Spleen et Ideal/le-tonneau-de-la-haine.js"></script>
-  <script defer src="1. Spleen et Ideal/la-cloche-felee.js"></script>
-  <script defer src="1. Spleen et Ideal/spleen-1.js"></script>
-  <script defer src="1. Spleen et Ideal/spleen-2.js"></script>
-  <script defer src="1. Spleen et Ideal/spleen-3.js"></script>
-  <script defer src="1. Spleen et Ideal/spleen-4.js"></script>
-  <script defer src="1. Spleen et Ideal/obsession.js"></script>
-  <script defer src="1. Spleen et Ideal/le-gout-du-neant.js"></script>
-  <script defer src="1. Spleen et Ideal/alchimie-de-la-douleur.js"></script>
-  <script defer src="1. Spleen et Ideal/horreur-sympathique.js"></script>
-  <script defer src="1. Spleen et Ideal/l-heautontimoroumenos.js"></script>
-  <script defer src="1. Spleen et Ideal/l-irremediable.js"></script>
-  <script defer src="1. Spleen et Ideal/l-horloge.js"></script>
-  <script defer src="2. Tableaux Parisiens/paysage.js"></script>
-  <script defer src="2. Tableaux Parisiens/le-soleil.js"></script>
-  <script defer src="2. Tableaux Parisiens/a-une-mendiante-rousse.js"></script>
-  <script defer src="2. Tableaux Parisiens/le-cygne.js"></script>
-  <script defer src="2. Tableaux Parisiens/les-sept-vieillards.js"></script>
-  <script defer src="2. Tableaux Parisiens/les-petites-vieilles.js"></script>
-  <script defer src="2. Tableaux Parisiens/les-aveugles.js"></script>
-  <script defer src="2. Tableaux Parisiens/a-une-passante.js"></script>
-  <script defer src="2. Tableaux Parisiens/le-squelette-laboureur.js"></script>
-  <script defer src="2. Tableaux Parisiens/le-crepuscule-du-soir.js"></script>
-  <script defer src="2. Tableaux Parisiens/le-jeu.js"></script>
-  <script defer src="2. Tableaux Parisiens/danse-macabre.js"></script>
-  <script defer src="2. Tableaux Parisiens/l-amour-du-mensonge.js"></script>
-  <script defer src="2. Tableaux Parisiens/je-n-ai-pas-oublie.js"></script>
-  <script defer src="2. Tableaux Parisiens/la-servante-au-grand-coeur.js"></script>
-  <script defer src="2. Tableaux Parisiens/brumes-et-pluies.js"></script>
-  <script defer src="2. Tableaux Parisiens/reve-parisien.js"></script>
-  <script defer src="2. Tableaux Parisiens/le-crepuscule-du-matin.js"></script>
-  <script defer src="3. Le Vin/l-ame-du-vin.js"></script>
-  <script defer src="3. Le Vin/le-vin-des-chiffonniers.js"></script>
-  <script defer src="3. Le Vin/le-vin-de-l-assassin.js"></script>
-  <script defer src="3. Le Vin/le-vin-du-solitaire.js"></script>
-  <script defer src="3. Le Vin/le-vin-des-amants.js"></script>
-  <script defer src="4. Fleurs du Mal/la-destruction.js"></script>
-  <script defer src="4. Fleurs du Mal/une-martyre.js"></script>
-  <script defer src="4. Fleurs du Mal/femmes-damnees.js"></script>
-  <script defer src="4. Fleurs du Mal/les-deux-bonnes-soeurs.js"></script>
-  <script defer src="4. Fleurs du Mal/la-fontaine-de-sang.js"></script>
-  <script defer src="4. Fleurs du Mal/allegorie.js"></script>
-  <script defer src="4. Fleurs du Mal/la-beatrice.js"></script>
-  <script defer src="4. Fleurs du Mal/un-voyage-a-cythere.js"></script>
-  <script defer src="4. Fleurs du Mal/l-amour-et-le-crane.js"></script>
-  <script defer src="5. Revolte/le-reniement-de-saint-pierre.js"></script>
-  <script defer src="5. Revolte/abel-et-cain.js"></script>
-  <script defer src="5. Revolte/les-litanies-de-satan.js"></script>
-  <script defer src="6. La Mort/la-mort-des-amants.js"></script>
-  <script defer src="6. La Mort/la-mort-des-pauvres.js"></script>
-  <script defer src="6. La Mort/la-mort-des-artistes.js"></script>
-  <script defer src="6. La Mort/la-fin-de-la-journee.js"></script>
-  <script defer src="6. La Mort/le-reve-d-un-curieux.js"></script>
-  <script defer src="6. La Mort/le-voyage.js"></script>
-  <script defer src="7. Pieces Condamnees/les-bijoux.js"></script>
-  <script defer src="7. Pieces Condamnees/le-lethe.js"></script>
-  <script defer src="7. Pieces Condamnees/a-celle-qui-est-trop-gaie.js"></script>
-  <script defer src="7. Pieces Condamnees/lesbos.js"></script>
-  <script defer src="7. Pieces Condamnees/femmes-damnees-delphine-et-hippolyte.js"></script>
-  <script defer src="7. Pieces Condamnees/les-metamorphoses-du-vampire.js"></script>
+  <!--/POEM-SCRIPT-->
   <script defer src="translation-data.js"></script>
   <script defer src="bravo.js"></script>
+  <script defer src="corpus.js"></script>
   <script defer src="meta.js"></script>
   <script defer src="translation.js"></script>
   <script defer src="search.js"></script>
