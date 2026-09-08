@@ -110,3 +110,36 @@ window.POEMS["l-albatros"] = {
     { type: 'stanza', lines: 4 },
   ],
 };
+
+/* --- Translations by Bravo, and the backdrop ----------------------------
+   Machine-managed by localhost edit mode (tools/dev-server.mjs). Everything
+   from this marker to the end of the file is rewritten wholesale on save.
+   Do not hand-edit below this line, and do not append anything after it. */
+window.POEMS["l-albatros"].bravo = {
+  "es-bravo": {
+    status: "complete",
+    title: "El Albatros",
+    lines: [
+      "A menudo, por juego, los hombres del cordaje",
+      "capturan albatros, enormes aves australes,",
+      "que siguen, cual indolentes compañeros de viaje,",
+      "a la nave deslizándose por golfos abismales.",
+      "Apenas los han depositado sobre las tablas,",
+      "Esos reyes del aire, torpes y avergonzados,",
+      "Dejan lastimosamente que sus grandes alas blancas",
+      "Se arrastren como remos a sus costados.",
+      "Ese viajero alado, ¡cuán torpe y débil es!",
+      "Él, antes bello, ¡ahora cuán cómico y feo!",
+      "¡Uno lo hostiga con una pipa; el otro, cojeando,",
+      "imita a este inválido que volaba!",
+      "El Poeta es igual a este príncipe del cielo",
+      "que ronda la tormenta y se ríe del arquero;",
+      "en medio de abucheos y exiliado al suelo,",
+      "sus alas gigantes le impiden caminar.",
+    ],
+  },
+};
+
+window.POEMS["l-albatros"].backdrop = {
+  poem: { image: "assets/nightscapes/pexels-cottonbro-4881621.jpg", opacity: 0.3 },
+};
