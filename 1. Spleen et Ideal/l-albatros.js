@@ -133,7 +133,7 @@ window.POEMS["l-albatros"].bravo = {
       "¡Uno lo hostiga con una pipa; el otro, cojeando,",
       "Imita a este inválido que volaba!",
       "El Poeta es como este príncipe del cielo",
-      "Que se ríe del arquero y en tormentas prefiere andar;",
+      "Que en tormentas prefiere andar;",
       "En medio de abucheos y exiliado al suelo,",
       "Sus alas gigantes le impiden marchar.",
     ],
