@@ -59,7 +59,31 @@
     return (italic ? 'italic ' : '') + '400 ' + size + 'px ' + BODY;
   }
 
-  var NIGHTSCAPES = ['seine-paris', 'paris-rooftops', 'crescent-moon', 'milky-way-lake', 'starry-lake', 'fog-lamp'];
+  /* The photographs behind a Night card, in the order the picker shows them.
+     Files live in assets/nightscapes/ with a 160x200 thumbnail of each under
+     thumbs/; assets/nightscapes/CREDITS.md names the photographers. The
+     labels are what a screen reader gets for a thumbnail. */
+  var PHOTOS = [
+    { file: 'seine-paris',     en: 'The Seine at night',      es: 'El Sena de noche' },
+    { file: 'paris-rooftops',  en: 'Paris rooftops',          es: 'Tejados de París' },
+    { file: 'paris-brasserie', en: 'A Paris street at night', es: 'Una calle de París de noche' },
+    { file: 'rain-street',     en: 'Rain on a city street',   es: 'Lluvia en una calle' },
+    { file: 'fog-lamp',        en: 'A street lamp in fog',    es: 'Un farol en la niebla' },
+    { file: 'crescent-moon',   en: 'Crescent moon',           es: 'Luna creciente' },
+    { file: 'milky-way-lake',  en: 'The Milky Way over a lake', es: 'La Vía Láctea sobre un lago' },
+    { file: 'starry-lake',     en: 'Stars over a lake',       es: 'Estrellas sobre un lago' },
+    { file: 'stormy-sea',      en: 'A stormy sea',            es: 'Un mar tormentoso' },
+    { file: 'lightning-sea',   en: 'Lightning over the sea',  es: 'Relámpagos sobre el mar' },
+    { file: 'candle',          en: 'A candle',                es: 'Una vela' },
+    { file: 'black-cat',       en: 'A black cat',             es: 'Un gato negro' },
+    { file: 'red-rose',        en: 'A red rose',              es: 'Una rosa roja' },
+    { file: 'rose-petals',     en: 'Rose petals',             es: 'Pétalos de rosa' },
+    { file: 'cemetery-fog',    en: 'A cemetery in fog',       es: 'Un cementerio en la niebla' },
+    { file: 'cemetery-gate',   en: 'A cemetery gate',         es: 'La verja de un cementerio' }
+  ];
+  function photoPath(index) {
+    return 'assets/nightscapes/' + PHOTOS[index % PHOTOS.length].file + '.jpg';
+  }
 
   var PALETTES = {
     paperLight: { bg: '#e6dfd3', card: '#f5f0e8', ink: '#1a1512', tr: '#6f5a3a', accent: '#6b2d2d', muted: '#8b7355', rule: '#c4b8a8', shadow: false },
@@ -83,7 +107,7 @@
     style:    { en: 'Style', es: 'Estilo' },
     paper:    { en: 'Paper', es: 'Papel' },
     night:    { en: 'Night', es: 'Noche' },
-    photo:    { en: 'Another photo', es: 'Otra foto' },
+    photo:    { en: 'Photograph', es: 'Fotografía' },
     noPhotos: { en: 'Photos are available on the website.', es: 'Las fotos están disponibles en el sitio web.' },
     share:    { en: 'Share…', es: 'Compartir…' },
     download: { en: 'Download', es: 'Descargar' },
@@ -215,7 +239,7 @@
     return probeTextures().then(function (ok) {
       if (!ok) return {};
       if (state.style === 'night') {
-        return loadImage('assets/nightscapes/' + NIGHTSCAPES[state.photo % NIGHTSCAPES.length] + '.jpg')
+        return loadImage(photoPath(state.photo))
           .then(function (photo) { return { photo: photo }; });
       }
       var wants = [loadImage(isDark() ? 'assets/burnt-edge-dark.png' : 'assets/burnt-edge.png')];
@@ -789,8 +813,8 @@
       +         '<div class="share-choice">'
       +           '<label><input type="radio" name="share-style" value="paper"> <span data-t="paper"></span></label>'
       +           '<label class="share-style-night"><input type="radio" name="share-style" value="night"> <span data-t="night"></span></label>'
-      +           '<button type="button" class="share-photo-next share-link" data-t="photo" hidden></button>'
       +         '</div>'
+      +         '<div class="share-photos" role="radiogroup" data-t-aria="photo" hidden></div>'
       +         '<p class="share-note share-no-photos" data-t="noPhotos" hidden></p>'
       +       '</fieldset>'
       +     '</form>'
@@ -823,7 +847,7 @@
       whole: q('.share-whole'),
       langList: q('.share-lang-list'),
       nightLabel: q('.share-style-night'),
-      photoNext: q('.share-photo-next'),
+      photos: q('.share-photos'),
       noPhotos: q('.share-no-photos'),
       canvas: q('.share-canvas'),
       pages: q('.share-pages'),
@@ -874,11 +898,31 @@
         changed();
       }
     });
-    handle.photoNext.addEventListener('click', function () {
-      state.photo = (state.photo + 1) % NIGHTSCAPES.length;
+    /* One thumbnail per photograph, as a radio so the arrow keys move
+       between them. The full-size image is fetched only when one is picked. */
+    PHOTOS.forEach(function (photo, index) {
+      var label = el('label', 'share-photo');
+      var input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'share-photo';
+      input.value = String(index);
+      var img = document.createElement('img');
+      img.src = BASE + 'assets/nightscapes/thumbs/' + photo.file + '.jpg';
+      img.width = 160;
+      img.height = 200;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.draggable = false;
+      img.setAttribute('data-t-alt', index);
+      label.appendChild(input);
+      label.appendChild(img);
+      handle.photos.appendChild(label);
+    });
+    handle.photos.addEventListener('change', function (e) {
+      var input = e.target;
+      if (input.name !== 'share-photo' || !input.checked) return;
+      state.photo = Number(input.value) % PHOTOS.length;
       changed();
-      /* the one after is likely next */
-      loadImage('assets/nightscapes/' + NIGHTSCAPES[(state.photo + 1) % NIGHTSCAPES.length] + '.jpg').then(null, function () {});
     });
     handle.pagePrev.addEventListener('click', function () { showPage(pageIndex - 1); });
     handle.pageNext.addEventListener('click', function () { showPage(pageIndex + 1); });
@@ -901,6 +945,12 @@
     });
     ui.overlay.querySelectorAll('[data-t-aria]').forEach(function (node) {
       node.setAttribute('aria-label', t(node.getAttribute('data-t-aria')));
+    });
+    ui.overlay.querySelectorAll('[data-t-alt]').forEach(function (node) {
+      var photo = PHOTOS[Number(node.getAttribute('data-t-alt'))];
+      var name = window.SITE_LANG ? window.SITE_LANG.pick(photo) : photo.en;
+      node.alt = name;
+      node.title = name;
     });
     ui.primary.textContent = canShareFiles ? t('share') : t('download');
     if (selectionBtn) selectionBtn.textContent = t('selShare');
@@ -1012,7 +1062,7 @@
   }
 
   function syncStyleUi() {
-    ui.photoNext.hidden = state.style !== 'night' || texturesOK === false;
+    ui.photos.hidden = state.style !== 'night' || texturesOK === false;
     ui.nightLabel.hidden = texturesOK === false;
     ui.noPhotos.hidden = texturesOK !== false;
   }
@@ -1058,7 +1108,7 @@
       langs: defaultLangs(poemId),
       format: prefs.format,
       style: prefs.style,
-      photo: hash(poemId) % NIGHTSCAPES.length
+      photo: hash(poemId) % PHOTOS.length
     };
     canShareFiles = probeShare();
 
@@ -1067,6 +1117,7 @@
     fillLangs();
     ui.form.querySelector('input[name="share-format"][value="' + state.format + '"]').checked = true;
     ui.form.querySelector('input[name="share-style"][value="' + state.style + '"]').checked = true;
+    ui.photos.querySelector('input[value="' + state.photo + '"]').checked = true;
     applyText();
     syncStyleUi();
     setStatus('');

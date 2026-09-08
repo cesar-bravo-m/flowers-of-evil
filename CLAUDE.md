@@ -476,9 +476,12 @@ bottom sheet with the card first) offers a from/to line range, the poem's
 languages as checkboxes capped at two (`META.translationCodes()`, so drafts
 never appear), the format, and a style: *Paper* — the site's own look, with
 the grain and burnt edge from `assets/paper.png` and `assets/burnt-edge*.png`,
-following the dark theme — or *Night*, one of the six photographs in
-`assets/nightscapes/` under a dark veil (`tools/build-textures.mjs` generates
-the textures; `CREDITS.md` names the photographs). Format and style are
+following the dark theme — or *Night*, one of the sixteen Pexels photographs
+in `assets/nightscapes/` under a dark veil (`tools/build-textures.mjs`
+generates the textures; `assets/nightscapes/CREDITS.md` names the
+photographers). A strip of thumbnails (`.share-photos`, from `thumbs/`, listed
+in `PHOTOS`) lets the reader pick the photograph; the poem opens on one chosen
+by a hash of its id. Format and style are
 remembered under `flowers-share`; the range, the languages and the photo are
 not, since the poem changes the right answer every time.
 
