@@ -106,7 +106,7 @@ function loadPage(pageDir, html, { base }) {
   for (const src of scriptsOf(html)) {
     const file = resolve(pageDir, decodeURIComponent(src));
     /* translation.js and search.js want a browser; the data layer does not. */
-    if (/(?:translation|search|meta|site-lang)\.js$/.test(src) && !src.endsWith('translation-data.js')) continue;
+    if (/(?:translation|search|share|meta|site-lang)\.js$/.test(src) && !src.endsWith('translation-data.js')) continue;
     if (!existsSync(file)) { check(false, `script exists: ${src}`); continue; }
     run(file);
   }

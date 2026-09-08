@@ -234,6 +234,7 @@ window.META = (function () {
     ABOUT_DESCRIPTION: ABOUT_DESCRIPTION,
     absoluteUrl: absoluteUrl,
     poemUrl: poemUrl,
+    TRANSLATORS: TRANSLATORS,
     translationCodes: translationCodes,
     translationLangs: translationLangs,
     translationLangsOf: translationLangsOf,

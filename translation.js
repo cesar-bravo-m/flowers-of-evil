@@ -762,6 +762,9 @@
     }
     updateSources();
     updateMeta();
+    /* Anything with the old poem on screen -- the share dialog -- hears this and
+       lets go of it. */
+    document.dispatchEvent(new CustomEvent('flowers:poemchange', { detail: { id: id } }));
 
     // After switching poems via navigation, scroll viewport to top
     if (typeof window !== 'undefined' && window.scrollTo) {
@@ -1107,6 +1110,7 @@
     addRow([buildSourceCell('fr'), buildSourceCell(lang)], 'cell-source');
 
     initTranslationDropdown(translationLangs);
+    applyPairColors();
   }
 
   function switchTranslationLang(newLang) {
@@ -1156,6 +1160,7 @@
       }
     }
 
+    applyPairColors();
     if (syncDemoLang) syncDemoLang(newLang);
   }
 
@@ -1582,12 +1587,53 @@
     try { localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light'); } catch (e) {}
   }
 
+  /* --- All word pairs at once ----------------------------------------------
+     Hovering lights one pair; the toggle lights them all, each pair in a hue
+     of its own, so the two columns can be read against each other without
+     the mouse. A group's hue is fixed here on the span (`--pair-h`) and the
+     stylesheet only paints it while `body.word-pairs-on` is set, so the
+     assignment can run on every rebuild whether the toggle is on or not. */
+  var PAIRS_KEY = 'flowers-pairs';
+  var PAIR_HUES = [8, 40, 78, 150, 200, 250, 300];
+
+  function getStoredPairs() {
+    try { return localStorage.getItem(PAIRS_KEY) === 'on'; } catch (e) { return false; }
+  }
+
+  function applyPairColors() {
+    var comparison = document.querySelector('.comparison');
+    if (!comparison) return;
+    comparison.querySelectorAll('.word-group[data-wid]').forEach(function (span) {
+      var parts = span.getAttribute('data-wid').split('-');
+      var seg = parseInt(parts[0], 10) || 0;
+      var n = parseInt(parts[1], 10) || 0;
+      /* neighbours on a line differ, and so do the first groups of
+         neighbouring lines */
+      var hue = PAIR_HUES[(seg * 3 + n) % PAIR_HUES.length];
+      span.style.setProperty('--pair-h', String(hue));
+      span.classList.add('pair');
+    });
+  }
+
+  function setPairs(on) {
+    document.body.classList.toggle('word-pairs-on', !!on);
+    var btn = document.querySelector('.sidebar-control.pairs-toggle');
+    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    try { localStorage.setItem(PAIRS_KEY, on ? 'on' : 'off'); } catch (e) {}
+    if (on) applyPairColors();
+  }
+
   function initSidebarControls() {
     var fontDown = document.querySelector('.sidebar-control.font-down');
     var fontUp = document.querySelector('.sidebar-control.font-up');
     var themeBtn = document.querySelector('.sidebar-control.theme-toggle');
+    var pairsBtn = document.querySelector('.sidebar-control.pairs-toggle');
     setFontSize(getStoredFontSize());
     setTheme(getStoredTheme());
+    setPairs(getStoredPairs());
+    if (pairsBtn) pairsBtn.addEventListener('click', function () {
+      setPairs(!document.body.classList.contains('word-pairs-on'));
+    });
     if (fontDown) fontDown.addEventListener('click', function () {
       var cur = getStoredFontSize();
       var i = FONT_SIZES.indexOf(cur);
@@ -1876,7 +1922,24 @@
     availableTranslationLangs: availableTranslationLangs,
     rebuild: rebuildComparison,
     setPoemTitle: setPoemTitle,
-    focusLine: focusLine
+    focusLine: focusLine,
+    /* For share.js: the lines the reader has dragged over, as segment indexes
+       in order. Only the reader's own grid counts -- the home extract carries
+       `demo-` tids of its own, and off the poem view there is nothing to
+       share. */
+    getSelectedTids: function () {
+      if (getView() !== 'poem') return [];
+      var comparison = document.querySelector('.comparison');
+      if (!comparison) return [];
+      return getTidsFromSelection()
+        .filter(function (tid) {
+          return /^\d+$/.test(tid) && !!comparison.querySelector('.translation-segment[data-tid="' + tid + '"]');
+        })
+        .map(Number)
+        .sort(function (a, b) { return a - b; });
+    },
+    langLabel: function (code) { return COLUMN_TITLES[code] || code; },
+    poemHasLang: poemHasLang
   };
 
   /* --- Wiktionary lookup --- */

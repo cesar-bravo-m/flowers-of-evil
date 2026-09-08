@@ -75,11 +75,19 @@ of 133. `switchPoem()` fetches the poem first if it has to.
 
 **`search.js`** — Unified backend-free search over every loaded poem. Builds its index lazily from `window.POEMS` on first open: each title and line is "folded" once (lowercased, accents stripped, `œ`/`æ`/`ß` expanded, curly quotes and dashes normalised), so a query matches regardless of language or accents (`ame` → `âme`, `corazon` → `corazón`, `coeur` → `cœur`). A poem qualifies when every query term appears somewhere in it; title hits outrank line hits. Opens as a palette on Ctrl/Cmd+K, `/`, or either search trigger (`.sidebar-search` in the sidebar, `.topbar-search` on narrow screens), and reaches back into the page through `window.FLOWERS` (see below). Section labels in results are read from the sidebar markup rather than duplicating `POEM_SECTIONS`.
 
-**`window.FLOWERS`** — The only public surface of `translation.js`, exposed for `search.js` and `edit.js`: `switchPoem(id)`, `setTranslationLang(lang)` (drives the translation column as the dropdown would), `getTranslationLang()`, `focusLine(tid)` (scrolls a line into view in both columns and flashes it via `.translation-search-flash`), and `closeSidebar()` (dismisses the narrow-screen drawer so the palette is not covering an open drawer). Edit mode additionally uses `getPoemId()`, `getPoem()`, `availableTranslationLangs()`, `rebuild()` (tear the grid down and build it again from whatever `window.POEMS` now says) and `setPoemTitle()`. Every caller feature-detects, so a missing method degrades rather than throws.
+**`share.js`** — Share to Instagram. Paints the poem, or a run of its lines, in
+one or two of its languages onto a canvas at Instagram's sizes and hands the
+result to `navigator.share` where the browser can share files, or downloads it
+where it cannot. Reaches into the page only through `window.FLOWERS` and
+`window.META`. Loaded last. See *Sharing to Instagram* below.
+
+**`window.FLOWERS`** — The only public surface of `translation.js`, exposed for `search.js`, `edit.js` and `share.js`: `switchPoem(id)`, `setTranslationLang(lang)` (drives the translation column as the dropdown would), `getTranslationLang()`, `focusLine(tid)` (scrolls a line into view in both columns and flashes it via `.translation-search-flash`), and `closeSidebar()` (dismisses the narrow-screen drawer so the palette is not covering an open drawer). Edit mode additionally uses `getPoemId()`, `getPoem()`, `availableTranslationLangs()`, `rebuild()` (tear the grid down and build it again from whatever `window.POEMS` now says) and `setPoemTitle()`. Share uses `getSelectedTids()` (the lines under the reader's text selection, as segment indexes, and only from the reader's own grid — the home extract's `demo-` tids are left out), `langLabel(code)` (the dropdown's name for a translation) and `poemHasLang(lang)`. `switchPoem()` also dispatches `flowers:poemchange` on `document`, so anything holding the old poem on screen can let go of it. Every caller feature-detects, so a missing method degrades rather than throws.
 
 **`bravo.js`** — Folds the site's own translations into the ordinary data
 model. A poem file may end with a machine-managed block (`window.POEMS[id].bravo`)
-holding a `status`, a `title` and a `lines` array index-aligned with `segments`;
+holding a `status`, a `title`, a `lines` array index-aligned with `segments`
+and, where the pairs have been made, a `groups` map from a curated word
+group's `wid` to this translation's words (see *Edit mode*);
 this file copies those lines onto the segments as `en-bravo` / `es-bravo`, so
 everything downstream treats them as just another language. It also decides who
 sees what: `window.BRAVO.langsFor(id)` names only the translations marked
@@ -229,9 +237,12 @@ three lines on a phone.
 
 Everything persisted is a preference, on the reader's own device, under one of:
 `flowers-lang`, `flowers-theme`, `flowers-font-size`, `flowers-sidebar-hidden`,
-`flowers-sidebar-collapsed`, `flowers-privacy-ack`. Anything new that must
+`flowers-sidebar-collapsed`, `flowers-privacy-ack`, `flowers-share` (the card
+format and style last chosen in the share dialog), `flowers-pairs` (whether
+every word pair is coloured at once; see *Word-by-word highlighting*).
+Anything new that must
 survive a reload belongs in `localStorage` beside them — and in the About
-page's list, which names them for the reader. (A seventh key,
+page's list, which names them for the reader. (An eighth key,
 `flowers-edit-mode`, is written only by edit mode, which no reader can reach; it
 is therefore not in the About list, since a reader will never have one.)
 
@@ -439,6 +450,62 @@ Two rules when adding somebody else's translation:
   line *i*; a translation that condenses or expands lines would silently misalign
   the whole poem.
 
+## Sharing to Instagram
+
+Instagram has no address a page can hand a post to, so `share.js` makes the
+post itself: a card of the poem, or of a few of its lines, painted onto a
+canvas at Instagram's own sizes — *Post* 4:5 (1080×1350) and *Story* 9:16
+(1080×1920, with the top and bottom kept clear of Instagram's chrome). Where
+the browser can share files (`navigator.canShare({files})`, true on phones
+and on Safari) the button reads *Share…* and opens the share sheet, which
+lists Instagram; elsewhere it reads *Download* and saves the images. *Copy
+caption* puts the title, the author, the translator credit from
+`poem.sources`, the poem's URL from `META.poemUrl()` and a few hashtags on the
+clipboard.
+
+**Two ways in.** A floating button fixed to the foot of the window, on the
+right, carrying Instagram's glyph (`.poem-share`, hidden in the markup until
+`share.js` has found a canvas to draw on, and lifted above the privacy bar
+while that is up) opens the dialog with the whole poem. A drag over the verse brings up a small floating *Share*
+under the selection (`.share-selection-btn`), which opens it with those lines;
+it reads the selection through `FLOWERS.getSelectedTids()` and swallows its
+own `mousedown` so the press does not collapse the selection first. The
+dialog (`.share-overlay`, built once and toggled with `[hidden]` like the
+palette; `Escape`, the scrim and `flowers:poemchange` close it; ≤700px it is a
+bottom sheet with the card first) offers a from/to line range, the poem's
+languages as checkboxes capped at two (`META.translationCodes()`, so drafts
+never appear), the format, and a style: *Paper* — the site's own look, with
+the grain and burnt edge from `assets/paper.png` and `assets/burnt-edge*.png`,
+following the dark theme — or *Night*, one of the six photographs in
+`assets/nightscapes/` under a dark veil (`tools/build-textures.mjs` generates
+the textures; `CREDITS.md` names the photographs). Format and style are
+remembered under `flowers-share`; the range, the languages and the photo are
+not, since the poem changes the right answer every time.
+
+**Layout.** Two languages are set one stanza after the other — French, then
+the translation in italic with a rule to its left — never side by side: an
+alexandrine wants the whole 888px measure at any size a feed can read.
+`layout()` tries the verse at 34px down to 26px and keeps the largest size
+that puts everything on one card, else the largest at which every stanza sits
+whole on some card, else 26px with stanzas allowed to break. A poem longer
+than a card becomes a carousel of identically sized, numbered cards; the
+dialog says how many and warns above ten. Wrapped verse lines take a hanging
+indent, and French spacing punctuation (`!`, `?`, `:`, `;`, `»`) stays with
+its word. Part numerals are drawn above the first stanza of a part, when that
+stanza is in range.
+
+**Paper cards** draw the burnt edge as a 9-slice frame (`EDGE_SLICE` must
+match `SLICE` in the generator). The light tile's paper is white with the
+grain baked in, so the frame is filled white in the middle and multiplied by
+the paper colour, then cut back to the tile's own alpha so the tear survives.
+Off `file://` a drawn image taints the canvas and `toBlob` throws, so
+`probeTextures()` tries once and, when it fails, paints a flat card and hides
+*Night* — the feature stays, the textures go. Cards with a photograph behind
+them are saved as JPEG; paper cards as PNG.
+
+`tools/check-pages.mjs` skips `share.js` when it runs a page's scripts under
+`node:vm`, the way it skips the other browser-only files.
+
 ## Edit mode
 
 Writing a translation of your own, line against line. It exists only on
@@ -503,9 +570,17 @@ many written lines miss it, and a *Syllables* toggle beside *Reference* turns
 the whole thing off. None of it reaches `payload()` — counts are presentational,
 and the save format is untouched.
 
-**Out of scope:** `wordGroups`. A Bravo translation has none, so word-level
-hover is inert for it; line-level hover still pairs the columns. One editing tab
-at a time — two tabs on one poem would race on the same file.
+**Word pairs.** The editor does not make them, but a block may carry a
+`groups` map — the curated group's `wid` to the words of this translation
+that answer it — and `bravo.js` folds each onto its `wordGroups` entry under
+the language code, so word-level hover and the all-pairs toggle work for a
+Bravo translation exactly as for Scott or Marquina. They are paired by hand,
+against the poem's own line, and written into the block (Bénédiction's
+Spanish has 273 of its 282 groups paired; the rest have no counterpart in
+that line, an enjambment having moved the words). A save keeps the pairs on
+file and drops only those whose words no longer occur in the edited line. A
+translation without a `groups` map simply has inert word hover, as before.
+One editing tab at a time — two tabs on one poem would race on the same file.
 
 ## Syllable counting
 
@@ -563,6 +638,18 @@ translation, so hovering either side lights up both. A group carries `wid`
 (`"<segmentId>-<n>"`), `fr`, and whichever of `en` / `es` genuinely corresponds
 — Scott recasts images often enough that many groups are Spanish-only. Poems
 with no translation have no groups at all.
+
+**All pairs at once.** The last button in `.sidebar-controls` (`.pairs-toggle`,
+`aria-pressed`) sets `body.word-pairs-on`, under which every `.word-group` in
+the reader is painted in a hue of its own, the same hue on both halves of a
+pair, so the columns can be read against each other without hovering.
+`applyPairColors()` in `translation.js` writes the hue onto each span as
+`--pair-h` (from the group's `wid`, so neighbours on a line and the first
+groups of neighbouring lines differ) and runs after every build and language
+switch whether the toggle is on or not; only the stylesheet decides whether
+the hue shows. Hovering a pair while the mode is on still singles it out, with
+an outline. The choice is remembered under `flowers-pairs`. The home extract
+is left alone: the toggle is a reader's control.
 
 `renderWordGroupContent()` locates a group by `indexOf` on the line, claiming
 character ranges as it goes. Two consequences when adding groups by hand:

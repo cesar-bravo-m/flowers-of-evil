@@ -11,11 +11,14 @@
  *     };
  *
  * `lines` is index-aligned with `segments`, so line i of the translation is
- * line i of the poem; an untranslated line is the empty string. This file
- * folds those blocks into the ordinary data model, so nothing downstream needs
- * to know they arrived by a different route: a Bravo translation is just
- * another language key on a segment, and renders, highlights, searches and
- * credits itself exactly as `en` and `es` do.
+ * line i of the poem; an untranslated line is the empty string. A block may
+ * also carry `groups`, a map from a curated word group's `wid` to the words
+ * of this translation that answer it, which is folded onto that group under
+ * the language code the way `en` / `es` sit on it. This file folds those
+ * blocks into the ordinary data model, so nothing downstream needs to know
+ * they arrived by a different route: a Bravo translation is just another
+ * language key on a segment, and renders, highlights, searches and credits
+ * itself exactly as `en` and `es` do.
  *
  * Visibility is decided here rather than by withholding the data. A draft is
  * folded in like any other translation, but `langsFor()` names only the
@@ -70,10 +73,17 @@
 
     LANGS.forEach(function (lang) {
       var e = entry(poemId, lang);
+      var groups = (e && e.groups) || {};
       for (var i = 0; i < segments.length; i++) {
         var line = e && e.lines[i];
         if (line) segments[i][lang] = line;
         else delete segments[i][lang];
+        var wordGroups = segments[i].wordGroups || [];
+        for (var g = 0; g < wordGroups.length; g++) {
+          var words = line && groups[wordGroups[g].wid];
+          if (words) wordGroups[g][lang] = words;
+          else delete wordGroups[g][lang];
+        }
       }
       if (poem.titles) {
         if (e && e.title) poem.titles[lang] = e.title;

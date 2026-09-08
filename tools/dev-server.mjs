@@ -110,6 +110,13 @@ function renderBlock(poemId, bravo) {
     out += '    lines: [\n';
     for (const line of e.lines) out += `      ${jsString(line)},\n`;
     out += '    ],\n';
+    /* word pairs: the curated group's wid -> this translation's words */
+    const wids = e.groups ? Object.keys(e.groups) : [];
+    if (wids.length) {
+      out += '    groups: {\n';
+      for (const wid of wids) out += `      ${jsString(wid)}: ${jsString(e.groups[wid])},\n`;
+      out += '    },\n';
+    }
     out += '  },\n';
   }
   out += '};\n';
@@ -164,6 +171,18 @@ function saveTranslation({ poemId, lang, title, lines, status }) {
     delete bravo[lang];                       /* an abandoned draft leaves no stub */
   } else {
     bravo[lang] = { status, title: cleanTitle, lines: cleaned };
+    /* Word pairs are not edited here, so the ones already on file are kept —
+       except where the line they belong to no longer contains their words,
+       which is what a pair going stale looks like. */
+    const had = poem.bravo && poem.bravo[lang] && poem.bravo[lang].groups;
+    if (had) {
+      const groups = {};
+      for (const [wid, text] of Object.entries(had)) {
+        const line = cleaned[Number(wid.split('-')[0])] || '';
+        if (text && line.includes(text)) groups[wid] = text;
+      }
+      if (Object.keys(groups).length) bravo[lang].groups = groups;
+    }
   }
 
   const cut = src.indexOf(MARKER);

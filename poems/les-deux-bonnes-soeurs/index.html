@@ -315,6 +315,7 @@
       <button type="button" class="sidebar-control font-down" aria-label="Decrease font size" title="Decrease font size">A−</button>
       <button type="button" class="sidebar-control font-up" aria-label="Increase font size" title="Increase font size">A+</button>
       <button type="button" class="sidebar-control theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+      <button type="button" class="sidebar-control pairs-toggle" aria-pressed="false" aria-label="Highlight all word pairs" title="Highlight all word pairs"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.5" y="3" width="7" height="4" rx="1.2"/><rect x="7.5" y="9" width="7" height="4" rx="1.2"/></svg></button>
     </div>
   </aside>
 
@@ -366,6 +367,14 @@
       <div class="cell cell-fr cell-source row-last column-left" data-lang="fr" role="cell" style="grid-row: 9; grid-column: 1;"><div class="column-source"><span class="column-source-label">Source</span><span class="column-source-text"><a href="https://fr.wikisource.org/wiki/Les_Fleurs_du_mal_%281861%29/Les_Deux_Bonnes_S%C5%93urs" target="_blank" rel="noopener noreferrer">Les Fleurs du mal (1861) — French Wikisource</a></span></div></div>
       <div class="cell cell-es cell-source cell-translation row-last column-right" data-lang="es" role="cell" style="grid-row: 9; grid-column: 2;"><div class="column-source"><span class="column-source-label">Translation</span><span class="column-source-text"><a href="https://es.wikisource.org/wiki/Las_dos_buenas_hermanas" target="_blank" rel="noopener noreferrer">Traducido por Eduardo Marquina, «Las flores del mal» (1905)</a></span></div></div>
       </main>
+    </div>
+
+    <!-- Share: share.js paints the poem, or a run of its lines, onto a card
+         for Instagram. A floating button at the foot of the window, carrying
+         Instagram's glyph; it ships hidden and is shown only once the script
+         has found a canvas to draw on. The label is read, not seen. -->
+    <div class="poem-share">
+      <button type="button" class="poem-share-btn" aria-haspopup="dialog" hidden><svg class="poem-share-glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4"/><circle class="poem-share-dot" cx="17.4" cy="6.6" r="1.15"/></svg><span class="poem-share-label"><span class="lang-en" lang="en">Share on Instagram</span><span class="lang-es" lang="es">Compartir en Instagram</span></span></button>
     </div>
 
     <nav class="poem-nav" aria-label="Previous, random and next poem">
@@ -430,5 +439,6 @@
   <script defer src="../../meta.js"></script>
   <script defer src="../../translation.js"></script>
   <script defer src="../../search.js"></script>
+  <script defer src="../../share.js"></script>
 </body>
 </html>
