@@ -115,3 +115,30 @@ window.POEMS["la-muse-malade"] = {
     { type: 'stanza', lines: 3 },
   ],
 };
+
+/* --- Translations by Bravo ---------------------------------------------
+   Machine-managed by localhost edit mode (tools/dev-server.mjs). Everything
+   from this marker to the end of the file is rewritten wholesale on save.
+   Do not hand-edit below this line, and do not append anything after it. */
+window.POEMS["la-muse-malade"].bravo = {
+  "es-bravo": {
+    status: "complete",
+    title: "La Musa enferma",
+    lines: [
+      "¿Qué tienes, pues, esta mañana?, mi pobre musa",
+      "Tus ojos vacíos están llenos de visiones nocturnas,",
+      "Nuevamente veo reflejadas sobre tu complexión,",
+      "La locura y la angustia, frías y taciturnas.",
+      "El súcubo verdoso y el rosado duende,",
+      "¿Te han vertido el miedo y el amor de sus urnas?",
+      "La pesadilla con un puño despótico y rebelde;",
+      "¿Te ha ahogado en el fondo de un fabuloso Minturno?",
+      "Yo quisiera que exhalando el perfume de la salud",
+      "Tu seno de pensamientos fuertes fuera siempre frecuentado,",
+      "Y que tu sangre cristiana corriera en oleadas rítmicas,",
+      "Como los sones numerosos de las sílabas antiguas,",
+      "Donde reinan vez a vez el padre de las canciones,",
+      "Febo, y el gran Pan, el señor de las mieses.",
+    ],
+  },
+};
