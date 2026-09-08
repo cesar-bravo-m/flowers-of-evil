@@ -564,7 +564,7 @@ window.POEMS["benediction"] = {
   ],
 };
 
-/* --- Translations by Bravo ---------------------------------------------
+/* --- Translations by Bravo, and the backdrop ----------------------------
    Machine-managed by localhost edit mode (tools/dev-server.mjs). Everything
    from this marker to the end of the file is rewritten wholesale on save.
    Do not hand-edit below this line, and do not append anything after it. */
@@ -595,7 +595,7 @@ window.POEMS["benediction"].bravo = {
       "Hogueras consagradas a los crímenes maternales.",
       "Sin embargo, bajo la tutela de un Ángel invisible,",
       "El Niño desheredado se embriaga del sol,",
-      "Y en todo lo que bebe y en todo lo comestible",
+      "Y en todo lo comestible",
       "Encuentra ambrosía y néctar arrebol.",
       "Él juega con el viento, conversa con el celaje,",
       "Y se embriaga cantando del camino de la cruz;",
@@ -603,16 +603,16 @@ window.POEMS["benediction"].bravo = {
       "Llora al verlo feliz como un pájaro en plena luz.",
       "Todos aquellos que él quiere amar lo observan con espanto,",
       "O bien, envalentonados por su tranquilidad,",
-      "Buscan al que sabrá arrancarle un llanto,",
+      "Buscan arrancarle un llanto,",
       "Y ensayan contra él su ferocidad.",
       "En el pan y el vino destinados a su boca",
       "Ellos mezclan ceniza con impuros escupitajos;",
-      "Con hipocresía desechan lo que él toca,",
+      "Con hipocresía desechan todo lo que él toca,",
       "Y se acusan de haber puesto sus pies en sus pasos.",
       "Su mujer va gritando por las plazas públicas:",
       "«Puesto que halla en mí belleza suficiente para adorarme,",
       "Haré el trabajo de los ídolos antiguos,",
-      "Y como ellos quiero que hacerme redorar.",
+      "Y como ellos quiero redorarme.",
       "¡Y me embriagaré de nardo, de incienso, de mirra,",
       "De genuflexiones, de carne y de vinos,",
       "Para saber si puedo de un corazón que me admira",
@@ -626,12 +626,12 @@ window.POEMS["benediction"].bravo = {
       "Y, para saciar mi bestia favorita,",
       "¡Se lo arrojaré al suelo con desdén sereno!»",
       "Hacia el Cielo, donde su ojo ve un trono espléndido,",
-      "El Poeta sereno eleva sus brazos piadosos,",
+      "El Poeta tranquilo eleva sus brazos piadosos,",
       "Y los vastos destellos de su espíritu lúcido",
       "Le ocultan el aspecto de pueblos furiosos:",
       "— «Bendito seas, mi Dios, que das en tu clemencia",
       "El dolor como santa cura de nuestras inmundicias",
-      "Y como la más pura y la mejor esencia",
+      "Y como la más pura y mejor esencia",
       "¡Que a los fuertes prepara para santas delicias!",
       "Yo sé que un lugar para el Poeta guardarás",
       "En las filas benditas de las santas Legiones,",
@@ -733,7 +733,6 @@ window.POEMS["benediction"].bravo = {
       "21-0": "El Niño",
       "21-1": "desheredado",
       "21-2": "se embriaga del sol",
-      "22-0": "bebe",
       "22-1": "comestible",
       "23-0": "ambrosía",
       "23-1": "néctar",
@@ -794,7 +793,6 @@ window.POEMS["benediction"].bravo = {
       "38-3": "antiguos",
       "39-0": "Y como",
       "39-1": "ellos",
-      "39-2": "hacerme redorar",
       "40-0": "me embriagaré",
       "40-1": "nardo",
       "40-2": "incienso",
@@ -842,7 +840,6 @@ window.POEMS["benediction"].bravo = {
       "52-3": "ve",
       "52-4": "un trono espléndido",
       "53-0": "El Poeta",
-      "53-1": "sereno",
       "53-2": "eleva",
       "53-3": "sus brazos",
       "53-4": "piadosos",
@@ -860,7 +857,6 @@ window.POEMS["benediction"].bravo = {
       "57-2": "cura",
       "57-3": "nuestras inmundicias",
       "58-0": "Y como",
-      "58-1": "la mejor",
       "58-2": "la más pura",
       "58-3": "esencia",
       "59-0": "prepara",
@@ -926,4 +922,8 @@ window.POEMS["benediction"].bravo = {
       "75-3": "dolor",
     },
   },
+};
+
+window.POEMS["benediction"].backdrop = {
+  page: { image: "assets/nightscapes/stormy-sea.jpg", opacity: 0.18 },
 };
