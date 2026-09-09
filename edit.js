@@ -17,11 +17,28 @@
  * the whole translation is written into the poem's own `.js` file as a draft.
  * A draft is invisible to a reader — only "Mark complete" puts it in the
  * language dropdown, and it is refused while any line is still blank.
+ *
+ * The second thing it authors is a backdrop: a photograph behind the window
+ * and another behind the verse card, per poem and the same in every language.
+ * That one has a panel of its own rather than a place in the bar, because the
+ * editor hides the card the backdrop is for — see *The backdrop panel* below.
  */
 (function () {
   'use strict';
 
   var API = '/api/edit';
+  /* a generated poem page sits at /poems/<id>/, so an asset path needs the
+     same join every other one on the page gets. (Not `BASE`, which is already
+     the plain language each Bravo code translates into.) DOC_URL is the page
+     as it was loaded: switchPoem() pushes a new address, and a src set after
+     that would otherwise resolve against the poem's directory. */
+  var SITE_BASE = document.documentElement.getAttribute('data-base') || '';
+  var DOC_URL = window.location.href;
+
+  function assetUrl(path) {
+    try { return new URL(SITE_BASE + path, DOC_URL).href; }
+    catch (e) { return SITE_BASE + path; }
+  }
   var MODE_KEY = 'flowers-edit-mode';
   var AUTOSAVE_MS = 1500;
 
@@ -41,6 +58,23 @@
     status: '',
     error: '',
     git: null
+  };
+
+  /* The backdrop panel keeps its own small state, and its own debounce. The
+     one thing it shares with the editor is `inFlight`: both rewrite the tail
+     of the same file, so a backdrop save and a translation save must never be
+     in the air at once. */
+  var BACKDROP_LAYERS = ['page', 'poem'];
+  var BACKDROP_LABELS = { page: 'Page', poem: 'Poem' };
+  var BACKDROP_DEFAULT = { page: 0.18, poem: 0.3 };
+
+  var bd = {
+    open: false,
+    poemId: null,
+    layers: { page: null, poem: null },
+    images: null,              /* from /api/edit/images, fetched once */
+    dirty: false,
+    timer: null
   };
 
   var els = {};
@@ -570,6 +604,7 @@
 
   function setMode(on) {
     if (on === state.on) return;
+    if (on) setBackdropMode(false);   /* one mode at a time */
     state.on = on;
     store(on ? '1' : '0');
     document.body.classList.toggle('edit-mode', on);
@@ -588,6 +623,272 @@
     }
   }
 
+  /* --- The backdrop panel -------------------------------------------------- */
+
+  /* A poem may carry a photograph behind the window and another behind the
+     verse card. Neither is a translation, so neither belongs in the bar above
+     the editor — and the editor hides `.comparison-wrap` anyway, which would
+     leave you choosing a backdrop for a card you cannot see. So this is a mode
+     of its own, over the reader's real view: every change is applied to the
+     page you are looking at before it is written, and the two modes are
+     mutually exclusive.
+
+     The file format and the endpoint are in tools/dev-server.mjs; the drawing
+     is four custom properties read by `body::before` and
+     `.comparison::before` (styles.css). */
+
+  function backdropOf(poemId) {
+    var p = (window.POEMS || {})[poemId];
+    var saved = (p && p.backdrop) || {};
+    var out = {};
+    BACKDROP_LAYERS.forEach(function (which) {
+      var layer = saved[which];
+      out[which] = layer && layer.image
+        ? { image: layer.image, opacity: layer.opacity == null ? 1 : layer.opacity }
+        : null;
+    });
+    return out;
+  }
+
+  function backdropPayload() {
+    return { poemId: bd.poemId, page: bd.layers.page, poem: bd.layers.poem };
+  }
+
+  /* Show what is chosen, saved or not. */
+  function previewBackdrop() {
+    if (window.FLOWERS && window.FLOWERS.applyBackdrop) {
+      window.FLOWERS.applyBackdrop({ page: bd.layers.page, poem: bd.layers.poem });
+    }
+  }
+
+  function setBackdropNote(text, kind) {
+    if (!els.bdNote) return;
+    els.bdNote.textContent = text;
+    els.bdNote.className = 'edit-note' + (kind ? ' edit-note--' + kind : '');
+  }
+
+  function scheduleBackdropSave() {
+    window.clearTimeout(bd.timer);
+    bd.dirty = true;
+    setBackdropNote('unsaved', 'pending');
+    bd.timer = window.setTimeout(flushBackdrop, AUTOSAVE_MS);
+  }
+
+  function flushBackdrop() {
+    window.clearTimeout(bd.timer);
+    if (!bd.dirty || !bd.poemId) return Promise.resolve();
+    bd.dirty = false;
+
+    var poemId = bd.poemId;
+    var body = backdropPayload();
+    setBackdropNote('saving…', 'pending');
+
+    function run() {
+      return api('/backdrop', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      }).then(function (saved) {
+        writeBackBackdrop(poemId, saved.backdrop);
+        if (bd.poemId !== poemId) return;
+        var n = BACKDROP_LAYERS.filter(function (k) { return saved.backdrop[k]; }).length;
+        setBackdropNote(n ? 'saved · ' + n + (n === 1 ? ' layer' : ' layers') : 'saved · none', 'ok');
+      }).catch(function (e) {
+        if (bd.poemId === poemId) setBackdropNote(e.message, 'error');
+      });
+    }
+
+    /* the same queue the translation saves use — one writer at a time */
+    inFlight = (inFlight || Promise.resolve()).then(run, run);
+    return inFlight;
+  }
+
+  /* Keep window.POEMS in step with the file, so leaving the panel — or a later
+     rebuild of the grid — shows what was written rather than what was there. */
+  function writeBackBackdrop(poemId, saved) {
+    var p = (window.POEMS || {})[poemId];
+    if (!p) return;
+    if (saved && (saved.page || saved.poem)) p.backdrop = saved;
+    else delete p.backdrop;
+  }
+
+  function chooseImage(which, image) {
+    if (!image) {
+      bd.layers[which] = null;
+    } else {
+      var had = bd.layers[which];
+      bd.layers[which] = { image: image, opacity: had ? had.opacity : BACKDROP_DEFAULT[which] };
+    }
+    syncBackdropPanel();
+    previewBackdrop();
+    scheduleBackdropSave();
+  }
+
+  function setOpacity(which, value) {
+    var layer = bd.layers[which];
+    if (!layer) return;
+    layer.opacity = Math.round(Math.min(1, Math.max(0, value)) * 100) / 100;
+    syncBackdropPanel();
+    previewBackdrop();
+    scheduleBackdropSave();
+  }
+
+  /* One row per layer: a strip of thumbnails with None at its head, and the
+     slider that says how far through the photograph the page shows. */
+  function buildBackdropRow(which) {
+    var row = el('div', 'backdrop-row');
+    row.appendChild(el('span', 'backdrop-row-label', BACKDROP_LABELS[which]));
+
+    var strip = el('div', 'backdrop-strip');
+    strip.setAttribute('role', 'radiogroup');
+    strip.setAttribute('aria-label', BACKDROP_LABELS[which] + ' backdrop');
+    strip.addEventListener('change', function (e) {
+      if (e.target && e.target.name === 'backdrop-' + which) chooseImage(which, e.target.value);
+    });
+    els['bdStrip_' + which] = strip;
+    row.appendChild(strip);
+
+    var slider = el('label', 'backdrop-opacity');
+    var range = document.createElement('input');
+    range.type = 'range';
+    range.min = '0';
+    range.max = '1';
+    range.step = '0.01';
+    range.value = String(BACKDROP_DEFAULT[which]);
+    range.disabled = true;
+    range.setAttribute('aria-label', BACKDROP_LABELS[which] + ' backdrop opacity');
+    range.addEventListener('input', function () { setOpacity(which, Number(range.value)); });
+    var pct = el('span', 'backdrop-pct', '—');
+    slider.appendChild(range);
+    slider.appendChild(pct);
+    els['bdRange_' + which] = range;
+    els['bdPct_' + which] = pct;
+    row.appendChild(slider);
+
+    return row;
+  }
+
+  /* The strip is filled once the server has said what is on disk. Until then
+     each row holds its None chip alone, so the panel opens rather than waits. */
+  function fillBackdropStrips() {
+    BACKDROP_LAYERS.forEach(function (which) {
+      var strip = els['bdStrip_' + which];
+      if (!strip) return;
+      strip.innerHTML = '';
+      strip.appendChild(backdropChip(which, null));
+      (bd.images || []).forEach(function (image) {
+        strip.appendChild(backdropChip(which, image));
+      });
+    });
+    syncBackdropPanel();
+  }
+
+  /* The radio is the control and the label is the target — the same shape the
+     share dialog's photo picker uses, and the reason the keyboard and a screen
+     reader get a real radio group out of a row of pictures. */
+  function backdropChip(which, image) {
+    var chip = el('label', 'backdrop-photo' + (image ? '' : ' backdrop-photo--none'));
+    var input = document.createElement('input');
+    input.type = 'radio';
+    input.name = 'backdrop-' + which;
+    input.value = image ? image.path : '';
+    chip.appendChild(input);
+
+    if (!image) {
+      chip.appendChild(el('span', 'backdrop-photo-none', 'None'));
+      chip.title = 'No backdrop';
+      return chip;
+    }
+
+    var img = document.createElement('img');
+    img.src = assetUrl(image.thumb || image.path);
+    img.alt = image.label;
+    img.loading = 'lazy';
+    chip.appendChild(img);
+    chip.title = image.label;
+    return chip;
+  }
+
+  function syncBackdropPanel() {
+    BACKDROP_LAYERS.forEach(function (which) {
+      var layer = bd.layers[which];
+      var strip = els['bdStrip_' + which];
+      if (strip) {
+        strip.querySelectorAll('input[type="radio"]').forEach(function (input) {
+          var on = input.value === (layer ? layer.image : '');
+          input.checked = on;
+          input.parentNode.classList.toggle('is-on', on);
+        });
+      }
+      var range = els['bdRange_' + which];
+      if (range) {
+        range.disabled = !layer;
+        range.value = String(layer ? layer.opacity : BACKDROP_DEFAULT[which]);
+      }
+      var pct = els['bdPct_' + which];
+      if (pct) pct.textContent = layer ? Math.round(layer.opacity * 100) + '%' : '—';
+    });
+  }
+
+  function buildBackdropPanel() {
+    var panel = el('div', 'backdrop-panel');
+    panel.setAttribute('hidden', '');
+    panel.setAttribute('aria-label', 'Backdrop');
+
+    var head = el('div', 'backdrop-head');
+    head.appendChild(el('span', 'backdrop-heading', 'Backdrop'));
+    els.bdFile = el('span', 'edit-file', '');
+    head.appendChild(els.bdFile);
+    els.bdNote = el('span', 'edit-note', '');
+    head.appendChild(els.bdNote);
+    var close = el('button', 'edit-btn edit-btn--quiet', 'Done');
+    close.type = 'button';
+    close.addEventListener('click', function () { setBackdropMode(false); });
+    head.appendChild(close);
+    panel.appendChild(head);
+
+    BACKDROP_LAYERS.forEach(function (which) { panel.appendChild(buildBackdropRow(which)); });
+    return panel;
+  }
+
+  /* Point the panel at whatever poem is open now. */
+  function loadPoemIntoBackdrop() {
+    bd.poemId = window.FLOWERS ? window.FLOWERS.getPoemId() : window.CURRENT_POEM_ID;
+    bd.layers = backdropOf(bd.poemId);
+    bd.dirty = false;
+    syncBackdropPanel();
+    var chosen = BACKDROP_LAYERS.filter(function (k) { return bd.layers[k]; }).length;
+    setBackdropNote(chosen ? 'saved · ' + chosen + (chosen === 1 ? ' layer' : ' layers') : 'no backdrop yet',
+      chosen ? 'ok' : '');
+
+    api('/poem?id=' + encodeURIComponent(bd.poemId))
+      .then(function (info) { els.bdFile.textContent = info.file; })
+      .catch(function (e) { setBackdropNote(e.message, 'error'); });
+  }
+
+  function setBackdropMode(on) {
+    if (on === bd.open) return;
+    bd.open = on;
+    document.body.classList.toggle('backdrop-mode', on);
+    els.bdToggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+    els.bdToggle.title = on ? 'Close the backdrop panel' : 'Choose this poem\'s backdrop';
+    els.bdPanel[on ? 'removeAttribute' : 'setAttribute']('hidden', '');
+
+    if (!on) { flushBackdrop(); return; }
+
+    setMode(false);                   /* the editor hides the card this is for */
+    if (document.body.getAttribute('data-view') !== 'poem' && window.FLOWERS) {
+      window.FLOWERS.switchPoem(window.CURRENT_POEM_ID);
+    }
+    loadPoemIntoBackdrop();
+
+    if (bd.images) return;
+    api('/images').then(function (res) {
+      bd.images = res.images || [];
+      fillBackdropStrips();
+    }).catch(function (e) { setBackdropNote(e.message, 'error'); });
+  }
+
   /* --- Wiring ------------------------------------------------------------- */
 
   function mount(status) {
@@ -602,6 +903,19 @@
     els.toggle.addEventListener('click', function () { setMode(!state.on); });
     if (controls) controls.appendChild(els.toggle);
 
+    els.bdToggle = el('button', 'sidebar-control backdrop-toggle-btn');
+    els.bdToggle.type = 'button';
+    els.bdToggle.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">'
+      + '<rect x="1.5" y="3" width="13" height="10" rx="1.4"/>'
+      + '<circle class="backdrop-glyph-sun" cx="5.4" cy="6.4" r="1.3"/>'
+      + '<path class="backdrop-glyph-hill" d="M2.2 12.4 6 8.2l2.5 2.8 2-2.1 3.3 3.5z"/>'
+      + '</svg>';
+    els.bdToggle.setAttribute('aria-label', 'Choose this poem\'s backdrop');
+    els.bdToggle.setAttribute('aria-pressed', 'false');
+    els.bdToggle.title = 'Choose this poem\'s backdrop';
+    els.bdToggle.addEventListener('click', function () { setBackdropMode(!bd.open); });
+    if (controls) controls.appendChild(els.bdToggle);
+
     /* no heading of its own: the page header already names the poem, and the
        bar names the file the text is going into */
     var view = el('div', 'edit-view');
@@ -613,6 +927,21 @@
     if (wrap && wrap.parentNode) wrap.parentNode.insertBefore(view, wrap);
     else document.querySelector('.page').appendChild(view);
 
+    /* the panel is fixed to the foot of the window, over the reader's own view */
+    els.bdPanel = buildBackdropPanel();
+    document.body.appendChild(els.bdPanel);
+    fillBackdropStrips();
+
+    /* switchPoem() says so directly; the hashchange below is the older route
+       and only the editor still needs it. */
+    document.addEventListener('flowers:poemchange', function () {
+      if (!bd.open) return;
+      var next = window.FLOWERS ? window.FLOWERS.getPoemId() : window.CURRENT_POEM_ID;
+      if (next === bd.poemId) return;
+      flushBackdrop();               /* still holding the poem we are leaving */
+      loadPoemIntoBackdrop();
+    });
+
     /* the sidebar, prev/next and search all still work; follow them */
     window.addEventListener('hashchange', function () {
       if (!state.on) return;
@@ -623,16 +952,27 @@
     });
 
     document.addEventListener('keydown', function (e) {
-      if (!state.on) return;
+      if (!state.on) {
+        if (bd.open && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
+          e.preventDefault();
+          flushBackdrop();
+        }
+        return;
+      }
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
         e.preventDefault();
         flush();
       }
     });
 
+    document.addEventListener('keydown', function (e) {
+      if (bd.open && e.key === 'Escape') setBackdropMode(false);
+    });
+
     /* a pending autosave must not be lost to a reload */
     window.addEventListener('beforeunload', function () {
       flush();                        /* a pending autosave must survive a reload */
+      flushBackdrop();
     });
 
     if (stored() === '1') setMode(true);

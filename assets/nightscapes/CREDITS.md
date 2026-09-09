@@ -1,6 +1,6 @@
 # Nightscapes
 
-The photographs behind the *Night* share card (share.js). All sixteen are from
+The photographs behind the *Night* share card (share.js). All twenty are from
 Pexels, under the [Pexels License](https://www.pexels.com/license/): free to
 use, no attribution required. Credit is given here anyway. Each was downloaded
 from the Pexels CDN and scaled to 1920 px on the long side; nothing else was
@@ -26,6 +26,14 @@ the share dialog.
 | `rose-petals.jpg` | James Lee | Red Rose in Dark Room | https://www.pexels.com/photo/4077709/ |
 | `cemetery-fog.jpg` | KoolShooters | A Foggy Cemetery | https://www.pexels.com/photo/6494460/ |
 | `cemetery-gate.jpg` | KoolShooters | Metal Gate in the Cemetery | https://www.pexels.com/photo/6494920/ |
+| `moon-bird.jpg` | Martin Lopez | Low Angle Photo of Bird Flying during Night | https://www.pexels.com/photo/2314308/ |
+| `church-candle.jpg` | Esra Erdem | Holy Bible in Church | https://www.pexels.com/photo/19130939/ |
+| `raven.jpg` | Boys in Bristol Photography | Portrait of a Raven Perching on a Branch | https://www.pexels.com/photo/20922423/ |
+| `cathedral-night.jpg` | Ben Kirby | A Gothic Cathedral at Night | https://www.pexels.com/photo/10965017/ |
+
+The same twenty are what the backdrop picker in edit mode offers, behind the
+page or behind the verse — but that one asks the dev server what is in
+`assets/` rather than reading a list, so it needs no step of its own.
 
 `share.js` opens on one per poem (a hash of the poem id), and the thumbnails
 in the share dialog let the reader pick another. Adding a photograph means

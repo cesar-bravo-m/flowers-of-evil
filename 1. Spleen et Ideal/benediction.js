@@ -925,5 +925,5 @@ window.POEMS["benediction"].bravo = {
 };
 
 window.POEMS["benediction"].backdrop = {
-  page: { image: "assets/nightscapes/stormy-sea.jpg", opacity: 0.18 },
+  poem: { image: "assets/nightscapes/pexels-dav-h-58867999-7952409.jpg", opacity: 0.3 },
 };

@@ -1111,6 +1111,69 @@
 
     initTranslationDropdown(translationLangs);
     applyPairColors();
+    applyBackdrop();
+  }
+
+  /* --- Backdrops --- */
+
+  /* A poem may carry a photograph to lie behind the window, another to lie
+     behind the verse card, or neither. Edit mode picks them and writes them
+     into the poem's own file (see `backdrop` there); `body::before` and
+     `.comparison::before` draw them, and read nothing but the four custom
+     properties set here — so applying a backdrop is setting four strings, and
+     a poem without one leaves the page exactly as it always was.
+
+     Called from buildComparison(), which is the one place every route into a
+     poem passes through: first paint, switchPoem(), rebuild, and a change of
+     translation language. Called with an argument instead, it shows a backdrop
+     that is not on file yet, which is how the sliders in edit mode move the
+     real page under your hand. */
+  function applyBackdrop(backdrop) {
+    if (backdrop === undefined) {
+      var poem = (window.POEMS || {})[window.CURRENT_POEM_ID];
+      backdrop = poem && poem.backdrop;
+    }
+    backdrop = backdrop || {};
+    setBackdropLayer(document.body, 'page', backdrop.page);
+    setBackdropLayer(document.querySelector('.comparison'), 'poem', backdrop.poem);
+    /* the card goes opaque over a photograph — see body.page-backdrop */
+    document.body.classList.toggle('page-backdrop',
+      !!(backdrop.page && backdrop.page.image));
+  }
+
+  /* The path is stored relative to the site root, as every path the poem files
+     carry is, so it takes the same `data-base` join a poem's own src gets —
+     and then one step more. A url() inside a custom property is not resolved
+     against the element that declares it but against the stylesheet that uses
+     it, which here is styles.css at the site root; rather than depend on which
+     of the two an engine picks, this makes the URL absolute and leaves nothing
+     to resolve — against DOC_URL rather than document.baseURI, which follows
+     the address bar: after a pushState from / to a poem the two differ, and
+     resolving `assets/...` against the bar asks for it under /poems/<id>/. */
+  function setBackdropLayer(node, which, layer) {
+    if (!node) return;
+    var image = layer && layer.image;
+    if (!image) {
+      /* Removed, not blanked. The default for a layer a poem does not name
+         lives once, on `:root` in styles.css — nothing behind the window and
+         creased paper behind the verse — and writing `none` here would be
+         this function overruling it on every build. Removing also clears what
+         build-pages.mjs wrote inline for the *previous* poem, which is what
+         has to go when a reader walks from a poem with a backdrop to one
+         without. */
+      node.style.removeProperty('--backdrop-' + which + '-image');
+      node.style.removeProperty('--backdrop-' + which + '-opacity');
+      return;
+    }
+    node.style.setProperty('--backdrop-' + which + '-image',
+      'url("' + assetUrl(image) + '")');
+    node.style.setProperty('--backdrop-' + which + '-opacity',
+      String(layer.opacity == null ? 1 : layer.opacity));
+  }
+
+  function assetUrl(path) {
+    try { return new URL(BASE + path, DOC_URL).href; }
+    catch (e) { return BASE + path; }
   }
 
   function switchTranslationLang(newLang) {
@@ -1921,6 +1984,8 @@
     getPoem: function () { return (window.POEMS || {})[window.CURRENT_POEM_ID] || null; },
     availableTranslationLangs: availableTranslationLangs,
     rebuild: rebuildComparison,
+    /* edit mode, showing a backdrop before it has been saved */
+    applyBackdrop: applyBackdrop,
     setPoemTitle: setPoemTitle,
     focusLine: focusLine,
     /* For share.js: the lines the reader has dragged over, as segment indexes

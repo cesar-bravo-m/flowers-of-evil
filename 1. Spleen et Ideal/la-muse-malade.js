@@ -116,7 +116,7 @@ window.POEMS["la-muse-malade"] = {
   ],
 };
 
-/* --- Translations by Bravo ---------------------------------------------
+/* --- Translations by Bravo, and the backdrop ----------------------------
    Machine-managed by localhost edit mode (tools/dev-server.mjs). Everything
    from this marker to the end of the file is rewritten wholesale on save.
    Do not hand-edit below this line, and do not append anything after it. */

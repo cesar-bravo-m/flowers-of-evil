@@ -3,10 +3,11 @@
  *
  * The site itself needs no server — it is opened as a file and always will be.
  * This exists for one reason: a browser cannot write to disk, and edit mode
- * has to put the translation you type into the poem's own `.js` file. So it
- * serves the site over http on 127.0.0.1 (which is also what makes edit mode
- * appear at all — see the guard at the top of index.html) and adds four
- * endpoints under /api/edit for reading, saving and committing.
+ * has to put what you author — the translation you type, the backdrop you
+ * pick — into the poem's own `.js` file. So it serves the site over http on
+ * 127.0.0.1 (which is also what makes edit mode appear at all — see the guard
+ * at the top of index.html) and adds the endpoints under /api/edit that read,
+ * save and commit.
  *
  * Zero dependencies. Bound to the loopback address only, and it refuses
  * requests that did not address it as localhost, so nothing outside this
@@ -33,7 +34,7 @@ const LANG_NAMES = { 'en-bravo': 'English (Bravo)', 'es-bravo': 'Español (Bravo
 /* Everything from this marker to the end of a poem file belongs to the tool. */
 const MARKER = '/* --- Translations by Bravo';
 const MARKER_COMMENT =
-  '/* --- Translations by Bravo ---------------------------------------------\n' +
+  '/* --- Translations by Bravo, and the backdrop ----------------------------\n' +
   '   Machine-managed by localhost edit mode (tools/dev-server.mjs). Everything\n' +
   '   from this marker to the end of the file is rewritten wholesale on save.\n' +
   '   Do not hand-edit below this line, and do not append anything after it. */\n';
@@ -62,6 +63,14 @@ function scanPoems() {
 
 let poemFiles = scanPoems();
 
+const ASSETS = path.join(ROOT, 'assets');
+
+/* A path written the way the site writes one: relative to the root, forward
+   slashes, so it can be joined to `data-base` in the browser. */
+function rel(full) {
+  return path.relative(ROOT, full).split(path.sep).join('/');
+}
+
 function fileFor(poemId) {
   if (!/^[a-z0-9-]+$/.test(poemId)) return null;
   if (!poemFiles.has(poemId)) poemFiles = scanPoems();   /* a poem added since startup */
@@ -80,6 +89,44 @@ function loadPoem(file) {
   return { id, poem: poems[id] || null, src };
 }
 
+/* --- Images --------------------------------------------------------------- */
+
+/* What the backdrop picker offers. Found by looking rather than kept in a
+   list somebody has to remember, so dropping a photograph into assets/ is the
+   whole of adding one. A thumbs/ directory beside an image is used for the
+   strip, as the twenty nightscapes have one; an image with no thumbnail shows
+   itself instead. */
+const IMAGE_EXT = /\.(?:jpe?g|png|webp|avif)$/i;
+
+function scanImages() {
+  const found = [];
+  (function walk(dir) {
+    let entries;
+    try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+    for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== 'thumbs') walk(full);
+        continue;
+      }
+      if (!IMAGE_EXT.test(entry.name)) continue;
+      const stem = entry.name.replace(/\.[^.]+$/, '');
+      const thumb = path.join(dir, 'thumbs', stem + '.jpg');
+      found.push({
+        path: rel(full),
+        thumb: fs.existsSync(thumb) ? rel(thumb) : null,
+        label: stem.replace(/[-_]+/g, ' ').replace(/^./, (c) => c.toUpperCase())
+      });
+    }
+  })(ASSETS);
+  /* The photographs meant to be looked at are the ones somebody cropped a
+     thumbnail for; the loose textures at the top of assets/ come after them,
+     so the strip opens on the twenty nightscapes rather than on paper.png. */
+  return found.sort((a, b) => (b.thumb ? 1 : 0) - (a.thumb ? 1 : 0));
+}
+
+let imageFiles = null;
+
 /* --- Serialising ---------------------------------------------------------- */
 
 /* Double quotes and literal UTF-8, as every poem file is written: only the
@@ -96,12 +143,17 @@ function jsString(value) {
     .replace(/\u2029/g, '\\u2029') + '"';
 }
 
-function renderBlock(poemId, bravo) {
-  const langs = LANGS.filter((l) => bravo[l]);
-  if (!langs.length) return '';
+/* Everything the tool owns in a poem file: the translations, and the backdrop.
+   Two statements under one marker, either of which may be absent — and when
+   both are, so is the marker, so a poem nobody has authored anything for keeps
+   a file that ends where its curated data ends. */
+function renderTail(poemId, bravo, backdrop) {
+  const langs = LANGS.filter((l) => bravo && bravo[l]);
+  const layers = BACKDROP_LAYERS.filter((k) => backdrop && backdrop[k] && backdrop[k].image);
+  if (!langs.length && !layers.length) return '';
 
   let out = '\n' + MARKER_COMMENT;
-  out += `window.POEMS[${jsString(poemId)}].bravo = {\n`;
+  if (langs.length) out += `window.POEMS[${jsString(poemId)}].bravo = {\n`;
   for (const lang of langs) {
     const e = bravo[lang];
     out += `  ${jsString(lang)}: {\n`;
@@ -119,8 +171,33 @@ function renderBlock(poemId, bravo) {
     }
     out += '  },\n';
   }
-  out += '};\n';
+  if (langs.length) out += '};\n';
+
+  if (layers.length) {
+    if (langs.length) out += '\n';
+    out += `window.POEMS[${jsString(poemId)}].backdrop = {\n`;
+    for (const key of layers) {
+      const layer = backdrop[key];
+      out += `  ${key}: { image: ${jsString(layer.image)}, opacity: ${layer.opacity} },\n`;
+    }
+    out += '};\n';
+  }
   return out;
+}
+
+/* The truncation the whole format rests on: everything from the marker down is
+   ours to rewrite, everything above it is the curated poem and is never so
+   much as reparsed. Both save paths come through here, and each passes the
+   other's half back unchanged — writing a backdrop must not cost a
+   translation, or the other way about. */
+function writeTail(file, src, poemId, { bravo, backdrop }) {
+  const cut = src.indexOf(MARKER);
+  const kept = (cut === -1 ? src : src.slice(0, cut)).replace(/\s*$/, '\n');
+
+  /* via a temp file, so a crash mid-write cannot leave half a poem behind */
+  const tmp = file + '.tmp';
+  fs.writeFileSync(tmp, kept + renderTail(poemId, bravo, backdrop), 'utf8');
+  fs.renameSync(tmp, file);
 }
 
 /* --- Saving --------------------------------------------------------------- */
@@ -185,16 +262,56 @@ function saveTranslation({ poemId, lang, title, lines, status }) {
     }
   }
 
-  const cut = src.indexOf(MARKER);
-  const kept = (cut === -1 ? src : src.slice(0, cut)).replace(/\s*$/, '\n');
-  const out = kept + renderBlock(poemId, bravo);
-
-  /* via a temp file, so a crash mid-write cannot leave half a poem behind */
-  const tmp = file + '.tmp';
-  fs.writeFileSync(tmp, out, 'utf8');
-  fs.renameSync(tmp, file);
+  writeTail(file, src, poemId, { bravo, backdrop: poem.backdrop });
 
   return { file: path.relative(ROOT, file), status, translated, total, title: cleanTitle };
+}
+
+/* --- Backdrops ------------------------------------------------------------ */
+
+const BACKDROP_LAYERS = ['page', 'poem'];
+
+/* An image path is checked three ways before it is written into a poem file:
+   it must look like one, it must not climb out of assets/ once resolved, and
+   the file must actually be there. The regex alone is not enough — ".." is
+   made of characters it allows. */
+const IMAGE_PATH = /^assets\/[A-Za-z0-9._-]+(?:\/[A-Za-z0-9._-]+)*\.(?:jpe?g|png|webp|avif)$/;
+
+function cleanLayer(layer, which) {
+  if (layer == null) return null;
+  if (typeof layer !== 'object') throw new BadRequest(`\`${which}\` must be an object or null.`);
+
+  const image = String(layer.image || '');
+  if (!image) return null;                 /* a layer with no image is no layer */
+  if (!IMAGE_PATH.test(image) || image.split('/').includes('..')) {
+    throw new BadRequest(`"${image}" is not an image path under assets/.`);
+  }
+  const full = path.resolve(ROOT, image);
+  if (!full.startsWith(ASSETS + path.sep) || !fs.existsSync(full)) {
+    throw new BadRequest(`No such image: ${image}`, 404);
+  }
+
+  const opacity = Number(layer.opacity);
+  if (!Number.isFinite(opacity)) throw new BadRequest(`\`${which}.opacity\` must be a number.`);
+  return { image, opacity: Math.round(Math.min(1, Math.max(0, opacity)) * 100) / 100 };
+}
+
+/* The backdrop is a property of the poem, not of a translation: one choice per
+   layer, the same in every language. */
+function saveBackdrop({ poemId, page, poem }) {
+  const file = fileFor(poemId);
+  if (!file) throw new BadRequest(`No poem file for id "${poemId}".`, 404);
+
+  const { poem: onDisk, src } = loadPoem(file);
+  if (!onDisk) throw new BadRequest(`${path.basename(file)} did not register a poem.`, 500);
+
+  const backdrop = {};
+  const layers = { page: cleanLayer(page, 'page'), poem: cleanLayer(poem, 'poem') };
+  for (const key of BACKDROP_LAYERS) if (layers[key]) backdrop[key] = layers[key];
+
+  writeTail(file, src, poemId, { bravo: onDisk.bravo, backdrop });
+
+  return { file: path.relative(ROOT, file), backdrop };
 }
 
 /* --- Git ------------------------------------------------------------------ */
@@ -274,13 +391,26 @@ async function handleApi(req, res, url) {
       file: path.relative(ROOT, file),
       segmentCount: poem?.segments?.length ?? 0,
       title: poem?.title || '',
-      bravo: poem?.bravo || {}
+      bravo: poem?.bravo || {},
+      backdrop: poem?.backdrop || null
     });
+  }
+
+  /* Rescanned when the picker asks and the list is stale — dropping a
+     photograph into assets/ should not mean restarting the server. */
+  if (url.pathname === '/api/edit/images' && req.method === 'GET') {
+    if (!imageFiles || url.searchParams.get('rescan')) imageFiles = scanImages();
+    return sendJson(res, 200, { ok: true, images: imageFiles });
   }
 
   if (url.pathname === '/api/edit/save' && req.method === 'POST') {
     const body = await readBody(req);
     return sendJson(res, 200, Object.assign({ ok: true }, saveTranslation(body)));
+  }
+
+  if (url.pathname === '/api/edit/backdrop' && req.method === 'POST') {
+    const body = await readBody(req);
+    return sendJson(res, 200, Object.assign({ ok: true }, saveBackdrop(body)));
   }
 
   if (url.pathname === '/api/edit/commit' && req.method === 'POST') {

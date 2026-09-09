@@ -66,7 +66,8 @@
         "@id": "https://floresdelmal.org/#book"
       },
       "alternateName": [
-        "El albatros"
+        "El albatros",
+        "El Albatros"
       ],
       "workTranslation": [
         {
@@ -76,6 +77,15 @@
           "translator": {
             "@type": "Person",
             "name": "Eduardo Marquina"
+          }
+        },
+        {
+          "@type": "Poem",
+          "name": "El Albatros",
+          "inLanguage": "es",
+          "translator": {
+            "@type": "Person",
+            "name": "César Bravo"
           }
         }
       ]
@@ -168,16 +178,20 @@
       var host = window.location.hostname;
       if (window.location.protocol.indexOf('http') !== 0) return;
       if (['localhost', '127.0.0.1', '[::1]', '::1'].indexOf(host) === -1) return;
+      /* These four are written in script rather than markup, so rebase() never
+         sees them: a generated poem page sits two directories down and has to
+         do the `data-base` join itself, or edit mode exists only at the root. */
+      var base = document.documentElement.getAttribute('data-base') || '';
       var css = document.createElement('link');
       css.rel = 'stylesheet';
-      css.href = 'edit.css';
+      css.href = base + 'edit.css';
       document.head.appendChild(css);
       /* The syllable counter and its English word list go in ahead of edit.js.
          A script added this way is async by default, so `async = false` is what
          holds them in order; edit.js feature-detects anyway. */
       ['syllables.js', 'en-syllables.js', 'edit.js'].forEach(function (src) {
         var js = document.createElement('script');
-        js.src = src;
+        js.src = base + src;
         js.async = false;
         document.head.appendChild(js);
       });
@@ -327,7 +341,7 @@
     </header>
 
     <div class="comparison-wrap">
-      <main class="comparison" data-lines-per-stanza="4" data-langs="fr,en" data-translation-langs="en,es" aria-label="Comparison French / translation">
+      <main class="comparison" style='--backdrop-poem-image:url("assets/nightscapes/pexels-cottonbro-4881621.jpg");--backdrop-poem-opacity:0.3;' data-lines-per-stanza="4" data-langs="fr,en" data-translation-langs="en,es" aria-label="Comparison French / translation">
       <div class="cell cell-fr row-first column-left" data-lang="fr" role="cell" style="grid-row: 1; grid-column: 1;"><h2 class="column-title" id="column-title-fr">Français</h2></div>
       <div class="cell cell-es cell-translation row-first column-right" data-lang="es" role="cell" style="grid-row: 1; grid-column: 2;"><div class="column-title column-title--translation"><span class="column-title-text">El albatros</span></div></div>
       <div class="cell cell-fr column-left" data-lang="fr" role="cell" style="grid-row: 2; grid-column: 1;"><div class="stanza stanza--numbered"><div class="line"><span class="line-number" aria-hidden="true">1</span><span class="translation-segment" data-tid="0">Souvent, pour s’amuser, les hommes d’équipage</span></div>

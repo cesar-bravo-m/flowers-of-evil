@@ -165,16 +165,20 @@
       var host = window.location.hostname;
       if (window.location.protocol.indexOf('http') !== 0) return;
       if (['localhost', '127.0.0.1', '[::1]', '::1'].indexOf(host) === -1) return;
+      /* These four are written in script rather than markup, so rebase() never
+         sees them: a generated poem page sits two directories down and has to
+         do the `data-base` join itself, or edit mode exists only at the root. */
+      var base = document.documentElement.getAttribute('data-base') || '';
       var css = document.createElement('link');
       css.rel = 'stylesheet';
-      css.href = 'edit.css';
+      css.href = base + 'edit.css';
       document.head.appendChild(css);
       /* The syllable counter and its English word list go in ahead of edit.js.
          A script added this way is async by default, so `async = false` is what
          holds them in order; edit.js feature-detects anyway. */
       ['syllables.js', 'en-syllables.js', 'edit.js'].forEach(function (src) {
         var js = document.createElement('script');
-        js.src = src;
+        js.src = base + src;
         js.async = false;
         document.head.appendChild(js);
       });

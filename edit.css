@@ -10,11 +10,31 @@ body.edit-mode[data-view="poem"] .edit-view { display: block; }
 body.edit-mode .comparison-wrap,
 body.edit-mode .poem-nav { display: none; }
 
-/* the ✎ sits with the font and theme buttons and behaves like them */
-.edit-toggle-btn[aria-pressed="true"] {
+/* the ✎ sits with the font and theme buttons and behaves like them, and the
+   backdrop button sits beside the ✎ */
+.edit-toggle-btn[aria-pressed="true"],
+.backdrop-toggle-btn[aria-pressed="true"] {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--paper);
+}
+
+.backdrop-toggle-btn svg {
+  width: 1em;
+  height: 1em;
+  display: block;
+  margin: 0 auto;
+}
+
+.backdrop-toggle-btn rect {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+}
+
+.backdrop-toggle-btn .backdrop-glyph-sun,
+.backdrop-toggle-btn .backdrop-glyph-hill {
+  fill: currentColor;
 }
 
 /* --- The bar --- */
@@ -286,6 +306,157 @@ body.edit-no-syl .edit-write { display: block; }
   resize: none;
 }
 
+/* --- The backdrop panel ---
+
+   Not part of .edit-view: it sits over the reader's own page, because the card
+   it is about is one the editor hides. Fixed to the foot of the window, and
+   the page is padded by roughly its height so the last stanza is not under
+   it. --- */
+
+.backdrop-panel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 0.75rem var(--cell-pad-x) calc(0.75rem + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  background: var(--veil);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 -4px 24px var(--shadow);
+  font-family: var(--font-body);
+}
+
+.backdrop-panel[hidden] { display: none; }
+
+/* room for it, and nothing of the reader's own furniture underneath it */
+body.backdrop-mode .page { padding-bottom: 16rem; }
+body.backdrop-mode .poem-share,
+body.backdrop-mode .privacy-bar { display: none; }
+
+.backdrop-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.backdrop-heading {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.backdrop-head .edit-note { margin-left: auto; }
+
+.backdrop-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.backdrop-row-label {
+  flex: 0 0 3.2rem;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* the photographs, one row, scrolling sideways */
+.backdrop-strip {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding: 0.15rem 0.15rem 0.35rem;
+  scrollbar-width: thin;
+}
+
+/* the radio is the control, the label is the target */
+.backdrop-photo {
+  position: relative;
+  flex: 0 0 auto;
+  width: 3rem;
+  height: 3.75rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--paper-warm);
+}
+
+.backdrop-photo input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.backdrop-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.backdrop-photo.is-on {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.backdrop-photo input:focus-visible + img,
+.backdrop-photo:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.backdrop-photo--none {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backdrop-photo-none {
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+}
+
+.backdrop-opacity {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.backdrop-opacity input[type="range"] {
+  width: 7rem;
+  accent-color: var(--accent);
+}
+
+.backdrop-opacity input[type="range"]:disabled { opacity: 0.4; }
+
+.backdrop-pct {
+  min-width: 2.6rem;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--gold);
+}
+
 /* --- Responsive --- */
 
 @media (max-width: 1150px) {
@@ -301,7 +472,16 @@ body.edit-no-syl .edit-write { display: block; }
   .edit-bar { top: var(--topbar-h); }
 }
 
+@media (max-width: 900px) {
+  .backdrop-row { flex-wrap: wrap; }
+  .backdrop-strip { order: 3; flex-basis: 100%; }
+  .backdrop-opacity { flex: 1 1 auto; }
+  .backdrop-opacity input[type="range"] { width: 100%; }
+  body.backdrop-mode .page { padding-bottom: 22rem; }
+}
+
 @media (max-width: 480px) {
+  .backdrop-panel { padding-left: 0.75rem; padding-right: 0.75rem; }
   .edit-bar { padding: 0.6rem 0.75rem; }
   .edit-bar-row--status { flex-direction: column; align-items: stretch; }
   .edit-bar-actions { justify-content: flex-end; }
@@ -312,4 +492,5 @@ body.edit-no-syl .edit-write { display: block; }
   .edit-lang,
   .edit-toggle,
   .edit-btn { padding-top: 0.55rem; padding-bottom: 0.55rem; }
+  .backdrop-photo { width: 3.5rem; height: 4.4rem; }
 }

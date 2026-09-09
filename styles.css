@@ -25,6 +25,32 @@
   --num-col: 2.5em;            /* line-number margin in the French column */
   --num-gap: 0.5rem;
   --veil: rgba(245, 240, 232, 0.92); /* translucent bar over the paper */
+
+  /* Backdrops. A photograph behind the window and another behind the verse
+     card, chosen per poem in edit mode and written into the poem's own file.
+     applyBackdrop() in translation.js sets them from `poem.backdrop`, and a
+     generated page carries them on its own markup so a deep link never paints
+     the card bare first.
+
+     What stands here is what a poem gets when it names nothing of its own:
+     no photograph behind the window, and creased paper behind the verse, so
+     the card reads as a sheet rather than a panel. A poem's own backdrop
+     overrides it and clearing that gives it back — this is the one place the
+     default lives, which is why setBackdropLayer() removes the properties
+     rather than blanking them. The path is relative to styles.css, which sits
+     at the site root and is what a url() in a custom property resolves
+     against, so it needs no `data-base` prefix. */
+  --backdrop-page-image: none;
+  --backdrop-page-opacity: 0;
+  --backdrop-poem-image: url("assets/nightscapes/pexels-dav-h-58867999-7952409.jpg");
+  --backdrop-poem-opacity: 0.5;
+
+  /* The card is translucent — rgba(255, 255, 255, 0.4) over the paper — which
+     is fine over a gradient and not over a photograph, where the verse would
+     be read through it. With a page backdrop the card uses this instead: the
+     same colour that translucency already produces over `--paper`, so the
+     card looks exactly as it did and merely stops being see-through. */
+  --card-solid: #f9f6f1;
 }
 
 /* Dark theme */
@@ -39,6 +65,10 @@
   --border: #3d3630;
   --shadow: rgba(0, 0, 0, 0.35);
   --veil: rgba(30, 26, 23, 0.92);
+  --card-solid: #221e1a;   /* rgba(37, 32, 28, 0.6) over --paper, made solid */
+  /* the default paper is a bright sheet, so a whisper of it is all a dark
+     card can take before the verse is reading off white */
+  --backdrop-poem-opacity: 0.1;
 }
 
 /* Font size. A- / A+ step --font-scale from 1 (the default, and the floor) to 2,
@@ -78,6 +108,37 @@ body {
   background-image:
     radial-gradient(ellipse 120% 80% at 50% -20%, rgba(139, 45, 45, 0.06), transparent),
     linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 100%);
+}
+
+/* The page backdrop. body's background paints the canvas, so a fixed
+   pseudo-element at z-index -1 lies over that gradient and under every bit of
+   content — and stays put while .page scrolls beneath it. Inert until a poem
+   names an image, and never shown on the two written pages, which have no poem
+   to be about. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--backdrop-page-image);
+  background-size: cover;
+  background-position: center;
+  opacity: var(--backdrop-page-opacity);
+}
+
+body:not([data-view="poem"])::before {
+  display: none;
+}
+
+/* A photograph behind the page stops at the card. The verse is read against
+   paper whatever is behind it, and the poem's own backdrop — drawn by
+   .comparison::before, which paints after this background and before the
+   verse — still shows, now over paper rather than over the page's photograph.
+   Beats the dark-theme card rule on specificity, and takes its colour from a
+   token, so both themes follow. */
+body.page-backdrop .comparison {
+  background: var(--card-solid);
 }
 
 /* --- Narrow-screen top bar: opens the poem drawer and the search palette.
@@ -680,6 +741,8 @@ body.sidebar-hidden .page {
 /* --- Side-by-side comparison: French + one translation (dropdown in header) --- */
 .comparison {
   position: relative;
+  /* keeps the backdrop's z-index inside the card — see .comparison::before */
+  isolation: isolate;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: none;
@@ -692,6 +755,22 @@ body.sidebar-hidden .page {
   border-radius: 2px;
   box-shadow: 0 2px 12px var(--shadow);
   width: 100%;
+}
+
+/* The poem backdrop. `isolation` above is what makes a z-index of -1 mean
+   *within* the card rather than behind it: the photograph lies over the card's
+   own wash and under the verse, and the divider below stays above both. */
+.comparison::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image: var(--backdrop-poem-image);
+  background-size: cover;
+  background-position: center;
+  opacity: var(--backdrop-poem-opacity);
 }
 
 /* Continuous vertical divider between the two columns */
@@ -1530,7 +1609,7 @@ body.privacy-bar-open .poem-share {
 }
 
 .share-panel {
-  width: min(58rem, 100%);
+  width: min(52rem, 100%);
   max-height: 100%;
   background: var(--paper);
   border: 1px solid var(--border);
@@ -1563,14 +1642,14 @@ body.privacy-bar-open .poem-share {
 .share-close,
 .share-page-btn {
   flex-shrink: 0;
-  width: 2rem;
-  height: 2rem;
+  width: 2.25rem;
+  height: 2.25rem;
   padding: 0;
   border: 1px solid var(--border);
-  border-radius: 2px;
+  border-radius: 50%;
   background: transparent;
   color: var(--gold);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   line-height: 1;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
@@ -1583,10 +1662,13 @@ body.privacy-bar-open .poem-share {
 }
 
 .share-page-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: default;
 }
 
+/* Wide: the card on the right, the controls on the left. Narrow (see the
+   sheet rules at the foot of the file): the card above, the controls under
+   it, each in its own scroll. */
 .share-body {
   display: grid;
   grid-template-columns: minmax(0, 19rem) minmax(0, 1fr);
@@ -1600,152 +1682,15 @@ body.privacy-bar-open .poem-share {
   color: var(--ink);
 }
 
-.share-form fieldset {
-  border: 0;
-  padding: 0;
-  margin: 0 0 1.1rem;
+.share-form {
+  grid-column: 1;
+  grid-row: 1;
   min-width: 0;
-}
-
-.share-form legend {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--accent);
-  padding: 0;
-  margin-bottom: 0.4rem;
-}
-
-.share-range {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem 0.6rem;
-  color: var(--gold);
-}
-
-.share-range label {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  flex: 1 1 100%;
-  min-width: 0;
-}
-
-.share-range select {
-  flex: 1 1 auto;
-  min-width: 0;
-  max-width: 100%;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  padding: 0.3rem 0.4rem;
-  background: var(--paper);
-  color: var(--ink);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-}
-
-.share-link {
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  font-size: 0.8rem;
-  color: var(--accent-light);
-  text-decoration: underline;
-  text-decoration-color: rgba(107, 45, 45, 0.3);
-  cursor: pointer;
-}
-
-.share-link:hover {
-  color: var(--accent);
-}
-
-.share-choice {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem 1rem;
-}
-
-.share-choice label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  cursor: pointer;
-}
-
-.share-choice label.is-disabled {
-  opacity: 0.45;
-  cursor: default;
-}
-
-.share-choice input {
-  accent-color: var(--accent);
-  margin: 0;
-}
-
-.share-note {
-  margin: 0.4rem 0 0;
-  font-size: 0.8rem;
-  color: var(--gold-muted);
-}
-
-/* The photographs behind a Night card: a strip of thumbnails, each a radio
-   whose input is hidden so the picture itself is the control. */
-.share-photos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(3.6rem, 1fr));
-  gap: 0.4rem;
-  margin-top: 0.6rem;
-}
-
-.share-photos[hidden] {
-  display: none;
-}
-
-.share-photo {
-  position: relative;
-  display: block;
-  aspect-ratio: 4 / 5;
-  cursor: pointer;
-}
-
-.share-photo input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  margin: 0;
-  pointer-events: none;
-}
-
-.share-photo img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 2px;
-  border: 2px solid transparent;
-  opacity: 0.75;
-  transition: opacity 0.15s ease, border-color 0.15s ease;
-}
-
-.share-photo:hover img {
-  opacity: 1;
-}
-
-.share-photo input:checked + img {
-  opacity: 1;
-  border-color: var(--accent);
-}
-
-.share-photo input:focus-visible + img {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
 }
 
 .share-preview {
+  grid-column: 2;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1753,24 +1698,35 @@ body.privacy-bar-open .poem-share {
   min-width: 0;
 }
 
-/* a replaced element with both sizes auto keeps its own ratio under a
-   max-width and a max-height, which is what lets one rule fit both formats */
+/* The stage is the box the card is fitted into; share.js sizes the canvas
+   to it (fitCanvas), so the stage only has to be a definite size. */
+.share-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: min(62vh, 36rem);
+  min-height: 8rem;
+}
+
 .share-canvas {
   display: block;
   width: auto;
   height: auto;
   max-width: 100%;
-  max-height: 62vh;
+  max-height: 100%;
   border: 1px solid var(--border);
   box-shadow: 0 4px 16px var(--shadow);
   background: var(--paper-warm);
+  touch-action: pan-y;
 }
 
 .share-pages {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.85rem;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
   color: var(--gold);
   font-variant-numeric: tabular-nums;
 }
@@ -1790,6 +1746,228 @@ body.privacy-bar-open .poem-share {
   color: var(--accent);
 }
 
+/* --- The controls --- */
+.share-field {
+  margin: 0 0 1.1rem;
+  min-width: 0;
+}
+
+.share-field:last-child {
+  margin-bottom: 0;
+}
+
+.share-field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 1.6rem;
+  margin-bottom: 0.45rem;
+}
+
+.share-label {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.share-hint {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--gold-muted);
+}
+
+.share-range {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.6rem;
+  color: var(--gold);
+}
+
+.share-range label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.share-range select {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 2.2rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.3rem 0.5rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+
+/* A chip: the input is kept for the keyboard and the screen reader, the
+   pill-shaped label beside it is the whole target. */
+.share-choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.share-chip {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+}
+
+.share-chip input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.share-chip > span,
+.share-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.2rem;
+  padding: 0 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.share-chip-sm {
+  min-height: 1.7rem;
+  padding: 0 0.7rem;
+  font-size: 0.78rem;
+  color: var(--accent-light);
+}
+
+.share-chip-btn[hidden] {
+  display: none;
+}
+
+.share-chip:hover > span,
+.share-chip-btn:hover {
+  border-color: var(--accent-light);
+  color: var(--accent);
+}
+
+.share-chip input:checked + span {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+
+/* a tick on the ones that can be combined */
+.share-lang-list input:checked + span::before {
+  content: "✓";
+  font-size: 0.85em;
+}
+
+.share-chip input:focus-visible + span,
+.share-chip-btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.share-chip.is-disabled > span {
+  cursor: default;
+}
+
+.share-chip.is-disabled input:not(:checked) + span {
+  opacity: 0.45;
+}
+
+.share-chip.is-disabled:hover > span {
+  border-color: var(--border);
+  color: inherit;
+}
+
+.share-chip.is-disabled input:checked + span {
+  color: var(--paper);
+}
+
+.share-note {
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+  color: var(--gold-muted);
+}
+
+/* The photographs behind a Night card: a strip of thumbnails, each a radio
+   whose input is hidden so the picture itself is the control. */
+.share-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  padding: 0.15rem;
+}
+
+.share-photos[hidden] {
+  display: none;
+}
+
+.share-photo {
+  position: relative;
+  display: block;
+  flex: 0 0 3.6rem;
+  aspect-ratio: 4 / 5;
+  scroll-snap-align: center;
+  cursor: pointer;
+}
+
+.share-photo input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.share-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 2px solid transparent;
+  opacity: 0.75;
+  transition: opacity 0.15s ease, border-color 0.15s ease;
+}
+
+.share-photo:hover img {
+  opacity: 1;
+}
+
+.share-photo input:checked + img {
+  opacity: 1;
+  border-color: var(--accent);
+}
+
+.share-photo input:focus-visible + img {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .share-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1802,9 +1980,10 @@ body.privacy-bar-open .poem-share {
 
 .share-primary,
 .share-caption {
-  padding: 0.5rem 0.9rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
   border: 1px solid var(--border);
-  border-radius: 2px;
+  border-radius: 999px;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
@@ -1814,6 +1993,7 @@ body.privacy-bar-open .poem-share {
 }
 
 .share-primary {
+  padding-inline: 1.5rem;
   background: var(--accent);
   border-color: var(--accent);
   color: var(--paper);
@@ -1839,6 +2019,10 @@ body.privacy-bar-open .poem-share {
   margin: 0 0 0 auto;
   font-size: 0.8rem;
   color: var(--gold);
+}
+
+.share-status:empty {
+  display: none;
 }
 
 /* --- Static views: home and about -----------------------------------------
@@ -2817,51 +3001,134 @@ body.privacy-bar-open .page {
     overflow-x: auto;
   }
 
-  /* the share dialog: a sheet, with the card first and the form under it */
+  /* The share dialog fills the screen. The card takes whatever the controls
+     leave and only the controls scroll, so the preview never leaves the
+     screen and Share is always under the thumb. */
   .share-overlay {
-    align-items: flex-end;
+    align-items: stretch;
     padding: 0;
   }
 
   .share-panel {
     width: 100%;
-    max-height: 94vh;
-    max-height: 94dvh;
-    border-radius: 4px 4px 0 0;
-    border-bottom-width: 0;
+    max-height: none;
+    height: 100vh;
+    height: 100dvh;
+    border-width: 0;
+    border-radius: 0;
+  }
+
+  .share-header {
+    padding: calc(0.6rem + env(safe-area-inset-top)) 1rem 0.6rem;
   }
 
   .share-body {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1rem;
-    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
   }
 
   .share-preview {
-    order: -1;
+    flex: 1 1 0;
+    min-height: 9rem;
+    padding: 0.75rem 1rem 0.5rem;
+    gap: 0.4rem;
   }
 
+  .share-stage {
+    flex: 1 1 0;
+    height: auto;
+    min-height: 0;
+  }
+
+  /* the page count already says how many, and the warning still shows */
+  .share-count:not(.share-warn) {
+    display: none;
+  }
+
+  .share-form {
+    flex: 0 0 auto;
+    max-height: 52%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.6rem 1rem 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .share-field {
+    margin-bottom: 0.8rem;
+  }
+
+  .share-field-head {
+    margin-bottom: 0.35rem;
+  }
+
+  /* from and to side by side; the number is what shows, the picker the rest */
+  .share-range label {
+    flex: 1 1 0;
+  }
+
+  /* 16px, or iOS zooms the page to the control on focus */
+  .share-range select {
+    min-height: 2.75rem;
+    font-size: 16px;
+    padding: 0.45rem 0.5rem;
+  }
+
+  .share-chip > span,
+  .share-chip-btn {
+    min-height: 2.6rem;
+    padding: 0 1.05rem;
+    font-size: 0.95rem;
+  }
+
+  .share-chip-sm {
+    min-height: 2rem;
+    padding: 0 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  /* one row, scrolled sideways; share.js brings the chosen one into view */
   .share-photos {
-    display: flex;
+    flex-wrap: nowrap;
     overflow-x: auto;
-    gap: 0.5rem;
-    padding-bottom: 0.25rem;
+    padding-bottom: 0.4rem;
     scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
   }
 
   .share-photo {
-    flex: 0 0 3.6rem;
-    scroll-snap-align: start;
-  }
-
-  .share-canvas {
-    max-height: 38vh;
-    max-height: 38dvh;
+    flex: 0 0 4.25rem;
   }
 
   .share-actions {
-    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    gap: 0.5rem;
+    padding: 0.6rem 1rem calc(0.6rem + env(safe-area-inset-bottom));
+  }
+
+  .share-primary {
+    flex: 1 1 auto;
+    min-height: 3rem;
+    font-size: 1.05rem;
+  }
+
+  .share-caption {
+    flex: 0 0 auto;
+    min-height: 3rem;
+  }
+
+  .share-status {
+    flex: 1 1 100%;
+    margin: 0;
+    text-align: center;
+  }
+
+  .share-page-btn {
+    width: 2.75rem;
+    height: 2.75rem;
   }
 }
 
@@ -2881,10 +3148,31 @@ body.privacy-bar-open .page {
   .share-close, .share-page-btn { width: 2.4rem; height: 2.4rem; }
   .poem-share-btn { width: 3.5rem; height: 3.5rem; }
   .share-selection-btn { padding: 0.6rem 1rem; }
-  .share-choice label { padding: 0.2rem 0; }
 }
 
 /* --- Short viewports (landscape phones): the header must not eat the screen --- */
+@media (max-height: 520px) and (min-width: 701px) {
+  /* the share dialog keeps its two columns but gives up its margins */
+  .share-overlay {
+    padding: 0.5rem;
+  }
+
+  .share-header,
+  .share-actions {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .share-body {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+  }
+
+  .share-stage {
+    height: 52vh;
+  }
+}
+
 @media (max-height: 480px) and (max-width: 900px) {
   .header {
     padding: 0.9rem 1rem 0.75rem;

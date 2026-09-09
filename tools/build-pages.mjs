@@ -194,6 +194,28 @@ function sourceHtml(poem, lang) {
 }
 
 /**
+ * One layer of a poem's backdrop, as the two custom properties that draw it.
+ * A poem's own script is deferred, so without this the photograph would arrive
+ * a moment after the page had painted without it; applyBackdrop() in
+ * translation.js then sets the same properties to the same values, and nothing
+ * moves.
+ *
+ * The path is written with no prefix at all, which looks wrong on a page two
+ * directories down and is not: a url() inside a custom property is resolved
+ * against the stylesheet that *uses* it, and styles.css sits at the site root.
+ * (Verified in Chrome; an engine that resolved it against the element instead
+ * would find nothing, and translation.js — which makes the URL absolute —
+ * would put it right a frame later. So the worst case is the flash this
+ * exists to avoid, and never a wrong picture.)
+ */
+function backdropVars(backdrop, which) {
+  const layer = backdrop && backdrop[which];
+  if (!layer || !layer.image) return '';
+  return `--backdrop-${which}-image:url("${layer.image}");`
+    + `--backdrop-${which}-opacity:${layer.opacity};`;
+}
+
+/**
  * The comparison grid as static HTML, in the shape buildComparison() produces
  * so that the stylesheet lays it out identically and nothing shifts when the
  * script takes over.
@@ -393,10 +415,25 @@ function buildPage(template, win, sections, opts) {
       `<h1 class="title">${esc(poem.title)}</h1>`, 'poem <h1>');
     html = replaceOnce(html, /<span class="topbar-title">[^<]*<\/span>/,
       `<span class="topbar-title">${esc(poem.title)}</span>`, 'topbar title');
+    /* The backdrop, on the two elements whose ::before draws it. Both are
+       replacements of a tag this script already owns, so index.html stays
+       cuttable and nothing accumulates across runs. */
+    const pageVars = backdropVars(poem.backdrop, 'page');
+    if (pageVars) {
+      /* the class as well as the properties: it is what makes the card opaque,
+         and applyBackdrop() sets the same one the moment it runs */
+      html = replaceOnce(html, /<body data-view="poem">/,
+        `<body class="page-backdrop" data-view="poem" style='${pageVars}'>`, 'the <body> tag');
+    }
+
     const open = html.match(/<main class="comparison"[^>]*>/);
     if (!open) throw new Error('build-pages: <main class="comparison"> not found');
+    const poemVars = backdropVars(poem.backdrop, 'poem');
+    const openTag = poemVars
+      ? open[0].replace('<main class="comparison"', `<main class="comparison" style='${poemVars}'`)
+      : open[0];
     html = replaceOnce(html, /<main class="comparison"[^>]*>[\s\S]*?<\/main>/,
-      `${open[0]}\n      ${comparisonHtml(poem, primaryLang(poem))}\n      </main>`, '.comparison');
+      `${openTag}\n      ${comparisonHtml(poem, primaryLang(poem))}\n      </main>`, '.comparison');
 
     /* Prev and next, so the whole book is walkable without a script. */
     const order = win.POEM_IDS;

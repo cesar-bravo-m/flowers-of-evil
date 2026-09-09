@@ -29,11 +29,10 @@
   /* --- What a card is ---------------------------------------------------- */
 
   var W = 1080;
-  var FORMATS = {
-    /* top / bottom keep the verse clear of Instagram's own chrome */
-    portrait: { w: W, h: 1350, top: 96, bottom: 104, side: 96, ext: 'png' },
-    story:    { w: W, h: 1920, top: 260, bottom: 270, side: 96, ext: 'png' }
-  };
+  /* Instagram's story size, 9:16; the top and bottom margins keep the verse
+     clear of Instagram's own chrome. It is the one format: a story card is
+     also what a phone screen is shaped like, so the preview fills it. */
+  var FORMAT = { w: W, h: 1920, top: 260, bottom: 270, side: 96, ext: 'png' };
   var VERSE_SIZES = [34, 32, 30, 28, 26];
   var LINE_HEIGHT = 1.38;
   var HANG = 1.4;              /* em: hanging indent of a wrapped verse line */
@@ -79,7 +78,11 @@
     { file: 'red-rose',        en: 'A red rose',              es: 'Una rosa roja' },
     { file: 'rose-petals',     en: 'Rose petals',             es: 'Pétalos de rosa' },
     { file: 'cemetery-fog',    en: 'A cemetery in fog',       es: 'Un cementerio en la niebla' },
-    { file: 'cemetery-gate',   en: 'A cemetery gate',         es: 'La verja de un cementerio' }
+    { file: 'cemetery-gate',   en: 'A cemetery gate',         es: 'La verja de un cementerio' },
+    { file: 'moon-bird',       en: 'A bird against the moon', es: 'Un pájaro contra la luna' },
+    { file: 'church-candle',   en: 'A Bible by candlelight',  es: 'Una Biblia a la luz de una vela' },
+    { file: 'raven',           en: 'A raven',                 es: 'Un cuervo' },
+    { file: 'cathedral-night', en: 'A cathedral at night',    es: 'Una catedral de noche' }
   ];
   function photoPath(index) {
     return 'assets/nightscapes/' + PHOTOS[index % PHOTOS.length].file + '.jpg';
@@ -100,10 +103,8 @@
     from:     { en: 'From', es: 'Desde' },
     to:       { en: 'to', es: 'hasta' },
     whole:    { en: 'Whole poem', es: 'Poema completo' },
-    langs:    { en: 'Languages (up to two)', es: 'Idiomas (hasta dos)' },
-    format:   { en: 'Format', es: 'Formato' },
-    post:     { en: 'Post 4:5', es: 'Publicación 4:5' },
-    story:    { en: 'Story 9:16', es: 'Historia 9:16' },
+    langs:    { en: 'Languages', es: 'Idiomas' },
+    upToTwo:  { en: 'up to two', es: 'hasta dos' },
     style:    { en: 'Style', es: 'Estilo' },
     paper:    { en: 'Paper', es: 'Papel' },
     night:    { en: 'Night', es: 'Noche' },
@@ -119,6 +120,7 @@
     saved:    { en: 'Saved', es: 'Guardado' },
     working:  { en: 'Preparing…', es: 'Preparando…' },
     failed:   { en: 'Could not make the image.', es: 'No se pudo crear la imagen.' },
+    again:    { en: 'Ready — tap Share again.', es: 'Listo — toca Compartir otra vez.' },
     preview:  { en: 'Preview of the card', es: 'Vista previa de la tarjeta' },
     prevPage: { en: 'Previous image', es: 'Imagen anterior' },
     nextPage: { en: 'Next image', es: 'Imagen siguiente' },
@@ -177,18 +179,15 @@
     try {
       var raw = window.localStorage.getItem(STORE_KEY);
       var prefs = raw ? JSON.parse(raw) : {};
-      return {
-        format: FORMATS[prefs.format] ? prefs.format : 'portrait',
-        style: prefs.style === 'night' ? 'night' : 'paper'
-      };
+      return { style: prefs.style === 'night' ? 'night' : 'paper' };
     } catch (e) {
-      return { format: 'portrait', style: 'paper' };
+      return { style: 'paper' };
     }
   }
 
   function savePrefs(state) {
     try {
-      window.localStorage.setItem(STORE_KEY, JSON.stringify({ format: state.format, style: state.style }));
+      window.localStorage.setItem(STORE_KEY, JSON.stringify({ style: state.style }));
     } catch (e) { /* a preference, not a record */ }
   }
 
@@ -672,7 +671,7 @@
   function render(state) {
     var spec = buildSpec(state);
     if (!spec) return Promise.reject(new Error('no poem'));
-    var fmt = FORMATS[state.format] || FORMATS.portrait;
+    var fmt = FORMAT;
     return Promise.all([ensureFonts(), assetsFor(state)]).then(function (got) {
       var assets = got[1];
       var ctx = workCanvas().getContext('2d');
@@ -775,7 +774,7 @@
   var cache = { key: null, files: null };
 
   function stateKey(s) {
-    return JSON.stringify([s.poemId, s.from, s.to, s.langs, s.format, s.style, s.photo, isDark()]);
+    return JSON.stringify([s.poemId, s.from, s.to, s.langs, s.style, s.photo, isDark()]);
   }
 
   function buildUI() {
@@ -788,38 +787,12 @@
       +     '<button type="button" class="share-close" data-t-aria="close">×</button>'
       +   '</div>'
       +   '<div class="share-body">'
-      +     '<form class="share-form">'
-      +       '<fieldset class="share-lines">'
-      +         '<legend data-t="lines"></legend>'
-      +         '<div class="share-range">'
-      +           '<label><span data-t="from"></span> <select class="share-from"></select></label>'
-      +           '<label><span data-t="to"></span> <select class="share-to"></select></label>'
-      +           '<button type="button" class="share-whole share-link" data-t="whole"></button>'
-      +         '</div>'
-      +       '</fieldset>'
-      +       '<fieldset class="share-langs">'
-      +         '<legend data-t="langs"></legend>'
-      +         '<div class="share-choice share-lang-list"></div>'
-      +       '</fieldset>'
-      +       '<fieldset class="share-format">'
-      +         '<legend data-t="format"></legend>'
-      +         '<div class="share-choice">'
-      +           '<label><input type="radio" name="share-format" value="portrait"> <span data-t="post"></span></label>'
-      +           '<label><input type="radio" name="share-format" value="story"> <span data-t="story"></span></label>'
-      +         '</div>'
-      +       '</fieldset>'
-      +       '<fieldset class="share-style">'
-      +         '<legend data-t="style"></legend>'
-      +         '<div class="share-choice">'
-      +           '<label><input type="radio" name="share-style" value="paper"> <span data-t="paper"></span></label>'
-      +           '<label class="share-style-night"><input type="radio" name="share-style" value="night"> <span data-t="night"></span></label>'
-      +         '</div>'
-      +         '<div class="share-photos" role="radiogroup" data-t-aria="photo" hidden></div>'
-      +         '<p class="share-note share-no-photos" data-t="noPhotos" hidden></p>'
-      +       '</fieldset>'
-      +     '</form>'
+      /* The card first: on a phone it takes whatever the controls leave, and
+         a swipe over it turns the pages of a carousel. */
       +     '<div class="share-preview">'
-      +       '<canvas class="share-canvas" width="1080" height="1350" data-t-aria="preview"></canvas>'
+      +       '<div class="share-stage">'
+      +         '<canvas class="share-canvas" width="1080" height="1920" data-t-aria="preview"></canvas>'
+      +       '</div>'
       +       '<div class="share-pages" hidden>'
       +         '<button type="button" class="share-page-btn share-page-prev" data-t-aria="prevPage">‹</button>'
       +         '<span class="share-page-count"></span>'
@@ -827,6 +800,37 @@
       +       '</div>'
       +       '<p class="share-count"></p>'
       +     '</div>'
+      /* The controls are chips — a radio or checkbox under a pill-shaped
+         label — so the target is the word, not a 13px box beside it. */
+      +     '<form class="share-form">'
+      +       '<div class="share-field share-lines" role="group" aria-labelledby="share-label-lines">'
+      +         '<div class="share-field-head">'
+      +           '<span class="share-label" id="share-label-lines" data-t="lines"></span>'
+      +           '<button type="button" class="share-whole share-chip-btn share-chip-sm" data-t="whole"></button>'
+      +         '</div>'
+      +         '<div class="share-range">'
+      +           '<label><span data-t="from"></span> <select class="share-from"></select></label>'
+      +           '<label><span data-t="to"></span> <select class="share-to"></select></label>'
+      +         '</div>'
+      +       '</div>'
+      +       '<div class="share-field share-langs" role="group" aria-labelledby="share-label-langs">'
+      +         '<div class="share-field-head">'
+      +           '<span class="share-label" id="share-label-langs"><span data-t="langs"></span> <span class="share-hint" data-t="upToTwo"></span></span>'
+      +         '</div>'
+      +         '<div class="share-choice share-lang-list"></div>'
+      +       '</div>'
+      +       '<div class="share-field share-style" role="group" aria-labelledby="share-label-style">'
+      +         '<div class="share-field-head">'
+      +           '<span class="share-label" id="share-label-style" data-t="style"></span>'
+      +         '</div>'
+      +         '<div class="share-choice">'
+      +           '<label class="share-chip"><input type="radio" name="share-style" value="paper"><span data-t="paper"></span></label>'
+      +           '<label class="share-chip share-style-night"><input type="radio" name="share-style" value="night"><span data-t="night"></span></label>'
+      +         '</div>'
+      +         '<div class="share-photos" role="radiogroup" data-t-aria="photo" hidden></div>'
+      +         '<p class="share-note share-no-photos" data-t="noPhotos" hidden></p>'
+      +       '</div>'
+      +     '</form>'
       +   '</div>'
       +   '<div class="share-actions">'
       +     '<button type="button" class="share-primary"></button>'
@@ -849,6 +853,7 @@
       nightLabel: q('.share-style-night'),
       photos: q('.share-photos'),
       noPhotos: q('.share-no-photos'),
+      stage: q('.share-stage'),
       canvas: q('.share-canvas'),
       pages: q('.share-pages'),
       pagePrev: q('.share-page-prev'),
@@ -869,11 +874,13 @@
     handle.from.addEventListener('change', function () {
       state.from = Number(handle.from.value);
       if (state.to < state.from) { state.to = state.from; handle.to.value = String(state.to); }
+      syncRangeUi();
       changed();
     });
     handle.to.addEventListener('change', function () {
       state.to = Number(handle.to.value);
       if (state.from > state.to) { state.from = state.to; handle.from.value = String(state.from); }
+      syncRangeUi();
       changed();
     });
     handle.whole.addEventListener('click', function () {
@@ -882,22 +889,39 @@
       state.to = poem.segments.length - 1;
       handle.from.value = '0';
       handle.to.value = String(state.to);
+      syncRangeUi();
       changed();
     });
     handle.langList.addEventListener('change', onLangChange);
     handle.form.addEventListener('change', function (e) {
       var input = e.target;
-      if (input.name === 'share-format' && input.checked) {
-        state.format = input.value;
-        savePrefs(state);
-        changed();
-      } else if (input.name === 'share-style' && input.checked) {
+      if (input.name === 'share-style' && input.checked) {
         state.style = input.value;
         savePrefs(state);
         syncStyleUi();
         changed();
       }
     });
+    /* The canvas is sized to the stage by hand: on a phone the stage is
+       whatever the controls leave, and a replaced element's aspect ratio
+       against a flexed height is the one thing browsers still disagree on. */
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () { fitCanvas(); }).observe(handle.stage);
+    } else {
+      window.addEventListener('resize', fitCanvas);
+    }
+    /* a swipe over the card turns the page, the way a carousel does */
+    var touch = null;
+    handle.stage.addEventListener('touchstart', function (e) {
+      touch = e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null;
+    }, { passive: true });
+    handle.stage.addEventListener('touchend', function (e) {
+      if (!touch || !current || current.result.count < 2) { touch = null; return; }
+      var end = e.changedTouches[0];
+      var dx = end.clientX - touch.x, dy = end.clientY - touch.y;
+      touch = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) showPage(pageIndex + (dx < 0 ? 1 : -1));
+    }, { passive: true });
     /* One thumbnail per photograph, as a radio so the arrow keys move
        between them. The full-size image is fetched only when one is picked. */
     PHOTOS.forEach(function (photo, index) {
@@ -908,8 +932,8 @@
       input.value = String(index);
       var img = document.createElement('img');
       img.src = BASE + 'assets/nightscapes/thumbs/' + photo.file + '.jpg';
-      img.width = 160;
-      img.height = 200;
+      img.width = 120;
+      img.height = 150;
       img.loading = 'lazy';
       img.decoding = 'async';
       img.draggable = false;
@@ -978,6 +1002,15 @@
       close();
       return;
     }
+    /* the arrow keys page through a carousel, unless a control has them */
+    if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && current && current.result.count > 1) {
+      var tag = (e.target && e.target.tagName || '').toLowerCase();
+      if (tag !== 'input' && tag !== 'select') {
+        e.preventDefault();
+        showPage(pageIndex + (e.key === 'ArrowRight' ? 1 : -1));
+        return;
+      }
+    }
     if (e.key === 'Tab') {
       var list = focusables();
       if (!list.length) return;
@@ -1018,13 +1051,12 @@
     var codes = ['fr'].concat(translationCodes(state.poemId));
     ui.langList.innerHTML = '';
     codes.forEach(function (code) {
-      var label = el('label');
+      var label = el('label', 'share-chip');
       var box = document.createElement('input');
       box.type = 'checkbox';
       box.value = code;
       box.checked = state.langs.indexOf(code) !== -1;
       label.appendChild(box);
-      label.appendChild(document.createTextNode(' '));
       var name = window.FLOWERS && window.FLOWERS.langLabel ? window.FLOWERS.langLabel(code) : code;
       label.appendChild(el('span', null, name));
       ui.langList.appendChild(label);
@@ -1065,6 +1097,37 @@
     ui.photos.hidden = state.style !== 'night' || texturesOK === false;
     ui.nightLabel.hidden = texturesOK === false;
     ui.noPhotos.hidden = texturesOK !== false;
+    if (!ui.photos.hidden) revealPhoto();
+  }
+
+  /* the chosen thumbnail is brought into the strip's view — sideways only,
+     so the form is not scrolled from under the reader */
+  function revealPhoto() {
+    var on = ui.photos.querySelector('input:checked');
+    var label = on && on.parentNode;
+    if (!label) return;
+    var strip = ui.photos;
+    if (strip.scrollWidth <= strip.clientWidth) return;
+    strip.scrollLeft = label.offsetLeft - (strip.clientWidth - label.offsetWidth) / 2;
+  }
+
+  /* *Whole poem* is a way back to the whole poem, so it goes while that is
+     what is chosen */
+  function syncRangeUi() {
+    var poem = poemOf(state.poemId);
+    ui.whole.hidden = state.from === 0 && state.to === poem.segments.length - 1;
+  }
+
+  function fitCanvas() {
+    if (!ui || !isOpen()) return;
+    var stage = ui.stage;
+    var style = window.getComputedStyle(ui.canvas);
+    var edge = (parseFloat(style.borderLeftWidth) || 0) + (parseFloat(style.borderRightWidth) || 0);
+    var w = stage.clientWidth - edge, h = stage.clientHeight - edge;
+    if (w <= 0 || h <= 0) return;
+    var scale = Math.min(w / FORMAT.w, h / FORMAT.h);
+    ui.canvas.style.width = Math.floor(FORMAT.w * scale) + 'px';
+    ui.canvas.style.height = Math.floor(FORMAT.h * scale) + 'px';
   }
 
   function defaultLangs(poemId) {
@@ -1106,7 +1169,6 @@
       from: from,
       to: to,
       langs: defaultLangs(poemId),
-      format: prefs.format,
       style: prefs.style,
       photo: hash(poemId) % PHOTOS.length
     };
@@ -1115,7 +1177,7 @@
     lineOptions(ui.from, poem.segments, from);
     lineOptions(ui.to, poem.segments, to);
     fillLangs();
-    ui.form.querySelector('input[name="share-format"][value="' + state.format + '"]').checked = true;
+    syncRangeUi();
     ui.form.querySelector('input[name="share-style"][value="' + state.style + '"]').checked = true;
     ui.photos.querySelector('input[value="' + state.photo + '"]').checked = true;
     applyText();
@@ -1134,6 +1196,8 @@
       document.body.classList.add('modal-open');
       ui.overlay.removeAttribute('hidden');
     }
+    ui.form.scrollTop = 0;
+    fitCanvas();
     ui.panel.focus();
 
     /* off disk the photos cannot be drawn; find out before offering them */
@@ -1180,7 +1244,7 @@
     if (!current) return;
     var N = current.result.count;
     pageIndex = Math.max(0, Math.min(N - 1, index));
-    var fmt = FORMATS[state.format] || FORMATS.portrait;
+    var fmt = FORMAT;
     var painted = current.result.paint(pageIndex);
     ui.canvas.width = fmt.w;
     ui.canvas.height = fmt.h;
@@ -1232,6 +1296,9 @@
           setStatus('');
         }, function (err) {
           if (err && err.name === 'AbortError') { setStatus(''); return; }
+          /* Safari lets a share follow a tap only so long; the files are
+             ready now, so the next tap goes straight through */
+          if (err && err.name === 'NotAllowedError') { setStatus(t('again')); return; }
           downloadAll(files);
         });
       }
