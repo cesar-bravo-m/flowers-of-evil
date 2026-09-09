@@ -218,3 +218,44 @@ window.POEMS["hymne-a-la-beaute"] = {
     { type: 'stanza', lines: 4 },
   ],
 };
+
+/* --- Translations by Bravo, and the backdrop ----------------------------
+   Machine-managed by localhost edit mode (tools/dev-server.mjs). Everything
+   from this marker to the end of the file is rewritten wholesale on save.
+   Do not hand-edit below this line, and do not append anything after it. */
+window.POEMS["hymne-a-la-beaute"].bravo = {
+  "es-bravo": {
+    status: "complete",
+    title: "Himno a la Belleza",
+    lines: [
+      "¿Bajaste del cielo profundo o surges del abismo,",
+      "Oh, Belleza? Tu mirada, divina e infernal,",
+      "Vierte confusamente benevolencia y crimen,",
+      "Y se puede, por eso, compararte con el vino.",
+      "Contienes en tu mirada el ocaso y el amanecer,",
+      "Esparces perfumes como una noche tempestuosa;",
+      "Tus besos son una poción y tu boca un ánfora,",
+      "Que hacen al héroe flojo y al niño valiente.",
+      "¿Surges del golfo oscuro o desciendes de los astros?",
+      "El Destino, encantado, sigue tus faldas como un perro;",
+      "Siembras al azar alegría y desastres,",
+      "Y gobiernas todo pero no respondes por nada,",
+      "Tú marchas sobre cadáveres, Belleza, de los que te burlas;",
+      "De tus joyas el Horror no es lo menos encantador,",
+      "Y la Muerte, entre tus más caros encantos,",
+      "Danza amorosamente sobre tu vientre orgulloso.",
+      "La polilla deslumbrada vuela hacia tí, vela,",
+      "Crepita, flamea y dice: ¡Bendita sea esta llama!",
+      "El jadeante enamorado inclinado sobre su bella",
+      "Parece un moribundo acariciando su propia tumba.",
+      "Que vengas del cielo o del infierno, qué importa,",
+      "¡Oh, Belleza! ¡Monstruo enorme, aterrador, ingenuo!",
+      "¿Si tu mirada, tu sonrisa, tu pie abren para mí",
+      "Un Infinito que amo pero jamás he conocido?",
+      "De Satán o de Dios, ¿qué importa? Ángel o Sirena,",
+      "¿Qué importa, si haces, -- hada con ojos de terciopelo,",
+      "Ritmo, perfume, fulgor, ¡oh mi única reina! --",
+      "El universo menos horrible, los instantes menos pesados?",
+    ],
+  },
+};
