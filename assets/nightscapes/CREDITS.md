@@ -1,6 +1,6 @@
 # Nightscapes
 
-The photographs behind the *Night* share card (share.js). All thirteen are from
+The photographs behind the *Night* share card (share.js). All sixteen are from
 Pexels, under the [Pexels License](https://www.pexels.com/license/): free to
 use, no attribution required. Credit is given here anyway. They are as
 downloaded from the Pexels CDN, at the size Pexels served them; nothing was
@@ -22,7 +22,10 @@ is the order the picker shows them in, which is the order of `PHOTOS` in
 | `pexels-cottonbro-4881621.jpg` | cottonbro studio | one bird alone in a pale sky | https://www.pexels.com/photo/4881621/ |
 | `pexels-rahimegul-18470300.jpg` | rahimegul | dark leaves | https://www.pexels.com/photo/18470300/ |
 | `pexels-yanho-mo-2154266921-33138953.jpg` | Yanho Mo | roses, some blown, against the dark | https://www.pexels.com/photo/33138953/ |
+| `pexels-marianna-pashchuk-855871055-19867740.jpg` | Marianna Pashchuk | deep red roses against the black | https://www.pexels.com/photo/19867740/ |
+| `pexels-karina-shaikhutdinova-205352737-11647765.jpg` | Karina Shaikhutdinova | crimson roses in low light | https://www.pexels.com/photo/11647765/ |
 | `pexels-eugenia-remark-5767088-13918755.jpg` | Eugenia Remark | roses close up, in black and white | https://www.pexels.com/photo/13918755/ |
+| `pexels-mlkbnl-28943831.jpg` | mlkbnl | pale pink and white roses against grey | https://www.pexels.com/photo/28943831/ |
 | `pexels-didsss-10064809.jpg` | didsss | wallpaper printed with gilt roses | https://www.pexels.com/photo/10064809/ |
 | `pexels-mary-rose-relente-722720629-37625279.jpg` | Mary Rose Relente | a seraph on a painted church vault | https://www.pexels.com/photo/37625279/ |
 | `pexels-polina-kovaleva-6788571.jpg` | Polina Kovaleva | veined black marble | https://www.pexels.com/photo/6788571/ |
@@ -34,7 +37,7 @@ is the order the picker shows them in, which is the order of `PHOTOS` in
 behind the verse card, declared on `:root` in `styles.css`, so a poem that names
 no backdrop of its own is read off creased paper.
 
-The same thirteen are what the backdrop picker in edit mode offers, behind the
+The same sixteen are what the backdrop picker in edit mode offers, behind the
 page or behind the verse — but that one asks the dev server what is in
 `assets/` rather than reading a list, so it needs no step of its own.
 
