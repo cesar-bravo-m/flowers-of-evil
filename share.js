@@ -63,26 +63,19 @@
      thumbs/; assets/nightscapes/CREDITS.md names the photographers. The
      labels are what a screen reader gets for a thumbnail. */
   var PHOTOS = [
-    { file: 'seine-paris',     en: 'The Seine at night',      es: 'El Sena de noche' },
-    { file: 'paris-rooftops',  en: 'Paris rooftops',          es: 'Tejados de París' },
-    { file: 'paris-brasserie', en: 'A Paris street at night', es: 'Una calle de París de noche' },
-    { file: 'rain-street',     en: 'Rain on a city street',   es: 'Lluvia en una calle' },
-    { file: 'fog-lamp',        en: 'A street lamp in fog',    es: 'Un farol en la niebla' },
-    { file: 'crescent-moon',   en: 'Crescent moon',           es: 'Luna creciente' },
-    { file: 'milky-way-lake',  en: 'The Milky Way over a lake', es: 'La Vía Láctea sobre un lago' },
-    { file: 'starry-lake',     en: 'Stars over a lake',       es: 'Estrellas sobre un lago' },
-    { file: 'stormy-sea',      en: 'A stormy sea',            es: 'Un mar tormentoso' },
-    { file: 'lightning-sea',   en: 'Lightning over the sea',  es: 'Relámpagos sobre el mar' },
-    { file: 'candle',          en: 'A candle',                es: 'Una vela' },
-    { file: 'black-cat',       en: 'A black cat',             es: 'Un gato negro' },
-    { file: 'red-rose',        en: 'A red rose',              es: 'Una rosa roja' },
-    { file: 'rose-petals',     en: 'Rose petals',             es: 'Pétalos de rosa' },
-    { file: 'cemetery-fog',    en: 'A cemetery in fog',       es: 'Un cementerio en la niebla' },
-    { file: 'cemetery-gate',   en: 'A cemetery gate',         es: 'La verja de un cementerio' },
-    { file: 'moon-bird',       en: 'A bird against the moon', es: 'Un pájaro contra la luna' },
-    { file: 'church-candle',   en: 'A Bible by candlelight',  es: 'Una Biblia a la luz de una vela' },
-    { file: 'raven',           en: 'A raven',                 es: 'Un cuervo' },
-    { file: 'cathedral-night', en: 'A cathedral at night',    es: 'Una catedral de noche' }
+    { file: 'pexels-ahmet-simsek-544065449-17086452',     en: 'A starry sky over a hillside',  es: 'Un cielo estrellado sobre una ladera' },
+    { file: 'pexels-chudin-alexey-19182293',              en: 'The Milky Way through branches', es: 'La Vía Láctea entre las ramas' },
+    { file: 'pexels-matreding-9741544',                   en: 'Trees against a dusk sky',      es: 'Árboles contra un cielo crepuscular' },
+    { file: 'pexels-cottonbro-4881621',                   en: 'A bird alone in a pale sky',    es: 'Un pájaro solo en un cielo pálido' },
+    { file: 'pexels-rahimegul-18470300',                  en: 'Dark leaves',                   es: 'Hojas oscuras' },
+    { file: 'pexels-yanho-mo-2154266921-33138953',        en: 'Roses in the dark',             es: 'Rosas en la oscuridad' },
+    { file: 'pexels-eugenia-remark-5767088-13918755',     en: 'Roses in black and white',      es: 'Rosas en blanco y negro' },
+    { file: 'pexels-didsss-10064809',                     en: 'Wallpaper of gilt roses',       es: 'Papel pintado de rosas doradas' },
+    { file: 'pexels-mary-rose-relente-722720629-37625279', en: 'A seraph on a painted vault',  es: 'Un serafín en una bóveda pintada' },
+    { file: 'pexels-polina-kovaleva-6788571',             en: 'Veined black marble',           es: 'Mármol negro veteado' },
+    { file: 'pexels-dav-h-58867999-7952409',              en: 'Creased paper',                 es: 'Papel arrugado' },
+    { file: 'pexels-dav-h-58867999-7953203',              en: 'Old ink-spattered paper',       es: 'Papel viejo salpicado de tinta' },
+    { file: 'pexels-heather-green-1125370-18393282',      en: 'A folded, stained page',        es: 'Una hoja doblada y manchada' }
   ];
   function photoPath(index) {
     return 'assets/nightscapes/' + PHOTOS[index % PHOTOS.length].file + '.jpg';

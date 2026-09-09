@@ -94,7 +94,7 @@ function loadPoem(file) {
 /* What the backdrop picker offers. Found by looking rather than kept in a
    list somebody has to remember, so dropping a photograph into assets/ is the
    whole of adding one. A thumbs/ directory beside an image is used for the
-   strip, as the twenty nightscapes have one; an image with no thumbnail shows
+   strip, as the thirteen nightscapes have one; an image with no thumbnail shows
    itself instead. */
 const IMAGE_EXT = /\.(?:jpe?g|png|webp|avif)$/i;
 
@@ -121,7 +121,7 @@ function scanImages() {
   })(ASSETS);
   /* The photographs meant to be looked at are the ones somebody cropped a
      thumbnail for; the loose textures at the top of assets/ come after them,
-     so the strip opens on the twenty nightscapes rather than on paper.png. */
+     so the strip opens on the thirteen nightscapes rather than on paper.png. */
   return found.sort((a, b) => (b.thumb ? 1 : 0) - (a.thumb ? 1 : 0));
 }
 

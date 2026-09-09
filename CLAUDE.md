@@ -482,7 +482,7 @@ from/to line range (with a *Whole poem* chip that shows only while a range is
 set), the poem's languages capped at two (`META.translationCodes()`, so
 drafts never appear), and a style: *Paper* — the site's own look, with
 the grain and burnt edge from `assets/paper.png` and `assets/burnt-edge*.png`,
-following the dark theme — or *Night*, one of the twenty Pexels photographs
+following the dark theme — or *Night*, one of the thirteen Pexels photographs
 in `assets/nightscapes/` under a dark veil (`tools/build-textures.mjs`
 generates the textures; `assets/nightscapes/CREDITS.md` names the
 photographers). A strip of thumbnails (`.share-photos`, from `thumbs/`, listed
@@ -559,7 +559,7 @@ backdrop, or both:
     };
 
     window.POEMS["le-chat-1"].backdrop = {
-      page: { image: "assets/nightscapes/raven.jpg", opacity: 0.18 },
+      page: { image: "assets/nightscapes/pexels-rahimegul-18470300.jpg", opacity: 0.18 },
     };
 
 `lines` is index-aligned with `segments` and must be exactly as long; an
